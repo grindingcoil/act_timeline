@@ -1,4 +1,4 @@
-﻿namespace hw
+﻿namespace ACTTimeline
 {
     partial class TimelineView
     {
