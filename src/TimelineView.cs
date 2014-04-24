@@ -20,7 +20,7 @@ namespace ACTTimeline
         {
             InitializeComponent();
 
-            timeline = TimelineLoader.LoadFromFile("3so.txt");
+            timeline = TimelineLoader.LoadFromFile(@"..\..\..\..\resources\timeline\3so.txt");
 
             this.MouseDown += form_MouseDown;
             this.DoubleClick += (object sender, EventArgs e) => { this.Close(); };
