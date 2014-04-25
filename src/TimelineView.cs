@@ -20,7 +20,7 @@ namespace ACTTimeline
         {
             InitializeComponent();
 
-            timeline = TimelineLoader.LoadFromFile(@"..\..\..\..\resources\timeline\3so.txt");
+            timeline = TimelineLoader.LoadFromFile(@"..\..\..\..\resources\timeline\test.txt");
 
             this.MouseDown += form_MouseDown;
             this.DoubleClick += (object sender, EventArgs e) => { this.Close(); };
@@ -63,6 +63,9 @@ namespace ACTTimeline
         private void Synchronize()
         {
             timeline.CurrentTime = relativeClock.CurrentTime();
+
+            // timeline.PendingAlerts()
+
             dataGridView.DataSource = null;
             dataGridView.DataSource = timeline.VisibleItems(TimeLeftCell.THRESHOLD).ToList();
         }

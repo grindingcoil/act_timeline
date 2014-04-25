@@ -69,8 +69,11 @@
     <ProjectReference Include="..\src\act_timeline.csproj">
       <Project>{3874ef4c-d3d7-48de-bf5d-5d19d0e7b8a0}</Project>
       <Name>act_timeline</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

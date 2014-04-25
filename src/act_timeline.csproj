@@ -71,10 +71,12 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ACTPlugin.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="PluginSettings.cs" />
     <Compile Include="TimelineLoader.cs" />
     <Compile Include="TimelineView.cs">
       <SubType>Form</SubType>
@@ -112,6 +114,9 @@
     <Reference Include="Advanced Combat Tracker">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Sprache">
+      <HintPath>packages\Sprache.1.10.0.36\lib\net40\Sprache.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
