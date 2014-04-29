@@ -134,10 +134,10 @@ namespace ACTTimeline
         static public Timeline LoadFromFile(string path)
         {
             string text = System.IO.File.ReadAllText(path, System.Text.Encoding.UTF8);
-            return LoadFromText(text);
+            return LoadFromText(System.IO.Path.GetFileName(path), text);
         }
 
-        static public Timeline LoadFromText(string text)
+        static public Timeline LoadFromText(string name, string text)
         {
             TimelineConfig config = TimelineConfigParser.TimelineConfig.Parse(text);
             foreach (AlertAll alertAll in config.AlertAlls)
@@ -148,7 +148,7 @@ namespace ACTTimeline
                     config.Alerts.Add(alert);
                 }
             }
-            return new Timeline(config.Items, config.Alerts, config.AlertSoundAssets);
+            return new Timeline(name, config.Items, config.Alerts, config.AlertSoundAssets);
         }
     }
 }

@@ -44,11 +44,15 @@ namespace ACTTimeline
         void TimelineView_CurrentTimeUpdate(object sender, EventArgs e)
         {
             double currtime = plugin.TimelineView.CurrentTime;
-            double endtime = plugin.TimelineView.Timeline.EndTime;
             labelCurrPos.Text = FormatMMSS(currtime);
-            labelEndPos.Text = FormatMMSS(endtime);
             trackBar.Value = (int)currtime;
+            
+            // FIXME: move to TimelineUpdate
+            double endtime = plugin.Timeline.EndTime;
+            labelEndPos.Text = FormatMMSS(endtime);
             trackBar.Maximum = (int)endtime;
+
+            labelLoadedTimeline.Text = plugin.Timeline.Name;
         }
 
         void TimelineView_Move(object sender, EventArgs e)

@@ -197,6 +197,8 @@ namespace ACTTimeline
 
     public class Timeline
     {
+        public string Name { get; private set; }
+
         private double currentTime;
 
         public double CurrentTime
@@ -252,8 +254,9 @@ namespace ACTTimeline
 
         public double EndTime { get; private set; }
 
-        public Timeline(List<TimelineActivity> items_, List<ActivityAlert> alerts_, AlertSoundAssets soundAssets)
+        public Timeline(string name, List<TimelineActivity> items_, List<ActivityAlert> alerts_, AlertSoundAssets soundAssets)
         {
+            Name = name;
             currentTime = 0;
             items = items_.OrderBy(activity => activity.TimeFromStart).ToList();
             alerts = alerts_;

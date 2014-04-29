@@ -19,7 +19,7 @@ namespace ACTTimeline
         public TimelineView TimelineView { get; private set; }
 
         private Timeline timeline;
-        private Timeline Timeline
+        public Timeline Timeline
         {
             get { return timeline; }
             set
