@@ -25,11 +25,23 @@ namespace ACTTimeline
                     soundplayer.WarmUpCache(sound.Filename);
                 }
 
-                relativeClock.Set(0);
-                timeline.CurrentTime = 0;
+                CurrentTime = 0;
             }
         }
+        
         private RelativeClock relativeClock;
+        public double CurrentTime
+        {
+            get
+            {
+                return relativeClock.CurrentTime;
+            }
+            set
+            {
+                relativeClock.CurrentTime = value;
+                // timeline.CurrentTime will be |Synchronize()|d in next timer tick.
+            }
+        }
 
         private CachedSoundPlayer soundplayer;
 
@@ -55,6 +67,10 @@ namespace ACTTimeline
                 Win32APIUtils.SetWindow_EX_TRANSPARENT(Handle, !moveByDrag);
             }
         }
+        
+        // for external UIs depending on CurrentTime
+        // FIXME: refactor this into TimelineController
+        public event EventHandler CurrentTimeUpdate;
 
         public TimelineView()
         {
@@ -104,8 +120,9 @@ namespace ACTTimeline
             if (timeline == null)
                 return;
 
-            timeline.CurrentTime = relativeClock.CurrentTime();
+            timeline.CurrentTime = relativeClock.CurrentTime;
 
+            // play pending alerts
             var pendingAlerts = timeline.PendingAlerts;
             foreach (ActivityAlert pendingAlert in pendingAlerts)
             {
@@ -113,8 +130,17 @@ namespace ACTTimeline
                 pendingAlert.Processed = true;
             }
 
+            // sync dataGridView
             dataGridView.DataSource = null;
             dataGridView.DataSource = timeline.VisibleItems(TimeLeftCell.THRESHOLD).ToList();
+
+            OnCurrentTimeUpdate();
+        }
+
+        public void OnCurrentTimeUpdate()
+        {
+            if (CurrentTimeUpdate != null)
+                CurrentTimeUpdate(this, EventArgs.Empty);
         }
     }
 

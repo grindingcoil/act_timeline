@@ -31,6 +31,24 @@ namespace ACTTimeline
             settings.AddControlSetting("MoveOverlayByDrag", checkBoxMoveOverlayByDrag);
 
             plugin.TimelineView.Move += TimelineView_Move;
+            plugin.TimelineView.CurrentTimeUpdate += TimelineView_CurrentTimeUpdate;
+        }
+
+        public static string FormatMMSS(double time)
+        {
+            var mm = Math.Floor(time / 60.0);
+            var ss = time - mm * 60.0;
+            return String.Format("{0:00}:{1:00}", mm, ss);
+        }
+
+        void TimelineView_CurrentTimeUpdate(object sender, EventArgs e)
+        {
+            double currtime = plugin.TimelineView.CurrentTime;
+            double endtime = plugin.TimelineView.Timeline.EndTime;
+            labelCurrPos.Text = FormatMMSS(currtime);
+            labelEndPos.Text = FormatMMSS(endtime);
+            trackBar.Value = (int)currtime;
+            trackBar.Maximum = (int)endtime;
         }
 
         void TimelineView_Move(object sender, EventArgs e)
@@ -130,6 +148,16 @@ namespace ACTTimeline
         private void checkBoxMoveOverlayByDrag_CheckedChanged(object sender, EventArgs e)
         {
             plugin.TimelineView.MoveByDrag = checkBoxMoveOverlayByDrag.Checked;
+        }
+
+        private void trackBar_ValueChanged(object sender, EventArgs e)
+        {
+            plugin.TimelineView.CurrentTime = (int)trackBar.Value;
+        }
+
+        private void buttonRewind_Click(object sender, EventArgs e)
+        {
+            plugin.TimelineView.CurrentTime = 0;
         }
     }
 }

@@ -171,6 +171,14 @@ namespace ACTTimeline
         const double Instant = 0;
         public double Duration { get; set; }
 
+        public double EndTime
+        {
+            get
+            {
+                return TimeFromStart + Duration;
+            }
+        }
+
         public TimelineActivity()
         {
             Name = "何かすごい攻撃";
@@ -237,12 +245,15 @@ namespace ACTTimeline
 
         public AlertSoundAssets AlertSoundAssets { get; private set; }
 
+        public double EndTime { get; private set; }
+
         public Timeline(List<TimelineActivity> items_, List<ActivityAlert> alerts_, AlertSoundAssets soundAssets)
         {
             currentTime = 0;
-            items = items_;
+            items = items_.OrderBy(activity => activity.TimeFromStart).ToList();
             alerts = alerts_;
             AlertSoundAssets = soundAssets;
+            EndTime = items.Last().EndTime;
         }
     }
 
@@ -250,23 +261,25 @@ namespace ACTTimeline
     {
         private long baseTicks;
 
-        public RelativeClock()
-        {
-            Set(0);
-        }
-
         static private long currentTick() { return DateTime.Now.Ticks; }
 
-        public double CurrentTime()
+        public RelativeClock()
         {
-            long now = currentTick();
-            TimeSpan elapsed = new TimeSpan(now - baseTicks);
-            return elapsed.TotalSeconds;
+            CurrentTime = 0;
         }
 
-        public void Set(double time)
+        public double CurrentTime
         {
-            baseTicks = currentTick() - (long)(time * TimeSpan.TicksPerSecond);
+            get
+            {
+                long now = currentTick();
+                TimeSpan elapsed = new TimeSpan(now - baseTicks);
+                return elapsed.TotalSeconds;
+            }
+            set
+            {
+               baseTicks = currentTick() - (long)(value * TimeSpan.TicksPerSecond);
+            }
         }
     }
 }

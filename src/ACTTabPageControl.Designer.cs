@@ -47,12 +47,24 @@
             this.labelNumRows = new System.Windows.Forms.Label();
             this.udNumRows = new System.Windows.Forms.NumericUpDown();
             this.checkBoxMoveOverlayByDrag = new System.Windows.Forms.CheckBox();
+            this.groupBoxTracker = new System.Windows.Forms.GroupBox();
+            this.trackBar = new System.Windows.Forms.TrackBar();
+            this.labelLoadedTimelineLabel = new System.Windows.Forms.Label();
+            this.labelLoadedTimeline = new System.Windows.Forms.Label();
+            this.labelCurrPos = new System.Windows.Forms.Label();
+            this.labelEndPos = new System.Windows.Forms.Label();
+            this.labelSlash = new System.Windows.Forms.Label();
+            this.buttonRewind = new System.Windows.Forms.Button();
+            this.buttonPlay = new System.Windows.Forms.Button();
+            this.buttonPause = new System.Windows.Forms.Button();
             this.groupBoxEnvironment.SuspendLayout();
             this.groupBoxTimelines.SuspendLayout();
             this.groupBoxOverlay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udNumRows)).BeginInit();
+            this.groupBoxTracker.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonResourceDirSelect
@@ -120,9 +132,9 @@
             this.groupBoxTimelines.Controls.Add(this.buttonRefreshList);
             this.groupBoxTimelines.Controls.Add(this.buttonLoad);
             this.groupBoxTimelines.Controls.Add(this.listTimelines);
-            this.groupBoxTimelines.Location = new System.Drawing.Point(15, 120);
+            this.groupBoxTimelines.Location = new System.Drawing.Point(15, 139);
             this.groupBoxTimelines.Name = "groupBoxTimelines";
-            this.groupBoxTimelines.Size = new System.Drawing.Size(470, 139);
+            this.groupBoxTimelines.Size = new System.Drawing.Size(470, 126);
             this.groupBoxTimelines.TabIndex = 4;
             this.groupBoxTimelines.TabStop = false;
             this.groupBoxTimelines.Text = "Timelines";
@@ -130,7 +142,7 @@
             // buttonRefreshList
             // 
             this.buttonRefreshList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRefreshList.Location = new System.Drawing.Point(375, 102);
+            this.buttonRefreshList.Location = new System.Drawing.Point(375, 89);
             this.buttonRefreshList.Name = "buttonRefreshList";
             this.buttonRefreshList.Size = new System.Drawing.Size(89, 27);
             this.buttonRefreshList.TabIndex = 1;
@@ -156,7 +168,7 @@
             this.listTimelines.FormattingEnabled = true;
             this.listTimelines.Location = new System.Drawing.Point(12, 20);
             this.listTimelines.Name = "listTimelines";
-            this.listTimelines.Size = new System.Drawing.Size(355, 108);
+            this.listTimelines.Size = new System.Drawing.Size(355, 95);
             this.listTimelines.TabIndex = 0;
             this.listTimelines.DoubleClick += new System.EventHandler(this.buttonLoad_Click);
             // 
@@ -275,10 +287,114 @@
             this.checkBoxMoveOverlayByDrag.UseVisualStyleBackColor = true;
             this.checkBoxMoveOverlayByDrag.CheckedChanged += new System.EventHandler(this.checkBoxMoveOverlayByDrag_CheckedChanged);
             // 
+            // groupBoxTracker
+            // 
+            this.groupBoxTracker.Controls.Add(this.labelSlash);
+            this.groupBoxTracker.Controls.Add(this.buttonPause);
+            this.groupBoxTracker.Controls.Add(this.buttonPlay);
+            this.groupBoxTracker.Controls.Add(this.buttonRewind);
+            this.groupBoxTracker.Controls.Add(this.labelEndPos);
+            this.groupBoxTracker.Controls.Add(this.labelCurrPos);
+            this.groupBoxTracker.Controls.Add(this.labelLoadedTimeline);
+            this.groupBoxTracker.Controls.Add(this.labelLoadedTimelineLabel);
+            this.groupBoxTracker.Controls.Add(this.trackBar);
+            this.groupBoxTracker.Location = new System.Drawing.Point(15, 13);
+            this.groupBoxTracker.Name = "groupBoxTracker";
+            this.groupBoxTracker.Size = new System.Drawing.Size(470, 120);
+            this.groupBoxTracker.TabIndex = 6;
+            this.groupBoxTracker.TabStop = false;
+            this.groupBoxTracker.Text = "Tracker";
+            // 
+            // trackBar
+            // 
+            this.trackBar.Location = new System.Drawing.Point(6, 39);
+            this.trackBar.Name = "trackBar";
+            this.trackBar.Size = new System.Drawing.Size(388, 45);
+            this.trackBar.TabIndex = 0;
+            this.trackBar.TickFrequency = 30;
+            this.trackBar.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
+            // 
+            // labelLoadedTimelineLabel
+            // 
+            this.labelLoadedTimelineLabel.AutoSize = true;
+            this.labelLoadedTimelineLabel.Location = new System.Drawing.Point(9, 16);
+            this.labelLoadedTimelineLabel.Name = "labelLoadedTimelineLabel";
+            this.labelLoadedTimelineLabel.Size = new System.Drawing.Size(88, 13);
+            this.labelLoadedTimelineLabel.TabIndex = 1;
+            this.labelLoadedTimelineLabel.Text = "Loaded Timeline:";
+            // 
+            // labelLoadedTimeline
+            // 
+            this.labelLoadedTimeline.AutoSize = true;
+            this.labelLoadedTimeline.Location = new System.Drawing.Point(103, 16);
+            this.labelLoadedTimeline.Name = "labelLoadedTimeline";
+            this.labelLoadedTimeline.Size = new System.Drawing.Size(91, 13);
+            this.labelLoadedTimeline.TabIndex = 2;
+            this.labelLoadedTimeline.Text = "hogefugaTimeline";
+            // 
+            // labelCurrPos
+            // 
+            this.labelCurrPos.AutoSize = true;
+            this.labelCurrPos.Location = new System.Drawing.Point(392, 30);
+            this.labelCurrPos.Name = "labelCurrPos";
+            this.labelCurrPos.Size = new System.Drawing.Size(34, 13);
+            this.labelCurrPos.TabIndex = 3;
+            this.labelCurrPos.Text = "00:00";
+            // 
+            // labelEndPos
+            // 
+            this.labelEndPos.AutoSize = true;
+            this.labelEndPos.Location = new System.Drawing.Point(433, 47);
+            this.labelEndPos.Name = "labelEndPos";
+            this.labelEndPos.Size = new System.Drawing.Size(34, 13);
+            this.labelEndPos.TabIndex = 3;
+            this.labelEndPos.Text = "00:00";
+            this.labelEndPos.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            // 
+            // labelSlash
+            // 
+            this.labelSlash.AutoSize = true;
+            this.labelSlash.BackColor = System.Drawing.Color.Transparent;
+            this.labelSlash.Location = new System.Drawing.Point(423, 39);
+            this.labelSlash.Name = "labelSlash";
+            this.labelSlash.Size = new System.Drawing.Size(12, 13);
+            this.labelSlash.TabIndex = 4;
+            this.labelSlash.Text = "/";
+            // 
+            // buttonRewind
+            // 
+            this.buttonRewind.Location = new System.Drawing.Point(10, 83);
+            this.buttonRewind.Name = "buttonRewind";
+            this.buttonRewind.Size = new System.Drawing.Size(87, 26);
+            this.buttonRewind.TabIndex = 5;
+            this.buttonRewind.Text = "<< Rewind";
+            this.buttonRewind.UseVisualStyleBackColor = true;
+            this.buttonRewind.Click += new System.EventHandler(this.buttonRewind_Click);
+            // 
+            // buttonPlay
+            // 
+            this.buttonPlay.Location = new System.Drawing.Point(166, 83);
+            this.buttonPlay.Name = "buttonPlay";
+            this.buttonPlay.Size = new System.Drawing.Size(57, 26);
+            this.buttonPlay.TabIndex = 5;
+            this.buttonPlay.Text = "Play";
+            this.buttonPlay.UseVisualStyleBackColor = true;
+            // 
+            // buttonPause
+            // 
+            this.buttonPause.Enabled = false;
+            this.buttonPause.Location = new System.Drawing.Point(110, 83);
+            this.buttonPause.Name = "buttonPause";
+            this.buttonPause.Size = new System.Drawing.Size(57, 26);
+            this.buttonPause.TabIndex = 5;
+            this.buttonPause.Text = "Pause";
+            this.buttonPause.UseVisualStyleBackColor = true;
+            // 
             // ACTTabPageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.groupBoxTracker);
             this.Controls.Add(this.groupBoxOverlay);
             this.Controls.Add(this.groupBoxTimelines);
             this.Controls.Add(this.groupBoxEnvironment);
@@ -292,6 +408,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udNumRows)).EndInit();
+            this.groupBoxTracker.ResumeLayout(false);
+            this.groupBoxTracker.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -317,5 +436,15 @@
         private System.Windows.Forms.Label labelNumRows;
         private System.Windows.Forms.Label labelOverlayOrientation;
         private System.Windows.Forms.CheckBox checkBoxMoveOverlayByDrag;
+        private System.Windows.Forms.GroupBox groupBoxTracker;
+        private System.Windows.Forms.Button buttonPause;
+        private System.Windows.Forms.Button buttonPlay;
+        private System.Windows.Forms.Button buttonRewind;
+        private System.Windows.Forms.Label labelEndPos;
+        private System.Windows.Forms.Label labelCurrPos;
+        private System.Windows.Forms.Label labelSlash;
+        private System.Windows.Forms.Label labelLoadedTimeline;
+        private System.Windows.Forms.Label labelLoadedTimelineLabel;
+        private System.Windows.Forms.TrackBar trackBar;
     }
 }
