@@ -14,13 +14,15 @@ namespace ACTTimeline
         private Timeline timeline;
         private RelativeClock relativeClock;
 
+        private CachedSoundPlayer soundplayer;
+
         const int NUMBER_OF_ROWS_TO_DISPLAY = 3;
 
         public TimelineView()
         {
             InitializeComponent();
 
-            timeline = TimelineLoader.LoadFromFile(@"..\..\..\..\resources\timeline\test.txt");
+            timeline = TimelineLoader.LoadFromFile(@"resources\timeline\test.txt");
 
             this.MouseDown += form_MouseDown;
             this.DoubleClick += (object sender, EventArgs e) => { this.Close(); };
@@ -44,6 +46,12 @@ namespace ACTTimeline
             this.Height = dataGridView.RowTemplate.Height * NUMBER_OF_ROWS_TO_DISPLAY;
             dataGridView.Height = this.Height;
 
+            soundplayer = new CachedSoundPlayer();
+            foreach (AlertSound sound in timeline.AlertSoundAssets.All)
+            {
+                soundplayer.WarmUpCache(sound.Filename);
+            }
+
             Synchronize();
         }
 
@@ -64,7 +72,12 @@ namespace ACTTimeline
         {
             timeline.CurrentTime = relativeClock.CurrentTime();
 
-            // timeline.PendingAlerts()
+            var pendingAlerts = timeline.PendingAlerts;
+            foreach (ActivityAlert pendingAlert in pendingAlerts)
+            {
+                soundplayer.PlaySound(pendingAlert.Sound.Filename);
+                pendingAlert.Processed = true;
+            }
 
             dataGridView.DataSource = null;
             dataGridView.DataSource = timeline.VisibleItems(TimeLeftCell.THRESHOLD).ToList();

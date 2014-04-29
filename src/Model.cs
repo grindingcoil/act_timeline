@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ACTTimeline
 {
@@ -13,7 +14,12 @@ namespace ACTTimeline
     public class DuplicateAlertSoundAliasException : ModelException
     {
         public DuplicateAlertSoundAliasException(string alias)
-            : base(String.Format("AlertSound alias {0} is already used.", alias)) { }
+            : base(String.Format("AlertSound alias \"{0}\" is already used.", alias)) { }
+    }
+    public class ResourceNotFoundException : ModelException
+    {
+        public ResourceNotFoundException(string alias)
+            : base(String.Format("Resource \"{0}\" could not be found.", alias)) { }
     }
 
     public class AlertSound
@@ -32,6 +38,9 @@ namespace ACTTimeline
         {
             aliases = new List<string>();
             Filename = filename;
+
+            if (!System.IO.File.Exists(filename))
+                throw new ResourceNotFoundException(filename);
         }
     };
 
@@ -39,6 +48,8 @@ namespace ACTTimeline
     {
         List<AlertSound> allAlertSounds;
         Dictionary<string, AlertSound> aliasMap;
+
+        const string ResourceCommonPath = "resources/wav/";
 
         public AlertSoundAssets()
         {
@@ -54,6 +65,21 @@ namespace ACTTimeline
                 return sound;
             }
 
+            // not alias => must be filename
+
+            if (!File.Exists(filenameOrAlias))
+            {
+                // try prepending resource path
+                string filenameWithResourcePath = ResourceCommonPath+filenameOrAlias;
+                if (!File.Exists(filenameWithResourcePath))
+                    throw new ResourceNotFoundException(filenameOrAlias);
+
+                sound = Get(filenameWithResourcePath);
+                // register filepath without the resource path as an alias
+                RegisterAlias(sound, filenameOrAlias);
+                return sound;
+            }
+
             sound = new AlertSound(filenameOrAlias);
             allAlertSounds.Add(sound);
             return sound;
@@ -66,9 +92,14 @@ namespace ACTTimeline
                 sound.AddAlias(alias);
                 aliasMap.Add(alias, sound);
             }
-            catch(ArgumentException){
+            catch(ArgumentException) {
                 throw new DuplicateAlertSoundAliasException(alias);
             }
+        }
+
+        public IEnumerable<AlertSound> All
+        {
+            get { return allAlertSounds; }
         }
     };
 
@@ -82,6 +113,12 @@ namespace ACTTimeline
         public double ReminderTimeOffset { get; set; }
         public AlertSound Sound { get; set; }
         public TimelineActivity Activity { get; set; }
+        public bool Processed { get; set; }
+
+        public ActivityAlert()
+        {
+            Processed = false;
+        }
     };
 
     public class TimelineActivity
@@ -139,6 +176,16 @@ namespace ACTTimeline
         List<ActivityAlert> alerts;
 
         public IEnumerable<ActivityAlert> Alerts { get { return alerts; } }
+        public IEnumerable<ActivityAlert> PendingAlerts
+        {
+            get
+            {
+                return from alert in alerts
+                       where alert.TimeFromStart < CurrentTime
+                       where !alert.Processed
+                       select alert;
+            }
+        }
 
         public AlertSoundAssets AlertSoundAssets { get; private set; }
 
