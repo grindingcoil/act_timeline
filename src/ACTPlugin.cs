@@ -1,5 +1,6 @@
 ﻿using Advanced_Combat_Tracker;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -52,6 +53,8 @@ namespace ACTTimeline
             }
         }
 
+        private CheckBox checkBoxShowView;
+
         public ACTPlugin()
         {
             // See |InitPlugin()|
@@ -68,11 +71,14 @@ namespace ACTTimeline
 
                 TimelineView = new TimelineView();
                 TimelineView.Show();
+                TimelineView.DoubleClick += TimelineView_DoubleClick;
 
                 Settings = new PluginSettings(this);
                 Settings.AddStringSetting("TimelineTxtFilePath");
 
                 SetupTab();
+                InjectButton();
+
                 Settings.Load();
 
                 StatusText.Text = "Plugin Started (^^)!";
@@ -82,6 +88,48 @@ namespace ACTTimeline
                 if (StatusText != null)
                     StatusText.Text = "Plugin Init Failed: "+e.Message;
             }
+        }
+
+        void TimelineView_DoubleClick(object sender, EventArgs e)
+        {
+            TimelineView.Hide();
+            checkBoxShowView.Checked = false;
+        }
+
+        void InjectButton()
+        {
+            checkBoxShowView = new CheckBox();
+            checkBoxShowView.Appearance = System.Windows.Forms.Appearance.Button;
+            checkBoxShowView.Name = "checkBoxShowView";
+            checkBoxShowView.Size = new System.Drawing.Size(90, 24);
+            checkBoxShowView.Text = "Show Timeline";
+            checkBoxShowView.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            checkBoxShowView.UseVisualStyleBackColor = true;
+            checkBoxShowView.Checked = true;
+            checkBoxShowView.CheckedChanged += checkBoxShowView_CheckedChanged;
+            Settings.AddControlSetting("TimelineShown", checkBoxShowView);
+
+            var formMain = ActGlobals.oFormActMain;
+            formMain.Resize += formMain_Resize;
+            formMain.Controls.Add(checkBoxShowView);
+            formMain.Controls.SetChildIndex(checkBoxShowView, 0);
+
+            formMain_Resize(this, null);
+        }
+
+        void checkBoxShowView_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxShowView.Checked)
+                TimelineView.Show();
+            else
+                TimelineView.Hide();
+        }
+
+        void formMain_Resize(object sender, EventArgs e)
+        {
+            // update button location
+            var mainFormSize = ActGlobals.oFormActMain.Size;
+            checkBoxShowView.Location = new Point(mainFormSize.Width - 440, 0);
         }
 
         void SetupTab()

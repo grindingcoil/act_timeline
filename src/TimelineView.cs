@@ -50,8 +50,7 @@ namespace ACTTimeline
         {
             InitializeComponent();
 
-            this.MouseDown += form_MouseDown;
-            this.DoubleClick += (object sender, EventArgs e) => { this.Close(); };
+            this.MouseDown += TimelineView_MouseDown;
             this.FormClosed += TimelineView_FormClosed;
 
             typeof(DataGridView).
@@ -81,7 +80,7 @@ namespace ACTTimeline
             Timeline = null;
         }
 
-        void form_MouseDown(object sender, MouseEventArgs e)
+        void TimelineView_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
