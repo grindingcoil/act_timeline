@@ -20,24 +20,18 @@ namespace ACTTimeline
     {
         public string Filename { get; private set; }
 
-        AlertSoundAssets assets;
-
         List<string> aliases;
         public IEnumerable<string> Aliases { get { return aliases; } }
 
         public void AddAlias(string alias)
         {
             aliases.Add(alias);
-            assets.RegisterAlias(this, alias);
         }
 
-        public AlertSound(AlertSoundAssets assets_, string filename)
+        public AlertSound(string filename)
         {
-            assets = assets_;
             aliases = new List<string>();
             Filename = filename;
-
-            assets.RegisterAlias(this, Filename);
         }
     };
 
@@ -60,13 +54,16 @@ namespace ACTTimeline
                 return sound;
             }
 
-            return new AlertSound(this, filenameOrAlias);
+            sound = new AlertSound(filenameOrAlias);
+            allAlertSounds.Add(sound);
+            return sound;
         }
 
         public void RegisterAlias(AlertSound sound, string alias)
         {
             try
             {
+                sound.AddAlias(alias);
                 aliasMap.Add(alias, sound);
             }
             catch(ArgumentException){
@@ -77,6 +74,11 @@ namespace ACTTimeline
 
     public class ActivityAlert
     {
+        public double TimeFromStart {
+            get {
+                return Activity.TimeFromStart - ReminderTimeOffset;
+            }  
+        }
         public double ReminderTimeOffset { get; set; }
         public AlertSound Sound { get; set; }
         public TimelineActivity Activity { get; set; }
@@ -125,18 +127,26 @@ namespace ACTTimeline
             }
         }
 
-        public List<TimelineActivity> Items { get; private set; }
+        List<TimelineActivity> items;
+        public IEnumerable<TimelineActivity> Items {
+            get { return items; }        
+        }
         public IEnumerable<TimelineActivity> VisibleItems(double threshold)
         {
             return from e in Items where e.TimeLeft > threshold select e;
         }
 
+        List<ActivityAlert> alerts;
+
+        public IEnumerable<ActivityAlert> Alerts { get { return alerts; } }
+
         public AlertSoundAssets AlertSoundAssets { get; private set; }
 
-        public Timeline(List<TimelineActivity> items, AlertSoundAssets soundAssets)
+        public Timeline(List<TimelineActivity> items_, List<ActivityAlert> alerts_, AlertSoundAssets soundAssets)
         {
             currentTime = 0;
-            Items = items;
+            items = items_;
+            alerts = alerts_;
             AlertSoundAssets = soundAssets;
         }
     }
