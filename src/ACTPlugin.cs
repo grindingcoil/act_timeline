@@ -129,7 +129,7 @@ namespace ACTTimeline
         {
             // update button location
             var mainFormSize = ActGlobals.oFormActMain.Size;
-            checkBoxShowView.Location = new Point(mainFormSize.Width - 440, 0);
+            checkBoxShowView.Location = new Point(mainFormSize.Width - 435, 0);
         }
 
         void SetupTab()

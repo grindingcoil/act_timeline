@@ -14,15 +14,29 @@ namespace ACTTimeline
     public partial class ACTTabPageControl : UserControl
     {
         private ACTPlugin plugin;
+        private bool updateFromOverlayMove;
 
         public ACTTabPageControl(ACTPlugin plugin_)
         {
             InitializeComponent();
 
             plugin = plugin_;
+            updateFromOverlayMove = false;
 
             var settings = plugin.Settings;
             settings.AddControlSetting("ResourcesDir", textBoxResourceDir);
+            settings.AddControlSetting("OverlayX", udOverlayX);
+            settings.AddControlSetting("OverlayY", udOverlayY);
+
+            plugin.TimelineView.Move += TimelineView_Move;
+        }
+
+        void TimelineView_Move(object sender, EventArgs e)
+        {
+            updateFromOverlayMove = true;
+            udOverlayX.Value = plugin.TimelineView.Left;
+            udOverlayY.Value = plugin.TimelineView.Top;
+            updateFromOverlayMove = false;
         }
 
         private void buttonResourceDirSelect_Click(object sender, EventArgs e)
@@ -94,5 +108,16 @@ namespace ACTTimeline
             plugin.TimelineTxtFilePath = String.Format("{0}/{1}", Globals.TimelineTxtsRoot, timelineTxtFilePath);
         }
 
+        private void udOverlayX_ValueChanged(object sender, EventArgs e)
+        {
+            if (!updateFromOverlayMove)
+                plugin.TimelineView.Left = (int)udOverlayX.Value;
+        }
+
+        private void udOverlayY_ValueChanged(object sender, EventArgs e)
+        {
+            if (!updateFromOverlayMove)
+                plugin.TimelineView.Top = (int)udOverlayY.Value;
+        }
     }
 }
