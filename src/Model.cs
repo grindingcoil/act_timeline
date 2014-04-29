@@ -156,6 +156,8 @@ namespace ACTTimeline
         public TimelineActivity Activity { get; set; }
         public bool Processed { get; set; }
 
+        public const double TooOldThreshold = 3.0;
+
         public ActivityAlert()
         {
             Processed = false;
@@ -205,14 +207,16 @@ namespace ACTTimeline
             }
             set
             {
+                var lastTime = currentTime;
+
                 currentTime = value;
                 foreach (TimelineActivity e in Items)
                 {
                     e.UpdateTimeLeft(currentTime);
                 }
 
-                // full reset
-                if (currentTime == 0)
+                bool isRewinding = currentTime - lastTime < 0;
+                if (isRewinding)
                 {
                     foreach (ActivityAlert alert in alerts)
                         alert.Processed = false;
@@ -238,6 +242,7 @@ namespace ACTTimeline
             {
                 return from alert in alerts
                        where alert.TimeFromStart < CurrentTime
+                       where CurrentTime - ActivityAlert.TooOldThreshold < alert.TimeFromStart 
                        where !alert.Processed
                        select alert;
             }
