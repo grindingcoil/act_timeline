@@ -27,6 +27,7 @@ namespace ACTTimeline
             settings.AddControlSetting("ResourcesDir", textBoxResourceDir);
             settings.AddControlSetting("OverlayX", udOverlayX);
             settings.AddControlSetting("OverlayY", udOverlayY);
+            settings.AddControlSetting("NumberOfRowsToDisplay", udNumRows);
 
             plugin.TimelineView.Move += TimelineView_Move;
         }
@@ -118,6 +119,11 @@ namespace ACTTimeline
         {
             if (!updateFromOverlayMove)
                 plugin.TimelineView.Top = (int)udOverlayY.Value;
+        }
+
+        private void udNumRows_ValueChanged(object sender, EventArgs e)
+        {
+            plugin.TimelineView.NumberOfRowsToDisplay = (int)udNumRows.Value;
         }
     }
 }

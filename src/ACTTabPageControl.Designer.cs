@@ -253,6 +253,7 @@
             0,
             0,
             0});
+            this.udNumRows.ValueChanged += new System.EventHandler(this.udNumRows_ValueChanged);
             // 
             // ACTTabPageControl
             // 
