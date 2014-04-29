@@ -28,6 +28,7 @@ namespace ACTTimeline
             settings.AddControlSetting("OverlayX", udOverlayX);
             settings.AddControlSetting("OverlayY", udOverlayY);
             settings.AddControlSetting("NumberOfRowsToDisplay", udNumRows);
+            settings.AddControlSetting("MoveOverlayByDrag", checkBoxMoveOverlayByDrag);
 
             plugin.TimelineView.Move += TimelineView_Move;
         }
@@ -124,6 +125,11 @@ namespace ACTTimeline
         private void udNumRows_ValueChanged(object sender, EventArgs e)
         {
             plugin.TimelineView.NumberOfRowsToDisplay = (int)udNumRows.Value;
+        }
+
+        private void checkBoxMoveOverlayByDrag_CheckedChanged(object sender, EventArgs e)
+        {
+            plugin.TimelineView.MoveByDrag = checkBoxMoveOverlayByDrag.Checked;
         }
     }
 }

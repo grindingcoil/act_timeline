@@ -46,6 +46,16 @@ namespace ACTTimeline
             }
         }
 
+        private bool moveByDrag;
+        public bool MoveByDrag {
+            get { return moveByDrag; }
+            set
+            {
+                moveByDrag = value;
+                Win32APIUtils.SetWindow_EX_TRANSPARENT(Handle, !moveByDrag);
+            }
+        }
+
         public TimelineView()
         {
             InitializeComponent();
@@ -70,6 +80,7 @@ namespace ACTTimeline
 
             this.Opacity = 0.8;
             NumberOfRowsToDisplay = 3;
+            MoveByDrag = true;
 
             soundplayer = new CachedSoundPlayer();
         }
@@ -82,7 +93,7 @@ namespace ACTTimeline
 
         void TimelineView_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && MoveByDrag)
             {
                 Win32APIUtils.DragMove(Handle);
             }

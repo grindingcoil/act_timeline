@@ -39,13 +39,14 @@
             this.buttonLoad = new System.Windows.Forms.Button();
             this.listTimelines = new System.Windows.Forms.ListBox();
             this.groupBoxOverlay = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelOverlayOrientation = new System.Windows.Forms.Label();
             this.udOverlayX = new System.Windows.Forms.NumericUpDown();
             this.udOverlayY = new System.Windows.Forms.NumericUpDown();
             this.labelOverlayX = new System.Windows.Forms.Label();
             this.labelOverlayY = new System.Windows.Forms.Label();
             this.labelNumRows = new System.Windows.Forms.Label();
             this.udNumRows = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxMoveOverlayByDrag = new System.Windows.Forms.CheckBox();
             this.groupBoxEnvironment.SuspendLayout();
             this.groupBoxTimelines.SuspendLayout();
             this.groupBoxOverlay.SuspendLayout();
@@ -90,7 +91,7 @@
             this.groupBoxEnvironment.Controls.Add(this.buttonResourceDirSelect);
             this.groupBoxEnvironment.Location = new System.Drawing.Point(16, 271);
             this.groupBoxEnvironment.Name = "groupBoxEnvironment";
-            this.groupBoxEnvironment.Size = new System.Drawing.Size(470, 109);
+            this.groupBoxEnvironment.Size = new System.Drawing.Size(470, 100);
             this.groupBoxEnvironment.TabIndex = 3;
             this.groupBoxEnvironment.TabStop = false;
             this.groupBoxEnvironment.Text = "Environment";
@@ -119,16 +120,17 @@
             this.groupBoxTimelines.Controls.Add(this.buttonRefreshList);
             this.groupBoxTimelines.Controls.Add(this.buttonLoad);
             this.groupBoxTimelines.Controls.Add(this.listTimelines);
-            this.groupBoxTimelines.Location = new System.Drawing.Point(15, 17);
+            this.groupBoxTimelines.Location = new System.Drawing.Point(15, 120);
             this.groupBoxTimelines.Name = "groupBoxTimelines";
-            this.groupBoxTimelines.Size = new System.Drawing.Size(470, 242);
+            this.groupBoxTimelines.Size = new System.Drawing.Size(470, 139);
             this.groupBoxTimelines.TabIndex = 4;
             this.groupBoxTimelines.TabStop = false;
             this.groupBoxTimelines.Text = "Timelines";
             // 
             // buttonRefreshList
             // 
-            this.buttonRefreshList.Location = new System.Drawing.Point(375, 205);
+            this.buttonRefreshList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonRefreshList.Location = new System.Drawing.Point(375, 102);
             this.buttonRefreshList.Name = "buttonRefreshList";
             this.buttonRefreshList.Size = new System.Drawing.Size(89, 27);
             this.buttonRefreshList.TabIndex = 1;
@@ -148,36 +150,41 @@
             // 
             // listTimelines
             // 
+            this.listTimelines.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listTimelines.FormattingEnabled = true;
             this.listTimelines.Location = new System.Drawing.Point(12, 20);
             this.listTimelines.Name = "listTimelines";
-            this.listTimelines.Size = new System.Drawing.Size(355, 212);
+            this.listTimelines.Size = new System.Drawing.Size(355, 108);
             this.listTimelines.TabIndex = 0;
+            this.listTimelines.DoubleClick += new System.EventHandler(this.buttonLoad_Click);
             // 
             // groupBoxOverlay
             // 
+            this.groupBoxOverlay.Controls.Add(this.checkBoxMoveOverlayByDrag);
             this.groupBoxOverlay.Controls.Add(this.labelOverlayY);
             this.groupBoxOverlay.Controls.Add(this.labelOverlayX);
             this.groupBoxOverlay.Controls.Add(this.udOverlayY);
             this.groupBoxOverlay.Controls.Add(this.udNumRows);
             this.groupBoxOverlay.Controls.Add(this.udOverlayX);
             this.groupBoxOverlay.Controls.Add(this.labelNumRows);
-            this.groupBoxOverlay.Controls.Add(this.label1);
-            this.groupBoxOverlay.Location = new System.Drawing.Point(16, 395);
+            this.groupBoxOverlay.Controls.Add(this.labelOverlayOrientation);
+            this.groupBoxOverlay.Location = new System.Drawing.Point(16, 377);
             this.groupBoxOverlay.Name = "groupBoxOverlay";
-            this.groupBoxOverlay.Size = new System.Drawing.Size(469, 94);
+            this.groupBoxOverlay.Size = new System.Drawing.Size(469, 112);
             this.groupBoxOverlay.TabIndex = 5;
             this.groupBoxOverlay.TabStop = false;
             this.groupBoxOverlay.Text = "Overlay";
             // 
-            // label1
+            // labelOverlayOrientation
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 25);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(97, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Overlay Orientation";
+            this.labelOverlayOrientation.AutoSize = true;
+            this.labelOverlayOrientation.Location = new System.Drawing.Point(8, 25);
+            this.labelOverlayOrientation.Name = "labelOverlayOrientation";
+            this.labelOverlayOrientation.Size = new System.Drawing.Size(97, 13);
+            this.labelOverlayOrientation.TabIndex = 0;
+            this.labelOverlayOrientation.Text = "Overlay Orientation";
             // 
             // udOverlayX
             // 
@@ -199,7 +206,7 @@
             // 
             // udOverlayY
             // 
-            this.udOverlayY.Location = new System.Drawing.Point(289, 23);
+            this.udOverlayY.Location = new System.Drawing.Point(271, 23);
             this.udOverlayY.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -227,7 +234,7 @@
             // labelOverlayY
             // 
             this.labelOverlayY.AutoSize = true;
-            this.labelOverlayY.Location = new System.Drawing.Point(269, 25);
+            this.labelOverlayY.Location = new System.Drawing.Point(251, 25);
             this.labelOverlayY.Name = "labelOverlayY";
             this.labelOverlayY.Size = new System.Drawing.Size(17, 13);
             this.labelOverlayY.TabIndex = 2;
@@ -236,7 +243,7 @@
             // labelNumRows
             // 
             this.labelNumRows.AutoSize = true;
-            this.labelNumRows.Location = new System.Drawing.Point(6, 57);
+            this.labelNumRows.Location = new System.Drawing.Point(8, 55);
             this.labelNumRows.Name = "labelNumRows";
             this.labelNumRows.Size = new System.Drawing.Size(131, 13);
             this.labelNumRows.TabIndex = 0;
@@ -244,7 +251,7 @@
             // 
             // udNumRows
             // 
-            this.udNumRows.Location = new System.Drawing.Point(159, 55);
+            this.udNumRows.Location = new System.Drawing.Point(159, 53);
             this.udNumRows.Name = "udNumRows";
             this.udNumRows.Size = new System.Drawing.Size(40, 20);
             this.udNumRows.TabIndex = 1;
@@ -254,6 +261,19 @@
             0,
             0});
             this.udNumRows.ValueChanged += new System.EventHandler(this.udNumRows_ValueChanged);
+            // 
+            // checkBoxMoveOverlayByDrag
+            // 
+            this.checkBoxMoveOverlayByDrag.AutoSize = true;
+            this.checkBoxMoveOverlayByDrag.Checked = true;
+            this.checkBoxMoveOverlayByDrag.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxMoveOverlayByDrag.Location = new System.Drawing.Point(11, 79);
+            this.checkBoxMoveOverlayByDrag.Name = "checkBoxMoveOverlayByDrag";
+            this.checkBoxMoveOverlayByDrag.Size = new System.Drawing.Size(218, 17);
+            this.checkBoxMoveOverlayByDrag.TabIndex = 3;
+            this.checkBoxMoveOverlayByDrag.Text = "Move by drag && right doubleclick to hide.";
+            this.checkBoxMoveOverlayByDrag.UseVisualStyleBackColor = true;
+            this.checkBoxMoveOverlayByDrag.CheckedChanged += new System.EventHandler(this.checkBoxMoveOverlayByDrag_CheckedChanged);
             // 
             // ACTTabPageControl
             // 
@@ -295,6 +315,7 @@
         private System.Windows.Forms.NumericUpDown udNumRows;
         private System.Windows.Forms.NumericUpDown udOverlayX;
         private System.Windows.Forms.Label labelNumRows;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelOverlayOrientation;
+        private System.Windows.Forms.CheckBox checkBoxMoveOverlayByDrag;
     }
 }
