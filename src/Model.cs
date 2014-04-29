@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace ACTTimeline
 {
@@ -20,6 +21,48 @@ namespace ACTTimeline
     {
         public ResourceNotFoundException(string alias)
             : base(String.Format("Resource \"{0}\" could not be found.", alias)) { }
+    }
+
+    public class Globals
+    {
+        static private readonly Regex stripEndSlashesRegex = new Regex(@"/*$");
+        static string StripEndSlashes(string pathstr)
+        {
+            return stripEndSlashesRegex.Replace(pathstr, "");
+        }
+
+        static private string resourceRoot;
+        static public string ResourceRoot
+        {
+            get { return resourceRoot; }
+            set
+            {
+                resourceRoot = StripEndSlashes(value);
+            }
+        }
+
+        static public string SoundFilesRoot
+        {
+            get { return ResourceRoot + "/wav"; }
+        }
+
+        static public int NumberOfSoundFilesInResourcesDir()
+        {
+            return Directory.GetFileSystemEntries(SoundFilesRoot, "*.wav").Length;
+        }
+
+        static public string TimelineTxtsRoot
+        {
+            get { return ResourceRoot + "/timeline"; }
+        }
+
+        static public string[] TimelineTxtsInResourcesDir
+        {
+            get
+            {
+                return Directory.GetFileSystemEntries(TimelineTxtsRoot, "*.txt");
+            }
+        }
     }
 
     public class AlertSound
@@ -49,8 +92,6 @@ namespace ACTTimeline
         List<AlertSound> allAlertSounds;
         Dictionary<string, AlertSound> aliasMap;
 
-        const string ResourceCommonPath = "resources/wav/";
-
         public AlertSoundAssets()
         {
             allAlertSounds = new List<AlertSound>();
@@ -70,7 +111,7 @@ namespace ACTTimeline
             if (!File.Exists(filenameOrAlias))
             {
                 // try prepending resource path
-                string filenameWithResourcePath = ResourceCommonPath+filenameOrAlias;
+                string filenameWithResourcePath = String.Format("{0}/{1}", Globals.SoundFilesRoot, filenameOrAlias);
                 if (!File.Exists(filenameWithResourcePath))
                     throw new ResourceNotFoundException(filenameOrAlias);
 
@@ -160,6 +201,13 @@ namespace ACTTimeline
                 foreach (TimelineActivity e in Items)
                 {
                     e.UpdateTimeLeft(currentTime);
+                }
+
+                // full reset
+                if (currentTime == 0)
+                {
+                    foreach (ActivityAlert alert in alerts)
+                        alert.Processed = false;
                 }
             }
         }

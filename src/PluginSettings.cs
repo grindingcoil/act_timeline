@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace ACTTimeline
 {
-    class PluginSettings : SettingsSerializer
+    public class PluginSettings : SettingsSerializer
     {
         private string settingsFile;
 
@@ -13,6 +13,10 @@ namespace ACTTimeline
             : base(actPlugin)
         {
             settingsFile = Path.Combine(ActGlobals.oFormActMain.AppDataFolder.FullName, "Config\\ACTTimeline.config.xml");
+        }
+
+        public void Load()
+        {
             if (File.Exists(settingsFile))
             {
                 FileStream fs = new FileStream(settingsFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);

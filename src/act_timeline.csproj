@@ -75,6 +75,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ACTPlugin.cs" />
+    <Compile Include="ACTTabPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ACTTabPageControl.Designer.cs">
+      <DependentUpon>ACTTabPageControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model.cs" />
     <Compile Include="PluginSettings.cs" />
     <Compile Include="CachedSoundPlayer.cs" />
@@ -86,6 +92,9 @@
     <Compile Include="Win32APIUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ACTTabPageControl.resx">
+      <DependentUpon>ACTTabPageControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TimelineView.resx" />
   </ItemGroup>
   <ItemGroup>

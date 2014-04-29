@@ -10,22 +10,49 @@ namespace ACTTimeline
     public partial class TimelineView : Form
     {
         private Timer timer;
-        
+
         private Timeline timeline;
+        public Timeline Timeline {
+            get { return timeline; }
+            set 
+            {
+                timeline = value;
+                if (timeline == null)
+                    return;
+
+                foreach (AlertSound sound in timeline.AlertSoundAssets.All)
+                {
+                    soundplayer.WarmUpCache(sound.Filename);
+                }
+
+                relativeClock.Set(0);
+                timeline.CurrentTime = 0;
+            }
+        }
         private RelativeClock relativeClock;
 
         private CachedSoundPlayer soundplayer;
 
-        const int NUMBER_OF_ROWS_TO_DISPLAY = 3;
+        private int numberOfRowsToDisplay;
+        public int NumberOfRowsToDisplay
+        {
+            get { return numberOfRowsToDisplay; }
+            set
+            {
+                numberOfRowsToDisplay = value;
+
+                this.Height = dataGridView.RowTemplate.Height * numberOfRowsToDisplay;
+                dataGridView.Height = this.Height;
+            }
+        }
 
         public TimelineView()
         {
             InitializeComponent();
 
-            timeline = TimelineLoader.LoadFromFile(@"resources\timeline\test.txt");
-
             this.MouseDown += form_MouseDown;
             this.DoubleClick += (object sender, EventArgs e) => { this.Close(); };
+            this.FormClosed += TimelineView_FormClosed;
 
             typeof(DataGridView).
                 GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).
@@ -36,23 +63,22 @@ namespace ACTTimeline
             dataGridView.Columns.Add(new TimeLeftColumn { DataPropertyName = "TimeLeft" });
             
             timer = new Timer();
-            timer.Tick += timer_Tick;
+            timer.Tick += (object sender, EventArgs e) => { Synchronize(); };
             timer.Interval = 50;
             timer.Start();
 
             relativeClock = new RelativeClock();
 
             this.Opacity = 0.8;
-            this.Height = dataGridView.RowTemplate.Height * NUMBER_OF_ROWS_TO_DISPLAY;
-            dataGridView.Height = this.Height;
+            NumberOfRowsToDisplay = 3;
 
             soundplayer = new CachedSoundPlayer();
-            foreach (AlertSound sound in timeline.AlertSoundAssets.All)
-            {
-                soundplayer.WarmUpCache(sound.Filename);
-            }
+        }
 
-            Synchronize();
+        void TimelineView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            timer.Stop();
+            Timeline = null;
         }
 
         void form_MouseDown(object sender, MouseEventArgs e)
@@ -63,13 +89,11 @@ namespace ACTTimeline
             }
         }
 
-        void timer_Tick(object sender, EventArgs e)
-        {
-            Synchronize();
-        }
-
         private void Synchronize()
         {
+            if (timeline == null)
+                return;
+
             timeline.CurrentTime = relativeClock.CurrentTime();
 
             var pendingAlerts = timeline.PendingAlerts;
