@@ -75,6 +75,31 @@ namespace ACTTimeline
         
         private Timer timer;
 
+        private bool paused;
+        public bool Paused {
+            get { return paused; }
+            set {
+                if (paused == value)
+                    return;
+
+                paused = value;
+                OnPausedUpdate();
+            }
+        }
+
+        public event EventHandler PausedUpdate;
+        public void OnPausedUpdate()
+        {
+            if (!Paused)
+            {
+                // adjust relativeClock when unpaused
+                relativeClock.CurrentTime = timeline.CurrentTime;
+            }
+
+            if (PausedUpdate != null)
+                PausedUpdate(this, EventArgs.Empty);
+        }
+
         public TimelineController()
         {
             timer = new Timer();
@@ -83,6 +108,8 @@ namespace ACTTimeline
             timer.Start();
 
             relativeClock = new RelativeClock();
+
+            Paused = false;
         }
 
         public void Stop()
@@ -93,7 +120,7 @@ namespace ACTTimeline
 
         private void Synchronize()
         {
-            if (timeline == null)
+            if (timeline == null || Paused)
                 return;
 
             timeline.CurrentTime = relativeClock.CurrentTime;

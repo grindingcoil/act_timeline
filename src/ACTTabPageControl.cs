@@ -33,6 +33,15 @@ namespace ACTTimeline
             plugin.TimelineView.Move += TimelineView_Move;
             plugin.Controller.CurrentTimeUpdate += Controller_CurrentTimeUpdate;
             plugin.Controller.TimelineUpdate += Controller_TimelineUpdate;
+            plugin.Controller.PausedUpdate += Controller_PausedUpdate;
+            Controller_TimelineUpdate(this, null);
+            Controller_PausedUpdate(this, null);
+        }
+
+        void Controller_PausedUpdate(object sender, EventArgs e)
+        {
+            buttonPause.Enabled = !plugin.Controller.Paused;
+            buttonPlay.Enabled = plugin.Controller.Paused;
         }
 
         public static string FormatMMSS(double time)
@@ -45,6 +54,8 @@ namespace ACTTimeline
         void Controller_TimelineUpdate(object sender, EventArgs e)
         {
             Timeline timeline = plugin.Controller.Timeline;
+            if (timeline == null)
+                return;
 
             double endtime = timeline.EndTime;
             labelEndPos.Text = FormatMMSS(endtime);
@@ -167,6 +178,16 @@ namespace ACTTimeline
         private void buttonRewind_Click(object sender, EventArgs e)
         {
             plugin.Controller.CurrentTime = 0;
+        }
+
+        private void buttonPause_Click(object sender, EventArgs e)
+        {
+            plugin.Controller.Paused = true;
+        }
+
+        private void buttonPlay_Click(object sender, EventArgs e)
+        {
+            plugin.Controller.Paused = false;
         }
     }
 }

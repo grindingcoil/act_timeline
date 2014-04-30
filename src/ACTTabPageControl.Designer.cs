@@ -39,30 +39,30 @@
             this.buttonLoad = new System.Windows.Forms.Button();
             this.listTimelines = new System.Windows.Forms.ListBox();
             this.groupBoxOverlay = new System.Windows.Forms.GroupBox();
-            this.labelOverlayOrientation = new System.Windows.Forms.Label();
-            this.udOverlayX = new System.Windows.Forms.NumericUpDown();
-            this.udOverlayY = new System.Windows.Forms.NumericUpDown();
-            this.labelOverlayX = new System.Windows.Forms.Label();
-            this.labelOverlayY = new System.Windows.Forms.Label();
-            this.labelNumRows = new System.Windows.Forms.Label();
-            this.udNumRows = new System.Windows.Forms.NumericUpDown();
             this.checkBoxMoveOverlayByDrag = new System.Windows.Forms.CheckBox();
+            this.labelOverlayY = new System.Windows.Forms.Label();
+            this.labelOverlayX = new System.Windows.Forms.Label();
+            this.udOverlayY = new System.Windows.Forms.NumericUpDown();
+            this.udNumRows = new System.Windows.Forms.NumericUpDown();
+            this.udOverlayX = new System.Windows.Forms.NumericUpDown();
+            this.labelNumRows = new System.Windows.Forms.Label();
+            this.labelOverlayOrientation = new System.Windows.Forms.Label();
             this.groupBoxTracker = new System.Windows.Forms.GroupBox();
-            this.trackBar = new System.Windows.Forms.TrackBar();
-            this.labelLoadedTimelineLabel = new System.Windows.Forms.Label();
-            this.labelLoadedTimeline = new System.Windows.Forms.Label();
-            this.labelCurrPos = new System.Windows.Forms.Label();
-            this.labelEndPos = new System.Windows.Forms.Label();
             this.labelSlash = new System.Windows.Forms.Label();
-            this.buttonRewind = new System.Windows.Forms.Button();
-            this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonPause = new System.Windows.Forms.Button();
+            this.buttonPlay = new System.Windows.Forms.Button();
+            this.buttonRewind = new System.Windows.Forms.Button();
+            this.labelEndPos = new System.Windows.Forms.Label();
+            this.labelCurrPos = new System.Windows.Forms.Label();
+            this.labelLoadedTimeline = new System.Windows.Forms.Label();
+            this.labelLoadedTimelineLabel = new System.Windows.Forms.Label();
+            this.trackBar = new System.Windows.Forms.TrackBar();
             this.groupBoxEnvironment.SuspendLayout();
             this.groupBoxTimelines.SuspendLayout();
             this.groupBoxOverlay.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udOverlayX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udNumRows)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udOverlayX)).BeginInit();
             this.groupBoxTracker.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.SuspendLayout();
@@ -189,32 +189,36 @@
             this.groupBoxOverlay.TabStop = false;
             this.groupBoxOverlay.Text = "Overlay";
             // 
-            // labelOverlayOrientation
+            // checkBoxMoveOverlayByDrag
             // 
-            this.labelOverlayOrientation.AutoSize = true;
-            this.labelOverlayOrientation.Location = new System.Drawing.Point(8, 25);
-            this.labelOverlayOrientation.Name = "labelOverlayOrientation";
-            this.labelOverlayOrientation.Size = new System.Drawing.Size(97, 13);
-            this.labelOverlayOrientation.TabIndex = 0;
-            this.labelOverlayOrientation.Text = "Overlay Orientation";
+            this.checkBoxMoveOverlayByDrag.AutoSize = true;
+            this.checkBoxMoveOverlayByDrag.Checked = true;
+            this.checkBoxMoveOverlayByDrag.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxMoveOverlayByDrag.Location = new System.Drawing.Point(11, 79);
+            this.checkBoxMoveOverlayByDrag.Name = "checkBoxMoveOverlayByDrag";
+            this.checkBoxMoveOverlayByDrag.Size = new System.Drawing.Size(218, 17);
+            this.checkBoxMoveOverlayByDrag.TabIndex = 3;
+            this.checkBoxMoveOverlayByDrag.Text = "Move by drag && right doubleclick to hide.";
+            this.checkBoxMoveOverlayByDrag.UseVisualStyleBackColor = true;
+            this.checkBoxMoveOverlayByDrag.CheckedChanged += new System.EventHandler(this.checkBoxMoveOverlayByDrag_CheckedChanged);
             // 
-            // udOverlayX
+            // labelOverlayY
             // 
-            this.udOverlayX.Location = new System.Drawing.Point(159, 23);
-            this.udOverlayX.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.udOverlayX.Name = "udOverlayX";
-            this.udOverlayX.Size = new System.Drawing.Size(80, 20);
-            this.udOverlayX.TabIndex = 1;
-            this.udOverlayX.Value = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.udOverlayX.ValueChanged += new System.EventHandler(this.udOverlayX_ValueChanged);
+            this.labelOverlayY.AutoSize = true;
+            this.labelOverlayY.Location = new System.Drawing.Point(251, 25);
+            this.labelOverlayY.Name = "labelOverlayY";
+            this.labelOverlayY.Size = new System.Drawing.Size(17, 13);
+            this.labelOverlayY.TabIndex = 2;
+            this.labelOverlayY.Text = "Y:";
+            // 
+            // labelOverlayX
+            // 
+            this.labelOverlayX.AutoSize = true;
+            this.labelOverlayX.Location = new System.Drawing.Point(139, 25);
+            this.labelOverlayX.Name = "labelOverlayX";
+            this.labelOverlayX.Size = new System.Drawing.Size(17, 13);
+            this.labelOverlayX.TabIndex = 2;
+            this.labelOverlayX.Text = "X:";
             // 
             // udOverlayY
             // 
@@ -234,33 +238,6 @@
             0});
             this.udOverlayY.ValueChanged += new System.EventHandler(this.udOverlayY_ValueChanged);
             // 
-            // labelOverlayX
-            // 
-            this.labelOverlayX.AutoSize = true;
-            this.labelOverlayX.Location = new System.Drawing.Point(139, 25);
-            this.labelOverlayX.Name = "labelOverlayX";
-            this.labelOverlayX.Size = new System.Drawing.Size(17, 13);
-            this.labelOverlayX.TabIndex = 2;
-            this.labelOverlayX.Text = "X:";
-            // 
-            // labelOverlayY
-            // 
-            this.labelOverlayY.AutoSize = true;
-            this.labelOverlayY.Location = new System.Drawing.Point(251, 25);
-            this.labelOverlayY.Name = "labelOverlayY";
-            this.labelOverlayY.Size = new System.Drawing.Size(17, 13);
-            this.labelOverlayY.TabIndex = 2;
-            this.labelOverlayY.Text = "Y:";
-            // 
-            // labelNumRows
-            // 
-            this.labelNumRows.AutoSize = true;
-            this.labelNumRows.Location = new System.Drawing.Point(8, 55);
-            this.labelNumRows.Name = "labelNumRows";
-            this.labelNumRows.Size = new System.Drawing.Size(131, 13);
-            this.labelNumRows.TabIndex = 0;
-            this.labelNumRows.Text = "Number of rows to display:";
-            // 
             // udNumRows
             // 
             this.udNumRows.Location = new System.Drawing.Point(159, 53);
@@ -274,18 +251,41 @@
             0});
             this.udNumRows.ValueChanged += new System.EventHandler(this.udNumRows_ValueChanged);
             // 
-            // checkBoxMoveOverlayByDrag
+            // udOverlayX
             // 
-            this.checkBoxMoveOverlayByDrag.AutoSize = true;
-            this.checkBoxMoveOverlayByDrag.Checked = true;
-            this.checkBoxMoveOverlayByDrag.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxMoveOverlayByDrag.Location = new System.Drawing.Point(11, 79);
-            this.checkBoxMoveOverlayByDrag.Name = "checkBoxMoveOverlayByDrag";
-            this.checkBoxMoveOverlayByDrag.Size = new System.Drawing.Size(218, 17);
-            this.checkBoxMoveOverlayByDrag.TabIndex = 3;
-            this.checkBoxMoveOverlayByDrag.Text = "Move by drag && right doubleclick to hide.";
-            this.checkBoxMoveOverlayByDrag.UseVisualStyleBackColor = true;
-            this.checkBoxMoveOverlayByDrag.CheckedChanged += new System.EventHandler(this.checkBoxMoveOverlayByDrag_CheckedChanged);
+            this.udOverlayX.Location = new System.Drawing.Point(159, 23);
+            this.udOverlayX.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.udOverlayX.Name = "udOverlayX";
+            this.udOverlayX.Size = new System.Drawing.Size(80, 20);
+            this.udOverlayX.TabIndex = 1;
+            this.udOverlayX.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.udOverlayX.ValueChanged += new System.EventHandler(this.udOverlayX_ValueChanged);
+            // 
+            // labelNumRows
+            // 
+            this.labelNumRows.AutoSize = true;
+            this.labelNumRows.Location = new System.Drawing.Point(8, 55);
+            this.labelNumRows.Name = "labelNumRows";
+            this.labelNumRows.Size = new System.Drawing.Size(131, 13);
+            this.labelNumRows.TabIndex = 0;
+            this.labelNumRows.Text = "Number of rows to display:";
+            // 
+            // labelOverlayOrientation
+            // 
+            this.labelOverlayOrientation.AutoSize = true;
+            this.labelOverlayOrientation.Location = new System.Drawing.Point(8, 25);
+            this.labelOverlayOrientation.Name = "labelOverlayOrientation";
+            this.labelOverlayOrientation.Size = new System.Drawing.Size(97, 13);
+            this.labelOverlayOrientation.TabIndex = 0;
+            this.labelOverlayOrientation.Text = "Overlay Orientation";
             // 
             // groupBoxTracker
             // 
@@ -305,52 +305,6 @@
             this.groupBoxTracker.TabStop = false;
             this.groupBoxTracker.Text = "Tracker";
             // 
-            // trackBar
-            // 
-            this.trackBar.Location = new System.Drawing.Point(6, 39);
-            this.trackBar.Name = "trackBar";
-            this.trackBar.Size = new System.Drawing.Size(388, 45);
-            this.trackBar.TabIndex = 0;
-            this.trackBar.TickFrequency = 30;
-            this.trackBar.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
-            // 
-            // labelLoadedTimelineLabel
-            // 
-            this.labelLoadedTimelineLabel.AutoSize = true;
-            this.labelLoadedTimelineLabel.Location = new System.Drawing.Point(9, 16);
-            this.labelLoadedTimelineLabel.Name = "labelLoadedTimelineLabel";
-            this.labelLoadedTimelineLabel.Size = new System.Drawing.Size(88, 13);
-            this.labelLoadedTimelineLabel.TabIndex = 1;
-            this.labelLoadedTimelineLabel.Text = "Loaded Timeline:";
-            // 
-            // labelLoadedTimeline
-            // 
-            this.labelLoadedTimeline.AutoSize = true;
-            this.labelLoadedTimeline.Location = new System.Drawing.Point(103, 16);
-            this.labelLoadedTimeline.Name = "labelLoadedTimeline";
-            this.labelLoadedTimeline.Size = new System.Drawing.Size(91, 13);
-            this.labelLoadedTimeline.TabIndex = 2;
-            this.labelLoadedTimeline.Text = "hogefugaTimeline";
-            // 
-            // labelCurrPos
-            // 
-            this.labelCurrPos.AutoSize = true;
-            this.labelCurrPos.Location = new System.Drawing.Point(392, 30);
-            this.labelCurrPos.Name = "labelCurrPos";
-            this.labelCurrPos.Size = new System.Drawing.Size(34, 13);
-            this.labelCurrPos.TabIndex = 3;
-            this.labelCurrPos.Text = "00:00";
-            // 
-            // labelEndPos
-            // 
-            this.labelEndPos.AutoSize = true;
-            this.labelEndPos.Location = new System.Drawing.Point(433, 47);
-            this.labelEndPos.Name = "labelEndPos";
-            this.labelEndPos.Size = new System.Drawing.Size(34, 13);
-            this.labelEndPos.TabIndex = 3;
-            this.labelEndPos.Text = "00:00";
-            this.labelEndPos.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-            // 
             // labelSlash
             // 
             this.labelSlash.AutoSize = true;
@@ -360,6 +314,27 @@
             this.labelSlash.Size = new System.Drawing.Size(12, 13);
             this.labelSlash.TabIndex = 4;
             this.labelSlash.Text = "/";
+            // 
+            // buttonPause
+            // 
+            this.buttonPause.Enabled = false;
+            this.buttonPause.Location = new System.Drawing.Point(110, 83);
+            this.buttonPause.Name = "buttonPause";
+            this.buttonPause.Size = new System.Drawing.Size(57, 26);
+            this.buttonPause.TabIndex = 5;
+            this.buttonPause.Text = "Pause";
+            this.buttonPause.UseVisualStyleBackColor = true;
+            this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
+            // 
+            // buttonPlay
+            // 
+            this.buttonPlay.Location = new System.Drawing.Point(166, 83);
+            this.buttonPlay.Name = "buttonPlay";
+            this.buttonPlay.Size = new System.Drawing.Size(57, 26);
+            this.buttonPlay.TabIndex = 5;
+            this.buttonPlay.Text = "Play";
+            this.buttonPlay.UseVisualStyleBackColor = true;
+            this.buttonPlay.Click += new System.EventHandler(this.buttonPlay_Click);
             // 
             // buttonRewind
             // 
@@ -371,24 +346,51 @@
             this.buttonRewind.UseVisualStyleBackColor = true;
             this.buttonRewind.Click += new System.EventHandler(this.buttonRewind_Click);
             // 
-            // buttonPlay
+            // labelEndPos
             // 
-            this.buttonPlay.Location = new System.Drawing.Point(166, 83);
-            this.buttonPlay.Name = "buttonPlay";
-            this.buttonPlay.Size = new System.Drawing.Size(57, 26);
-            this.buttonPlay.TabIndex = 5;
-            this.buttonPlay.Text = "Play";
-            this.buttonPlay.UseVisualStyleBackColor = true;
+            this.labelEndPos.AutoSize = true;
+            this.labelEndPos.Location = new System.Drawing.Point(433, 47);
+            this.labelEndPos.Name = "labelEndPos";
+            this.labelEndPos.Size = new System.Drawing.Size(34, 13);
+            this.labelEndPos.TabIndex = 3;
+            this.labelEndPos.Text = "00:00";
+            this.labelEndPos.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
-            // buttonPause
+            // labelCurrPos
             // 
-            this.buttonPause.Enabled = false;
-            this.buttonPause.Location = new System.Drawing.Point(110, 83);
-            this.buttonPause.Name = "buttonPause";
-            this.buttonPause.Size = new System.Drawing.Size(57, 26);
-            this.buttonPause.TabIndex = 5;
-            this.buttonPause.Text = "Pause";
-            this.buttonPause.UseVisualStyleBackColor = true;
+            this.labelCurrPos.AutoSize = true;
+            this.labelCurrPos.Location = new System.Drawing.Point(392, 30);
+            this.labelCurrPos.Name = "labelCurrPos";
+            this.labelCurrPos.Size = new System.Drawing.Size(34, 13);
+            this.labelCurrPos.TabIndex = 3;
+            this.labelCurrPos.Text = "00:00";
+            // 
+            // labelLoadedTimeline
+            // 
+            this.labelLoadedTimeline.AutoSize = true;
+            this.labelLoadedTimeline.Location = new System.Drawing.Point(103, 16);
+            this.labelLoadedTimeline.Name = "labelLoadedTimeline";
+            this.labelLoadedTimeline.Size = new System.Drawing.Size(91, 13);
+            this.labelLoadedTimeline.TabIndex = 2;
+            this.labelLoadedTimeline.Text = "hogefugaTimeline";
+            // 
+            // labelLoadedTimelineLabel
+            // 
+            this.labelLoadedTimelineLabel.AutoSize = true;
+            this.labelLoadedTimelineLabel.Location = new System.Drawing.Point(9, 16);
+            this.labelLoadedTimelineLabel.Name = "labelLoadedTimelineLabel";
+            this.labelLoadedTimelineLabel.Size = new System.Drawing.Size(88, 13);
+            this.labelLoadedTimelineLabel.TabIndex = 1;
+            this.labelLoadedTimelineLabel.Text = "Loaded Timeline:";
+            // 
+            // trackBar
+            // 
+            this.trackBar.Location = new System.Drawing.Point(6, 39);
+            this.trackBar.Name = "trackBar";
+            this.trackBar.Size = new System.Drawing.Size(388, 45);
+            this.trackBar.TabIndex = 0;
+            this.trackBar.TickFrequency = 30;
+            this.trackBar.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
             // 
             // ACTTabPageControl
             // 
@@ -405,9 +407,9 @@
             this.groupBoxTimelines.ResumeLayout(false);
             this.groupBoxOverlay.ResumeLayout(false);
             this.groupBoxOverlay.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.udOverlayX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udNumRows)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udOverlayX)).EndInit();
             this.groupBoxTracker.ResumeLayout(false);
             this.groupBoxTracker.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();

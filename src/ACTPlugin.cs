@@ -129,6 +129,7 @@ namespace ACTTimeline
             Settings.Save();
 
             TimelineView.Close();
+            Controller.Stop();
 
             StatusText.Text = "Plugin Exited m(_ _)m";
         }
