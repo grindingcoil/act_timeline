@@ -9,40 +9,6 @@ namespace ACTTimeline
 {
     public partial class TimelineView : Form
     {
-        private Timer timer;
-
-        private Timeline timeline;
-        public Timeline Timeline {
-            get { return timeline; }
-            set 
-            {
-                timeline = value;
-                if (timeline == null)
-                    return;
-
-                foreach (AlertSound sound in timeline.AlertSoundAssets.All)
-                {
-                    soundplayer.WarmUpCache(sound.Filename);
-                }
-
-                CurrentTime = 0;
-            }
-        }
-        
-        private RelativeClock relativeClock;
-        public double CurrentTime
-        {
-            get
-            {
-                return relativeClock.CurrentTime;
-            }
-            set
-            {
-                relativeClock.CurrentTime = value;
-                // timeline.CurrentTime will be |Synchronize()|d in next timer tick.
-            }
-        }
-
         private CachedSoundPlayer soundplayer;
 
         private int numberOfRowsToDisplay;
@@ -67,17 +33,18 @@ namespace ACTTimeline
                 Win32APIUtils.SetWindow_EX_TRANSPARENT(Handle, !moveByDrag);
             }
         }
-        
-        // for external UIs depending on CurrentTime
-        // FIXME: refactor this into TimelineController
-        public event EventHandler CurrentTimeUpdate;
 
-        public TimelineView()
+        private TimelineController controller;
+        
+        public TimelineView(TimelineController controller_)
         {
+            controller = controller_;
+            controller.TimelineUpdate += controller_TimelineUpdate;
+            controller.CurrentTimeUpdate += controller_CurrentTimeUpdate;
+
             InitializeComponent();
 
             this.MouseDown += TimelineView_MouseDown;
-            this.FormClosed += TimelineView_FormClosed;
 
             typeof(DataGridView).
                 GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).
@@ -86,25 +53,12 @@ namespace ACTTimeline
             dataGridView.AutoGenerateColumns = false;
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Name", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
             dataGridView.Columns.Add(new TimeLeftColumn { DataPropertyName = "TimeLeft" });
-            
-            timer = new Timer();
-            timer.Tick += (object sender, EventArgs e) => { Synchronize(); };
-            timer.Interval = 50;
-            timer.Start();
-
-            relativeClock = new RelativeClock();
 
             this.Opacity = 0.8;
             NumberOfRowsToDisplay = 3;
             MoveByDrag = true;
 
             soundplayer = new CachedSoundPlayer();
-        }
-
-        void TimelineView_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            timer.Stop();
-            Timeline = null;
         }
 
         void TimelineView_MouseDown(object sender, MouseEventArgs e)
@@ -115,12 +69,22 @@ namespace ACTTimeline
             }
         }
 
-        private void Synchronize()
+        void controller_TimelineUpdate(object sender, EventArgs e)
         {
-            if (timeline == null)
+            if (controller.Timeline == null)
                 return;
 
-            timeline.CurrentTime = relativeClock.CurrentTime;
+            foreach (AlertSound sound in controller.Timeline.AlertSoundAssets.All)
+            {
+                soundplayer.WarmUpCache(sound.Filename);
+            }
+        }
+
+        void controller_CurrentTimeUpdate(object sender, EventArgs e)
+        {
+            Timeline timeline = controller.Timeline;
+            if (timeline == null)
+                return;
 
             // play pending alerts
             var pendingAlerts = timeline.PendingAlerts;
@@ -133,14 +97,6 @@ namespace ACTTimeline
             // sync dataGridView
             dataGridView.DataSource = null;
             dataGridView.DataSource = timeline.VisibleItems(TimeLeftCell.THRESHOLD).ToList();
-
-            OnCurrentTimeUpdate();
-        }
-
-        public void OnCurrentTimeUpdate()
-        {
-            if (CurrentTimeUpdate != null)
-                CurrentTimeUpdate(this, EventArgs.Empty);
         }
     }
 

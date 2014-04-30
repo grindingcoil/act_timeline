@@ -84,6 +84,7 @@
     <Compile Include="Model.cs" />
     <Compile Include="PluginSettings.cs" />
     <Compile Include="CachedSoundPlayer.cs" />
+    <Compile Include="TimelineController.cs" />
     <Compile Include="TimelineLoader.cs" />
     <Compile Include="TimelineView.cs">
       <SubType>Form</SubType>

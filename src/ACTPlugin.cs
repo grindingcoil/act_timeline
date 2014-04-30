@@ -12,48 +12,20 @@ namespace ACTTimeline
         public TabPage ScreenSpace { get; private set; }
         public Label StatusText { get; private set; }
 
+        public TimelineController Controller { get; private set; }
+
         public PluginSettings Settings { get; private set; }
 
         private ACTTabPageControl tabPageControl;
-
         public TimelineView TimelineView { get; private set; }
+        private CheckBox checkBoxShowView;
 
-        private Timeline timeline;
-        public Timeline Timeline
-        {
-            get { return timeline; }
-            set
-            {
-                timeline = value;
-                TimelineView.Timeline = timeline;
-            }
-        }
-
-        private string timelineTxtFilePath;
+        // delegate for PluginSettings
         public string TimelineTxtFilePath
         {
-            get { return timelineTxtFilePath; }
-            set
-            {
-                if (value == null || value == "")
-                    return;
-
-                try
-                {
-                    if (!File.Exists(value))
-                        throw new ResourceNotFoundException(value);
-
-                    timelineTxtFilePath = value;
-                    Timeline = TimelineLoader.LoadFromFile(timelineTxtFilePath);
-                }
-                catch(Exception e)
-                {
-                    MessageBox.Show(String.Format("Failed to load timeline. Error: {0}", e.Message), "ACT Timeline Plugin");
-                }
-            }
+            get { return Controller.TimelineTxtFilePath; }
+            set { Controller.TimelineTxtFilePath = value; }
         }
-
-        private CheckBox checkBoxShowView;
 
         public ACTPlugin()
         {
@@ -69,7 +41,9 @@ namespace ACTTimeline
                 ScreenSpace = pluginScreenSpace;
                 StatusText = pluginStatusText;
 
-                TimelineView = new TimelineView();
+                Controller = new TimelineController();
+
+                TimelineView = new TimelineView(Controller);
                 TimelineView.Show();
                 TimelineView.DoubleClick += TimelineView_DoubleClick;
 

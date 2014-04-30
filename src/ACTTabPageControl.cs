@@ -31,7 +31,8 @@ namespace ACTTimeline
             settings.AddControlSetting("MoveOverlayByDrag", checkBoxMoveOverlayByDrag);
 
             plugin.TimelineView.Move += TimelineView_Move;
-            plugin.TimelineView.CurrentTimeUpdate += TimelineView_CurrentTimeUpdate;
+            plugin.Controller.CurrentTimeUpdate += Controller_CurrentTimeUpdate;
+            plugin.Controller.TimelineUpdate += Controller_TimelineUpdate;
         }
 
         public static string FormatMMSS(double time)
@@ -41,18 +42,22 @@ namespace ACTTimeline
             return String.Format("{0:00}:{1:00}", mm, ss);
         }
 
-        void TimelineView_CurrentTimeUpdate(object sender, EventArgs e)
+        void Controller_TimelineUpdate(object sender, EventArgs e)
         {
-            double currtime = plugin.TimelineView.CurrentTime;
-            labelCurrPos.Text = FormatMMSS(currtime);
-            trackBar.Value = (int)currtime;
-            
-            // FIXME: move to TimelineUpdate
-            double endtime = plugin.Timeline.EndTime;
+            Timeline timeline = plugin.Controller.Timeline;
+
+            double endtime = timeline.EndTime;
             labelEndPos.Text = FormatMMSS(endtime);
             trackBar.Maximum = (int)endtime;
 
-            labelLoadedTimeline.Text = plugin.Timeline.Name;
+            labelLoadedTimeline.Text = timeline.Name;
+        }
+
+        void Controller_CurrentTimeUpdate(object sender, EventArgs e)
+        {
+            double currtime = plugin.Controller.CurrentTime;
+            labelCurrPos.Text = FormatMMSS(currtime);
+            trackBar.Value = (int)currtime;
         }
 
         void TimelineView_Move(object sender, EventArgs e)
@@ -129,7 +134,7 @@ namespace ACTTimeline
         private void buttonLoad_Click(object sender, EventArgs e)
         {
             string timelineTxtFilePath = (string)listTimelines.SelectedItem;
-            plugin.TimelineTxtFilePath = String.Format("{0}/{1}", Globals.TimelineTxtsRoot, timelineTxtFilePath);
+            plugin.Controller.TimelineTxtFilePath = String.Format("{0}/{1}", Globals.TimelineTxtsRoot, timelineTxtFilePath);
         }
 
         private void udOverlayX_ValueChanged(object sender, EventArgs e)
@@ -156,12 +161,12 @@ namespace ACTTimeline
 
         private void trackBar_ValueChanged(object sender, EventArgs e)
         {
-            plugin.TimelineView.CurrentTime = (int)trackBar.Value;
+            plugin.Controller.CurrentTime = (int)trackBar.Value;
         }
 
         private void buttonRewind_Click(object sender, EventArgs e)
         {
-            plugin.TimelineView.CurrentTime = 0;
+            plugin.Controller.CurrentTime = 0;
         }
     }
 }
