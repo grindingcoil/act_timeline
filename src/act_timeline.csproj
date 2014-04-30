@@ -81,6 +81,7 @@
     <Compile Include="ACTTabPageControl.Designer.cs">
       <DependentUpon>ACTTabPageControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Globals.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="PluginSettings.cs" />
     <Compile Include="CachedSoundPlayer.cs" />

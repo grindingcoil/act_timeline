@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ACTTimeline
 {
@@ -121,6 +122,18 @@ namespace ACTTimeline
         }
     };
 
+    public class TimelineAnchor
+    {
+        public double TimeFromStart { get; set; }
+        public Regex Regex { get; set; }
+        public double Window { get; set; }
+
+        public TimelineAnchor()
+        {
+            Window = 3.0;
+        }
+    };
+
     public class TimelineActivity
     {
         public string Name { get; set; }
@@ -192,6 +205,12 @@ namespace ACTTimeline
             return from e in Items where e.TimeLeft > threshold select e;
         }
 
+        List<TimelineAnchor> anchors;
+        public IEnumerable<TimelineAnchor> Anchors
+        {
+            get { return anchors; }
+        }
+
         List<ActivityAlert> alerts;
 
         public IEnumerable<ActivityAlert> Alerts { get { return alerts; } }
@@ -211,11 +230,12 @@ namespace ACTTimeline
 
         public double EndTime { get; private set; }
 
-        public Timeline(string name, List<TimelineActivity> items_, List<ActivityAlert> alerts_, AlertSoundAssets soundAssets)
+        public Timeline(string name, List<TimelineActivity> items_, List<TimelineAnchor> anchors_, List<ActivityAlert> alerts_, AlertSoundAssets soundAssets)
         {
             Name = name;
             currentTime = 0;
             items = items_.OrderBy(activity => activity.TimeFromStart).ToList();
+            anchors = anchors_.OrderBy(anchor => anchor.TimeFromStart).ToList();
             alerts = alerts_;
             AlertSoundAssets = soundAssets;
             EndTime = items.Last().EndTime;

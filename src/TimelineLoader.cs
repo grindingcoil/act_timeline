@@ -15,6 +15,7 @@ namespace ACTTimeline
     public class TimelineConfig
     {
         public List<TimelineActivity> Items;
+        public List<TimelineAnchor> Anchors;
         public List<AlertAll> AlertAlls;
         public List<ActivityAlert> Alerts;
         public AlertSoundAssets AlertSoundAssets;
@@ -22,6 +23,7 @@ namespace ACTTimeline
         public TimelineConfig()
         {
             Items = new List<TimelineActivity>();
+            Anchors = new List<TimelineAnchor>();
             AlertAlls = new List<AlertAll>();
             Alerts = new List<ActivityAlert>();
             AlertSoundAssets = new AlertSoundAssets();
@@ -84,7 +86,7 @@ namespace ACTTimeline
             TimelineActivity.Select<Tuple<TimelineActivity, string>, ConfigOp>(t => ((TimelineConfig config) =>
             {
                 config.Items.Add(t.Item1);
-                // FIXME
+                config.Anchors.Add(new TimelineAnchor { TimeFromStart = t.Item1.TimeFromStart, Regex = new System.Text.RegularExpressions.Regex(t.Item2) });
             })).Named("TimelineActivityStatement");
         
         static readonly Parser<Tuple<string, string>> AlertSoundAlias =
@@ -168,7 +170,7 @@ namespace ACTTimeline
                     config.Alerts.Add(alert);
                 }
             }
-            return new Timeline(name, config.Items, config.Alerts, config.AlertSoundAssets);
+            return new Timeline(name, config.Items, config.Anchors, config.Alerts, config.AlertSoundAssets);
         }
     }
 }
