@@ -44,27 +44,47 @@ namespace ACTTimeline
         static readonly Parser<string> Spaces = Parse.Regex(@"^[ 　]+");
         static readonly Parser<string> NonWhiteSpaces = Parse.Char(c => !char.IsWhiteSpace(c), "non whitespace char").Many().Text();
         static readonly Parser<string> MaybeQuotedString = QuotedString.XOr(NonWhiteSpaces);
+
+        static readonly Parser<char> RegexEscapedSlash =
+            from escape in Parse.Char('\\')
+            from slash in Parse.Char('/')
+            select '/';
+        static readonly Parser<char> RegexChar = RegexEscapedSlash.Or(Parse.CharExcept('/'));
+        static readonly Parser<string> Regex =
+            from slash in Parse.Char('/')
+            from regex in RegexChar.Many().Text()
+            from slash2 in Parse.Char('/')
+            select regex;
+
         static readonly Parser<double> Duration = 
             from spaces in Spaces
             from durationPrefix in Parse.String("duration").Or(Parse.String("効果時間"))
             from spaces2 in Parse.Optional(Spaces)
             from value in Parse.Decimal
             select double.Parse(value, CultureInfo.InvariantCulture);
-        static readonly Parser<TimelineActivity> TimelineActivity =
+        static readonly Parser<string> Sync =
+            from spaces in Spaces
+            from sync in Parse.String("sync")
+            from spaces2 in Parse.Optional(Spaces)
+            from regex in Regex
+            select regex;
+        static readonly Parser<Tuple<TimelineActivity, string>> TimelineActivity =
             from timeFromStart in Parse.Decimal
-            from optionalSuffix in Parse.Regex(@"秒?後?")
             from spaces in Spaces
             from name in MaybeQuotedString
             from duration in Parse.Optional(Duration)
-            select new TimelineActivity {
+            from sync in Parse.Optional(Sync)
+            select new Tuple<TimelineActivity, string>(new TimelineActivity {
                 TimeFromStart = double.Parse(timeFromStart, CultureInfo.InvariantCulture),
                 Name = name,
                 Duration = duration.GetOrElse(0)
-            };
+            }, sync.GetOrElse(null));
 
         static readonly Parser<ConfigOp> TimelineActivityStatement =
-            TimelineActivity.Select<TimelineActivity, ConfigOp>(activity => ((TimelineConfig config) => {
-                config.Items.Add(activity);
+            TimelineActivity.Select<Tuple<TimelineActivity, string>, ConfigOp>(t => ((TimelineConfig config) =>
+            {
+                config.Items.Add(t.Item1);
+                // FIXME
             })).Named("TimelineActivityStatement");
         
         static readonly Parser<Tuple<string, string>> AlertSoundAlias =

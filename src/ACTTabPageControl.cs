@@ -59,7 +59,7 @@ namespace ACTTimeline
 
             double endtime = timeline.EndTime;
             labelEndPos.Text = FormatMMSS(endtime);
-            trackBar.Maximum = (int)endtime;
+            trackBar.Maximum = (int)Math.Ceiling(endtime);
 
             labelLoadedTimeline.Text = timeline.Name;
         }
@@ -68,7 +68,7 @@ namespace ACTTimeline
         {
             double currtime = plugin.Controller.CurrentTime;
             labelCurrPos.Text = FormatMMSS(currtime);
-            trackBar.Value = (int)currtime;
+            trackBar.Value = (int)Math.Floor(currtime);
         }
 
         void TimelineView_Move(object sender, EventArgs e)
