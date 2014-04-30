@@ -179,16 +179,13 @@ namespace ACTTimeline
             }
             set
             {
-                var lastTime = currentTime;
-
                 currentTime = value;
                 foreach (TimelineActivity e in Items)
                 {
                     e.UpdateTimeLeft(currentTime);
                 }
 
-                bool isRewinding = currentTime - lastTime < 0;
-                if (isRewinding)
+                if (currentTime == 0)
                 {
                     foreach (ActivityAlert alert in alerts)
                         alert.Processed = false;
