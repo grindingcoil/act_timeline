@@ -60,6 +60,8 @@ namespace ACTTimeline
                 CurrentTimeUpdate(this, EventArgs.Empty);
         }
 
+        bool forceSynchronizeOnce;
+
         private RelativeClock relativeClock;
         public double CurrentTime
         {
@@ -70,7 +72,7 @@ namespace ACTTimeline
             set
             {
                 relativeClock.CurrentTime = value;
-                // timeline.CurrentTime will be |Synchronize()|d in next timer tick.
+                forceSynchronizeOnce = true;
             }
         }
         
@@ -130,12 +132,11 @@ namespace ACTTimeline
             timer.Start();
 
             relativeClock = new RelativeClock();
-
+            forceSynchronizeOnce = true;
             Paused = false;
 
             ActGlobals.oFormActMain.OnLogLineRead += act_OnLogLineRead;
             ActGlobals.oFormActMain.OnCombatStart += act_OnCombatStart;
-
         }
 
         private void act_OnCombatStart(bool isImport, CombatToggleEventArgs encounterInfo)
@@ -170,9 +171,13 @@ namespace ACTTimeline
 
         private void Synchronize()
         {
-            if (timeline == null || Paused)
+            if (timeline == null)
                 return;
 
+            if (Paused && !forceSynchronizeOnce)
+                return;
+
+            forceSynchronizeOnce = false;
             timeline.CurrentTime = relativeClock.CurrentTime;
 
             OnCurrentTimeUpdate();
