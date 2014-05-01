@@ -29,17 +29,31 @@ namespace ACTTimeline
             settings.AddControlSetting("OverlayY", udOverlayY);
             settings.AddControlSetting("NumberOfRowsToDisplay", udNumRows);
             settings.AddControlSetting("MoveOverlayByDrag", checkBoxMoveOverlayByDrag);
+            settings.AddControlSetting("PlayOnEncounter", checkBoxAutoPlayEnc);
 
             plugin.TimelineView.Move += TimelineView_Move;
             plugin.Controller.CurrentTimeUpdate += Controller_CurrentTimeUpdate;
             plugin.Controller.TimelineUpdate += Controller_TimelineUpdate;
             plugin.Controller.PausedUpdate += Controller_PausedUpdate;
+            plugin.Controller.PlayOnEncounterUpdate += Controller_PlayOnEncounterUpdate;
             Controller_TimelineUpdate(this, null);
             Controller_PausedUpdate(this, null);
+            Controller_PlayOnEncounterUpdate(this, null);
+        }
+
+        void Controller_PlayOnEncounterUpdate(object sender, EventArgs e)
+        {
+            checkBoxAutoPlayEnc.Checked = plugin.Controller.PlayOnEncounter;
         }
 
         void Controller_PausedUpdate(object sender, EventArgs e)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => Controller_PausedUpdate(sender, e)));
+                return;
+            }
+
             buttonPause.Enabled = !plugin.Controller.Paused;
             buttonPlay.Enabled = plugin.Controller.Paused;
         }
@@ -188,6 +202,11 @@ namespace ACTTimeline
         private void buttonPlay_Click(object sender, EventArgs e)
         {
             plugin.Controller.Paused = false;
+        }
+
+        private void checkBoxAutoPlayEnc_CheckedChanged(object sender, EventArgs e)
+        {
+            plugin.Controller.PlayOnEncounter = checkBoxAutoPlayEnc.Checked;
         }
     }
 }

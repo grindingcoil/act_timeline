@@ -132,6 +132,11 @@ namespace ACTTimeline
         {
             Window = 3.0;
         }
+
+        public bool ActiveAt(double t)
+        {
+            return (TimeFromStart - Window / 2) < t && t < (TimeFromStart + Window / 2);
+        }
     };
 
     public class TimelineActivity
@@ -206,6 +211,10 @@ namespace ACTTimeline
         public IEnumerable<TimelineAnchor> Anchors
         {
             get { return anchors; }
+        }
+        public IEnumerable<TimelineAnchor> ActiveAnchors()
+        {
+            return from a in anchors where a.ActiveAt(CurrentTime) select a;
         }
 
         List<ActivityAlert> alerts;
