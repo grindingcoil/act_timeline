@@ -146,35 +146,24 @@ namespace ACTTimeline
             TimelineActivity activity = (TimelineActivity)value;
             TimelineController controller = ((TimeLeftColumn)OwningColumn).Controller;
 
-            double timeLeft = activity.EndTime - controller.CurrentTime;
-            float timeLeftF = (float)timeLeft;
-            
-            // draw bar
-            float bar = (BAR_START - timeLeftF) / BAR_START;
-            if (bar > MAX_BAR_RATIO)
-                bar = MAX_BAR_RATIO;
+            double timeTillStart = activity.EndTime - controller.CurrentTime;
+            float timeTillStartF = (float)timeTillStart;
 
-            RectangleF barArea = new RectangleF(cellBounds.X + MARGIN, cellBounds.Y + MARGIN, cellBounds.Width - MARGIN * 2, cellBounds.Height - MARGIN * 2);
-            RectangleF barFill = barArea;
-            barFill.Width *= bar / MAX_BAR_RATIO;
+            PaintBar(graphics, cellBounds, timeTillStartF);
+            PaintText(graphics, cellBounds, timeTillStartF);
+        }
 
-            if (barFill.Width > 1)
-            {
-                Color color = BarColorAtTimeLeft(timeLeftF);
-                Color lighterColor = ControlPaint.Light(color, 1.0F);
+        private static RectangleF DrawAreaFromCellBounds(Rectangle cellBounds)
+        {
+            return new RectangleF(cellBounds.X + MARGIN, cellBounds.Y + MARGIN, cellBounds.Width - MARGIN * 2, cellBounds.Height - MARGIN * 2);
+        }
 
-                Rectangle gradientRect = Rectangle.Ceiling(barFill);
-                Brush barBrush = new LinearGradientBrush(gradientRect, lighterColor, color, LinearGradientMode.Horizontal) { WrapMode = WrapMode.TileFlipX };
-                
-                graphics.FillRectangle(barBrush, barFill);
-            }
-            float barX = barArea.X + barArea.Width / MAX_BAR_RATIO;
-            graphics.DrawLine(Pens.DarkGray, barX, cellBounds.Y, barX, cellBounds.Y + cellBounds.Height);
- 
-            // draw text
-            string valueString = timeLeft.ToString("0");
+        private static void PaintText(Graphics graphics, Rectangle cellBounds, float timeTillStartF)
+        {
+            RectangleF drawArea = DrawAreaFromCellBounds(cellBounds);
+            string valueString = timeTillStartF.ToString("0");
 
-            RectangleF textRect = barArea;
+            RectangleF textRect = drawArea;
             textRect.Width *= 1.0F / MAX_BAR_RATIO;
 
             GraphicsPath pathText = new GraphicsPath();
@@ -185,6 +174,31 @@ namespace ACTTimeline
             graphics.DrawPath(ValuePen, pathText);
             graphics.FillPath(ValueFill, pathText);
             graphics.Restore(state);
+        }
+
+        private static void PaintBar(Graphics graphics, Rectangle cellBounds, float timeTillStartF)
+        {
+            RectangleF drawArea = DrawAreaFromCellBounds(cellBounds);
+
+            float bar = (BAR_START - timeTillStartF) / BAR_START;
+            if (bar > MAX_BAR_RATIO)
+                bar = MAX_BAR_RATIO;
+
+            RectangleF barFill = drawArea;
+            barFill.Width *= bar / MAX_BAR_RATIO;
+
+            if (barFill.Width > 1)
+            {
+                Color color = BarColorAtTimeLeft(timeTillStartF);
+                Color lighterColor = ControlPaint.Light(color, 1.0F);
+
+                Rectangle gradientRect = Rectangle.Ceiling(barFill);
+                Brush barBrush = new LinearGradientBrush(gradientRect, lighterColor, color, LinearGradientMode.Horizontal) { WrapMode = WrapMode.TileFlipX };
+
+                graphics.FillRectangle(barBrush, barFill);
+            }
+            float barX = drawArea.X + drawArea.Width / MAX_BAR_RATIO;
+            graphics.DrawLine(Pens.DarkGray, barX, cellBounds.Y, barX, cellBounds.Y + cellBounds.Height);
         }
     }
 }
