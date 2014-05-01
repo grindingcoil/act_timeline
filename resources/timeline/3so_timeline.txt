@@ -1,3 +1,5 @@
+# バハムート 侵攻編 3層
+
 # alert settings
 define alertsound "ピンポン" "se_maoudamashii_chime10.wav"
 define alertsound "アレ" "se_maoudamashii_onepoint26.wav"

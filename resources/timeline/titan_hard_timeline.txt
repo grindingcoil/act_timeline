@@ -1,3 +1,5 @@
+# 真タイタン
+
 # alert settings
 define alertsound "ピンポン" "se_maoudamashii_chime10.wav"
 alertall "大地の重み" before 3 sound "ピンポン"
