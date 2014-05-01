@@ -137,12 +137,24 @@ namespace ACTTimeline
 
             ActGlobals.oFormActMain.OnLogLineRead += act_OnLogLineRead;
             ActGlobals.oFormActMain.OnCombatStart += act_OnCombatStart;
+            ActGlobals.oFormActMain.OnCombatEnd += act_OnCombatEnd;
         }
 
         private void act_OnCombatStart(bool isImport, CombatToggleEventArgs encounterInfo)
         {
             if (PlayOnEncounter)
+            {
+                CurrentTime = 0;
                 Paused = false;
+            }
+        }
+
+        private void act_OnCombatEnd(bool isImport, CombatToggleEventArgs encounterInfo)
+        {
+            if (PlayOnEncounter)
+            {
+                Paused = true;
+            }
         }
 
         private void act_OnLogLineRead(bool isImport, LogLineEventArgs logInfo)
@@ -167,6 +179,7 @@ namespace ACTTimeline
 
             ActGlobals.oFormActMain.OnLogLineRead -= act_OnLogLineRead;
             ActGlobals.oFormActMain.OnCombatStart -= act_OnCombatStart;
+            ActGlobals.oFormActMain.OnCombatEnd -= act_OnCombatEnd;
         }
 
         private void Synchronize()

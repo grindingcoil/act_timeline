@@ -39,7 +39,7 @@ namespace ACTTimeline
                 Assembly.LoadFrom("Sprache.dll");
 
 #if DEBUG
-                Control.CheckForIllegalCrossThreadCalls = true;
+                // Control.CheckForIllegalCrossThreadCalls = true;
 #endif
 
                 ScreenSpace = pluginScreenSpace;
