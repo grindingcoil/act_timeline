@@ -228,6 +228,11 @@
             0,
             0,
             0});
+            this.udOverlayY.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
             this.udOverlayY.Name = "udOverlayY";
             this.udOverlayY.Size = new System.Drawing.Size(80, 20);
             this.udOverlayY.TabIndex = 1;
@@ -259,6 +264,11 @@
             0,
             0,
             0});
+            this.udOverlayX.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
             this.udOverlayX.Name = "udOverlayX";
             this.udOverlayX.Size = new System.Drawing.Size(80, 20);
             this.udOverlayX.TabIndex = 1;
