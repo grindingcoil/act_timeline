@@ -74,7 +74,10 @@ namespace ACTTimeline
         {
             double currtime = plugin.Controller.CurrentTime;
             labelCurrPos.Text = FormatMMSS(currtime);
-            trackBar.Value = (int)Math.Floor(currtime);
+
+            int currTimeInt = (int)Math.Floor(currtime);
+            if (currTimeInt < trackBar.Maximum)
+                trackBar.Value = currTimeInt;
         }
 
         void TimelineView_Move(object sender, EventArgs e)
