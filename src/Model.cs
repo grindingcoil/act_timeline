@@ -143,7 +143,6 @@ namespace ACTTimeline
     {
         public string Name { get; set; }
         public double TimeFromStart { get; set; }
-        public double TimeLeft { get; private set; }
 
         const double Instant = 0;
         public double Duration { get; set; }
@@ -156,17 +155,14 @@ namespace ACTTimeline
             }
         }
 
+        // for TimeLeft{Column,Cell}
+        public TimelineActivity Self { get { return this; } }
+
         public TimelineActivity()
         {
             Name = "何かすごい攻撃";
             TimeFromStart = 5;
-            TimeLeft = -1;
             Duration = Instant;
-        }
-
-        public void UpdateTimeLeft(double currentTime)
-        {
-            TimeLeft = TimeFromStart - currentTime;
         }
     }
 
@@ -185,10 +181,6 @@ namespace ACTTimeline
             set
             {
                 currentTime = value;
-                foreach (TimelineActivity e in Items)
-                {
-                    e.UpdateTimeLeft(currentTime);
-                }
 
                 if (currentTime == 0)
                 {
@@ -202,9 +194,9 @@ namespace ACTTimeline
         public IEnumerable<TimelineActivity> Items {
             get { return items; }        
         }
-        public IEnumerable<TimelineActivity> VisibleItems(double threshold)
+        public IEnumerable<TimelineActivity> VisibleItemsAt(double t)
         {
-            return from e in Items where e.TimeLeft > threshold select e;
+            return from e in Items where e.EndTime > t select e;
         }
 
         List<TimelineAnchor> anchors;

@@ -52,7 +52,7 @@ namespace ACTTimeline
             dataGridView.SelectionChanged += (object sender, EventArgs args) => dataGridView.ClearSelection();
             dataGridView.AutoGenerateColumns = false;
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Name", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
-            dataGridView.Columns.Add(new TimeLeftColumn { DataPropertyName = "TimeLeft" });
+            dataGridView.Columns.Add(new TimeLeftColumn { Controller = controller_ });
 
             this.Opacity = 0.8;
             NumberOfRowsToDisplay = 3;
@@ -96,18 +96,21 @@ namespace ACTTimeline
 
             // sync dataGridView
             dataGridView.DataSource = null;
-            dataGridView.DataSource = timeline.VisibleItems(TimeLeftCell.THRESHOLD).ToList();
+            dataGridView.DataSource = timeline.VisibleItemsAt(timeline.CurrentTime - TimeLeftCell.THRESHOLD).ToList();
         }
     }
 
     class TimeLeftColumn : DataGridViewColumn
     {
+        public TimelineController Controller;
+
         public TimeLeftColumn()
         {
             this.Width = 100;
             this.ReadOnly = true;
             this.CellTemplate = new TimeLeftCell();
             this.DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;
+            this.DataPropertyName = "Self";
         }
     }
 
@@ -136,14 +139,18 @@ namespace ACTTimeline
                 return Color.Red;
         }
 
-        protected override void Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, DataGridViewElementStates cellState, object value, object formattedValue, string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
+        protected override void Paint(Graphics graphics, Rectangle clipBounds, Rectangle cellBounds, int rowIndex, DataGridViewElementStates cellState, object value, object formattedValue, string errorText, DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle advancedBorderStyle, DataGridViewPaintParts paintParts)
         {
             base.Paint(graphics, clipBounds, cellBounds, rowIndex, cellState, "", "", errorText, cellStyle, advancedBorderStyle, paintParts);
 
-            float timeLeft = Convert.ToSingle(value);
+            TimelineActivity activity = (TimelineActivity)value;
+            TimelineController controller = ((TimeLeftColumn)OwningColumn).Controller;
 
+            double timeLeft = activity.EndTime - controller.CurrentTime;
+            float timeLeftF = (float)timeLeft;
+            
             // draw bar
-            float bar = (BAR_START - timeLeft) / BAR_START;
+            float bar = (BAR_START - timeLeftF) / BAR_START;
             if (bar > MAX_BAR_RATIO)
                 bar = MAX_BAR_RATIO;
 
@@ -153,7 +160,7 @@ namespace ACTTimeline
 
             if (barFill.Width > 1)
             {
-                Color color = BarColorAtTimeLeft(timeLeft);
+                Color color = BarColorAtTimeLeft(timeLeftF);
                 Color lighterColor = ControlPaint.Light(color, 1.0F);
 
                 Rectangle gradientRect = Rectangle.Ceiling(barFill);
