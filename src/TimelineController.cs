@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Advanced_Combat_Tracker;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -100,6 +101,27 @@ namespace ACTTimeline
                 PausedUpdate(this, EventArgs.Empty);
         }
 
+        private bool playOnEncounter;
+        public bool PlayOnEncounter
+        {
+            get { return playOnEncounter; }
+            set
+            {
+                if (playOnEncounter == value)
+                    return;
+
+                playOnEncounter = value;
+                OnPlayOnEncounterUpdate();
+            }
+        }
+
+        public event EventHandler PlayOnEncounterUpdate;
+        public void OnPlayOnEncounterUpdate()
+        {
+            if (PlayOnEncounterUpdate != null)
+                PlayOnEncounterUpdate(this, EventArgs.Empty);
+        }
+
         public TimelineController()
         {
             timer = new Timer();
@@ -110,12 +132,40 @@ namespace ACTTimeline
             relativeClock = new RelativeClock();
 
             Paused = false;
+
+            ActGlobals.oFormActMain.OnLogLineRead += act_OnLogLineRead;
+            ActGlobals.oFormActMain.OnCombatStart += act_OnCombatStart;
+
+        }
+
+        private void act_OnCombatStart(bool isImport, CombatToggleEventArgs encounterInfo)
+        {
+            if (PlayOnEncounter)
+                Paused = false;
+        }
+
+        private void act_OnLogLineRead(bool isImport, LogLineEventArgs logInfo)
+        {
+            if (isImport || timeline == null)
+                return;
+
+            string line = logInfo.logLine;
+            foreach (TimelineAnchor anchor in timeline.ActiveAnchors())
+            {
+                if (anchor.Regex.IsMatch(line)) {
+                    CurrentTime = anchor.TimeFromStart;
+                    break;
+                }
+            }
         }
 
         public void Stop()
         {
             timer.Stop();
             timeline = null;
+
+            ActGlobals.oFormActMain.OnLogLineRead -= act_OnLogLineRead;
+            ActGlobals.oFormActMain.OnCombatStart -= act_OnCombatStart;
         }
 
         private void Synchronize()
