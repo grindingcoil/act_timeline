@@ -57,7 +57,6 @@
             this.labelLoadedTimeline = new System.Windows.Forms.Label();
             this.labelLoadedTimelineLabel = new System.Windows.Forms.Label();
             this.trackBar = new System.Windows.Forms.TrackBar();
-            this.checkBoxAutoPlayEnc = new System.Windows.Forms.CheckBox();
             this.groupBoxEnvironment.SuspendLayout();
             this.groupBoxTimelines.SuspendLayout();
             this.groupBoxOverlay.SuspendLayout();
@@ -290,7 +289,6 @@
             // 
             // groupBoxTracker
             // 
-            this.groupBoxTracker.Controls.Add(this.checkBoxAutoPlayEnc);
             this.groupBoxTracker.Controls.Add(this.labelSlash);
             this.groupBoxTracker.Controls.Add(this.buttonPause);
             this.groupBoxTracker.Controls.Add(this.buttonPlay);
@@ -394,19 +392,6 @@
             this.trackBar.TickFrequency = 30;
             this.trackBar.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
             // 
-            // checkBoxAutoPlayEnc
-            // 
-            this.checkBoxAutoPlayEnc.AutoSize = true;
-            this.checkBoxAutoPlayEnc.Checked = true;
-            this.checkBoxAutoPlayEnc.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutoPlayEnc.Location = new System.Drawing.Point(247, 89);
-            this.checkBoxAutoPlayEnc.Name = "checkBoxAutoPlayEnc";
-            this.checkBoxAutoPlayEnc.Size = new System.Drawing.Size(139, 17);
-            this.checkBoxAutoPlayEnc.TabIndex = 3;
-            this.checkBoxAutoPlayEnc.Text = "Auto play on encounter.";
-            this.checkBoxAutoPlayEnc.UseVisualStyleBackColor = true;
-            this.checkBoxAutoPlayEnc.CheckedChanged += new System.EventHandler(this.checkBoxAutoPlayEnc_CheckedChanged);
-            // 
             // ACTTabPageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -463,6 +448,5 @@
         private System.Windows.Forms.Label labelLoadedTimeline;
         private System.Windows.Forms.Label labelLoadedTimelineLabel;
         private System.Windows.Forms.TrackBar trackBar;
-        private System.Windows.Forms.CheckBox checkBoxAutoPlayEnc;
     }
 }

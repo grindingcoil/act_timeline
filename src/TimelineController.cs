@@ -103,27 +103,6 @@ namespace ACTTimeline
                 PausedUpdate(this, EventArgs.Empty);
         }
 
-        private bool playOnEncounter;
-        public bool PlayOnEncounter
-        {
-            get { return playOnEncounter; }
-            set
-            {
-                if (playOnEncounter == value)
-                    return;
-
-                playOnEncounter = value;
-                OnPlayOnEncounterUpdate();
-            }
-        }
-
-        public event EventHandler PlayOnEncounterUpdate;
-        public void OnPlayOnEncounterUpdate()
-        {
-            if (PlayOnEncounterUpdate != null)
-                PlayOnEncounterUpdate(this, EventArgs.Empty);
-        }
-
         public TimelineController()
         {
             timer = new Timer();
@@ -136,25 +115,6 @@ namespace ACTTimeline
             Paused = false;
 
             ActGlobals.oFormActMain.OnLogLineRead += act_OnLogLineRead;
-            ActGlobals.oFormActMain.OnCombatStart += act_OnCombatStart;
-            ActGlobals.oFormActMain.OnCombatEnd += act_OnCombatEnd;
-        }
-
-        private void act_OnCombatStart(bool isImport, CombatToggleEventArgs encounterInfo)
-        {
-            if (PlayOnEncounter)
-            {
-                CurrentTime = 0;
-                Paused = false;
-            }
-        }
-
-        private void act_OnCombatEnd(bool isImport, CombatToggleEventArgs encounterInfo)
-        {
-            if (PlayOnEncounter)
-            {
-                Paused = true;
-            }
         }
 
         private void act_OnLogLineRead(bool isImport, LogLineEventArgs logInfo)
@@ -178,8 +138,6 @@ namespace ACTTimeline
             timeline = null;
 
             ActGlobals.oFormActMain.OnLogLineRead -= act_OnLogLineRead;
-            ActGlobals.oFormActMain.OnCombatStart -= act_OnCombatStart;
-            ActGlobals.oFormActMain.OnCombatEnd -= act_OnCombatEnd;
         }
 
         private void Synchronize()
