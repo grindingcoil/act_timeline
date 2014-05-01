@@ -64,29 +64,39 @@ namespace ACTTimeline
             from spaces2 in Parse.Optional(Spaces)
             from value in Parse.Decimal
             select double.Parse(value, CultureInfo.InvariantCulture);
-        static readonly Parser<string> Sync =
+        static readonly Parser<double> SyncWindow =
+            from spaces in Spaces
+            from window in Parse.String("window")
+            from spaces2 in Spaces
+            from value in Parse.Decimal
+            select double.Parse(value, CultureInfo.InvariantCulture);
+        static readonly Parser<Tuple<string, double>> Sync =
             from spaces in Spaces
             from sync in Parse.String("sync")
             from spaces2 in Parse.Optional(Spaces)
             from regex in Regex
-            select regex;
-        static readonly Parser<Tuple<TimelineActivity, string>> TimelineActivity =
+            from window in Parse.Optional(SyncWindow)
+            select new Tuple<string, double>(regex, window.GetOrElse(3));
+        static readonly Parser<Tuple<TimelineActivity, Tuple<string, double>>> TimelineActivity =
             from timeFromStart in Parse.Decimal
             from spaces in Spaces
             from name in MaybeQuotedString
             from duration in Parse.Optional(Duration)
             from sync in Parse.Optional(Sync)
-            select new Tuple<TimelineActivity, string>(new TimelineActivity {
+            select new Tuple<TimelineActivity, Tuple<string, double>>(new TimelineActivity {
                 TimeFromStart = double.Parse(timeFromStart, CultureInfo.InvariantCulture),
                 Name = name,
                 Duration = duration.GetOrElse(0)
             }, sync.GetOrElse(null));
 
         static readonly Parser<ConfigOp> TimelineActivityStatement =
-            TimelineActivity.Select<Tuple<TimelineActivity, string>, ConfigOp>(t => ((TimelineConfig config) =>
+            TimelineActivity.Select<Tuple<TimelineActivity, Tuple<string, double>>, ConfigOp>(t => ((TimelineConfig config) =>
             {
                 config.Items.Add(t.Item1);
-                config.Anchors.Add(new TimelineAnchor { TimeFromStart = t.Item1.TimeFromStart, Regex = new System.Text.RegularExpressions.Regex(t.Item2) });
+                if (t.Item2 != null)
+                {
+                    config.Anchors.Add(new TimelineAnchor { TimeFromStart = t.Item1.TimeFromStart, Regex = new System.Text.RegularExpressions.Regex(t.Item2.Item1), Window = t.Item2.Item2 });
+                }
             })).Named("TimelineActivityStatement");
         
         static readonly Parser<Tuple<string, string>> AlertSoundAlias =
