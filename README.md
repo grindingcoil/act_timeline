@@ -37,6 +37,8 @@ act_timelineを導入すると、ボスの攻撃パターンをオーバーレ�
 ## 使い方
 ![usage](https://raw.githubusercontent.com/grindingcoil/act_timeline/master/doc/usage.png)
 
+[タイムラインの自作方法はこちら](https://github.com/grindingcoil/act_timeline/blob/master/doc/TimelineSyntax.md)
+
 ## ライセンス
 ソースコード/タイムラインtxtファイルは三条項BSDライセンスです。
 
