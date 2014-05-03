@@ -224,6 +224,9 @@ namespace ACTTimeline
                 gradientRect = Rectangle.Ceiling(barFill);
             }
 
+            if (barFill.Width < 1.0F)
+                return;
+
             Brush barBrush = new LinearGradientBrush(gradientRect, colorA, colorB, LinearGradientMode.Horizontal) { WrapMode = WrapMode.TileFlipX };
             graphics.FillRectangle(barBrush, barFill);
         }
