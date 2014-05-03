@@ -28,7 +28,14 @@ namespace ACTTimeline
 
         static public int NumberOfSoundFilesInResourcesDir()
         {
-            return Directory.GetFileSystemEntries(SoundFilesRoot, "*.wav").Length;
+            try
+            {
+                return Directory.GetFileSystemEntries(SoundFilesRoot, "*.wav").Length;
+            }
+            catch (DirectoryNotFoundException)
+            {
+                return 0;
+            }
         }
 
         static public string TimelineTxtsRoot
@@ -40,7 +47,14 @@ namespace ACTTimeline
         {
             get
             {
-                return Directory.GetFileSystemEntries(TimelineTxtsRoot, "*.txt");
+                try
+                {
+                    return Directory.GetFileSystemEntries(TimelineTxtsRoot, "*.txt");
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    return new string[] { };
+                }
             }
         }
     }
