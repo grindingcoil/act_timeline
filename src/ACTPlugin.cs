@@ -36,14 +36,20 @@ namespace ACTTimeline
         {
             try
             {
-                Assembly.LoadFrom("Sprache.dll");
-
-#if DEBUG
-                // Control.CheckForIllegalCrossThreadCalls = true;
-#endif
-
                 ScreenSpace = pluginScreenSpace;
                 StatusText = pluginStatusText;
+
+                StatusText.Text = "Loading Sprache.dll";
+#if DEBUG
+                // Sprache.dll is already injected by libZ in Release builds.
+                Assembly.LoadFrom("Sprache.dll");
+#endif
+                StatusText.Text = "Sprache.dll Load Success!";
+
+#if DEBUG
+                // See Issue #1
+                // Control.CheckForIllegalCrossThreadCalls = true;
+#endif
 
                 Controller = new TimelineController();
 

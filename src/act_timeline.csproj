@@ -127,6 +127,9 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Advanced Combat Tracker\Advanced Combat Tracker.exe</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="LibZ.Bootstrap">
+      <HintPath>packages\LibZ.Bootstrap.1.1.0.2\lib\net40-client\LibZ.Bootstrap.dll</HintPath>
+    </Reference>
     <Reference Include="Sprache">
       <HintPath>packages\Sprache.1.10.0.36\lib\net40\Sprache.dll</HintPath>
     </Reference>
@@ -140,6 +143,11 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>set LIBZ=$(SolutionDir)packages\LibZ.Bootstrap.1.1.0.2\tools\libz.exe
+%25LIBZ%25 inject-dll --assembly $(TargetName).dll --include *.dll --exclude  $(TargetName).dll --move
+</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
