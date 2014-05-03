@@ -1,38 +1,48 @@
 act_timeline
 ============
-ƒŒƒCƒhƒ{ƒX‚ÌUŒ‚ƒpƒ^[ƒ“(ƒ^ƒCƒ€ƒ‰ƒCƒ“)‚ğ‰æ–Ê‚É•\¦‚·‚éACTƒvƒ‰ƒOƒCƒ“‚Å‚·B
+ãƒ¬ã‚¤ãƒ‰ãƒœã‚¹ã®æ”»æ’ƒãƒ‘ã‚¿ãƒ¼ãƒ³(ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³)ã‚’ç”»é¢ã«è¡¨ç¤ºã™ã‚‹ACTãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã§ã™ã€‚
 
-## ‚±‚ê‚Í‚È‚ÉH
-act_timeline‚Í[ACT](http://advancedcombattracker.com/)—p‚Ìƒvƒ‰ƒOƒCƒ“‚Å‚·B
+## ã“ã‚Œã¯ãªã«ï¼Ÿ
+act_timelineã¯[ACT](http://advancedcombattracker.com/)ç”¨ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã§ã™ã€‚
 
-act_timeline‚ğ“±“ü‚·‚é‚ÆAƒ{ƒX‚ÌUŒ‚ƒpƒ^[ƒ“‚ğƒI[ƒo[ƒŒƒC‚Æ‚µ‚Ä‰æ–Êã‚É•\¦‚³‚¹‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·:
+act_timelineã‚’å°å…¥ã™ã‚‹ã¨ã€ãƒœã‚¹ã®æ”»æ’ƒãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ¬ã‚¤ã¨ã—ã¦ç”»é¢ä¸Šã«è¡¨ç¤ºã•ã›ã‚‹ã“ã¨ãŒã§ãã¾ã™:
 
 ![screenshot](https://raw.githubusercontent.com/grindingcoil/act_timeline/master/doc/scrshot.gif)
 
-‚Ü‚½A”CˆÓ‚ÌUŒ‚‚Ì‘O‚ÉŒx‰¹‚ğ–Â‚ç‚·‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+ã¾ãŸã€ä»»æ„ã®æ”»æ’ƒã®å‰ã«è­¦å‘ŠéŸ³ã‚’é³´ã‚‰ã™ã“ã¨ãŒã§ãã¾ã™ã€‚
 
-## ƒCƒ“ƒXƒg[ƒ‹•û–@
-1. ACT‚ğ“±“ü‚·‚éB
-2. [act_timeline.zip](https://github.com/grindingcoil/act_timeline/blob/master/act_timeline.zip?raw=true) ‚ğƒ_ƒEƒ“ƒ[ƒh‚µA“K“–‚ÈƒtƒHƒ‹ƒ_‚É“WŠJ‚·‚éB
-3. ACT‚ğ‹N“®‚·‚éB
+## ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«æ–¹æ³•
+1. ACTã‚’å°å…¥ã™ã‚‹ã€‚
+2. [act_timeline.zip](https://github.com/grindingcoil/act_timeline/blob/master/act_timeline.zip?raw=true) ã‚’ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã—ã€é©å½“ãªãƒ•ã‚©ãƒ«ãƒ€ã«å±•é–‹ã™ã‚‹ã€‚
+3. ACTã‚’èµ·å‹•ã™ã‚‹ã€‚
 
 ![Plugin Listing](https://raw.githubusercontent.com/grindingcoil/act_timeline/master/doc/install1.png)
 
-4. Pluginƒ^ƒuAPlugin Listingƒ^ƒu‚©‚ç[Browse..]ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚·‚éB
-5. “WŠJ‚µ‚½ƒtƒHƒ‹ƒ_‚©‚ç bin\BindingCoil.ACTTimeline.dll ‚ğ‘I‘ğ‚·‚éB
-6. [Add/Enable Plugin]ƒ{ƒ^ƒ“‚ğƒNƒŠƒbƒN‚·‚éB
-7. Pluginƒ^ƒuAACT Timelineƒ^ƒu‚ğŠJ‚­
+4. Pluginã‚¿ãƒ–ã€Plugin Listingã‚¿ãƒ–ã‹ã‚‰[Browse..]ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã€‚
+5. å±•é–‹ã—ãŸãƒ•ã‚©ãƒ«ãƒ€ã‹ã‚‰ bin\BindingCoil.ACTTimeline.dll ã‚’é¸æŠã™ã‚‹ã€‚
+6. [Add/Enable Plugin]ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã€‚
+7. Pluginã‚¿ãƒ–ã€ACT Timelineã‚¿ãƒ–ã‚’é–‹ã
 
 ![ACT Timeline Tab](https://raw.githubusercontent.com/grindingcoil/act_timeline/master/doc/install2.png)
 
-8. Resources Directory: ‚Ì [...] ƒ{ƒ^ƒ“‚ğ‚¨‚µA“WŠJ‚µ‚½ƒtƒHƒ‹ƒ_‚Ì’†‚É‚ ‚é resources ƒtƒHƒ‹ƒ_‚ğ‘I‘ğ‚·‚éB
-9. Move by drag ‚Éƒ`ƒFƒbƒN‚ğ‚¢‚ê‚½ó‘Ô‚Åƒ^ƒCƒ€ƒ‰ƒCƒ“•\¦ƒI[ƒo[ƒŒƒC‚ğƒhƒ‰ƒbƒO‚µ‚ÄD‚«‚ÈêŠ‚É”z’u‚·‚éB‚¢‚¢Š´‚¶‚ÌêŠ‚ÉˆÚ“®‚µ‚½‚çƒ`ƒFƒbƒN‚ğ‚Í‚¸‚·‚ÆˆÊ’u‚ªŒÅ’è‚³‚ê‚éB
-10. Number of rows to display‚Å‚ÍƒI[ƒo[ƒŒƒC‚Ì‚‚³‚ğİ’è‚Å‚«‚éB
+8. Resources Directory: ã® [...] ãƒœã‚¿ãƒ³ã‚’ãŠã—ã€å±•é–‹ã—ãŸãƒ•ã‚©ãƒ«ãƒ€ã®ä¸­ã«ã‚ã‚‹ resources ãƒ•ã‚©ãƒ«ãƒ€ã‚’é¸æŠã™ã‚‹ã€‚
+9. Move by drag ã«ãƒã‚§ãƒƒã‚¯ã‚’ã„ã‚ŒãŸçŠ¶æ…‹ã§ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³è¡¨ç¤ºã‚ªãƒ¼ãƒãƒ¼ãƒ¬ã‚¤ã‚’ãƒ‰ãƒ©ãƒƒã‚°ã—ã¦å¥½ããªå ´æ‰€ã«é…ç½®ã™ã‚‹ã€‚ã„ã„æ„Ÿã˜ã®å ´æ‰€ã«ç§»å‹•ã—ãŸã‚‰ãƒã‚§ãƒƒã‚¯ã‚’ã¯ãšã™ã¨ä½ç½®ãŒå›ºå®šã•ã‚Œã‚‹ã€‚
+10. Number of rows to displayã§ã¯ã‚ªãƒ¼ãƒãƒ¼ãƒ¬ã‚¤ã®é«˜ã•ã‚’è¨­å®šã§ãã‚‹ã€‚
 
-## ƒAƒ“ƒCƒ“ƒXƒg[ƒ‹•û–@
-1. Pluginƒ^ƒuAPlugin Listingƒ^ƒu‚Å•\¦‚³‚ê‚Ä‚¢‚éƒvƒ‰ƒOƒCƒ“ˆê——‚©‚ç BindingCoil.ACTTimeline.dll‚ğ’T‚µAÔ‚¢~ƒ{ƒ^ƒ“‚ğ‰Ÿ‚·B
-2. “WŠJ‚µ‚½ƒtƒHƒ‹ƒ_‚ğíœ‚·‚éB
-3. %AppData%\Advanced Combat Tracker\Config ƒtƒHƒ‹ƒ_‚É‚ ‚é ACTTimeline.config.xml ‚É‚ ‚éİ’èƒtƒ@ƒCƒ‹‚ğíœ‚·‚éB
+## ã‚¢ãƒ³ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«æ–¹æ³•
+1. Pluginã‚¿ãƒ–ã€Plugin Listingã‚¿ãƒ–ã§è¡¨ç¤ºã•ã‚Œã¦ã„ã‚‹ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ä¸€è¦§ã‹ã‚‰ BindingCoil.ACTTimeline.dllã‚’æ¢ã—ã€èµ¤ã„Ã—ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™ã€‚
+2. å±•é–‹ã—ãŸãƒ•ã‚©ãƒ«ãƒ€ã‚’å‰Šé™¤ã™ã‚‹ã€‚
+3. %AppData%\Advanced Combat Tracker\Config ãƒ•ã‚©ãƒ«ãƒ€ã«ã‚ã‚‹ ACTTimeline.config.xml ã«ã‚ã‚‹è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤ã™ã‚‹ã€‚
 
-## g‚¢•û
+## ä½¿ã„æ–¹
 ![usage](https://raw.githubusercontent.com/grindingcoil/act_timeline/master/doc/usage.png)
+
+## ãƒ©ã‚¤ã‚»ãƒ³ã‚¹
+ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰/ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³txtãƒ•ã‚¡ã‚¤ãƒ«ã¯ä¸‰æ¡é …BSDãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã§ã™ã€‚
+
+ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³ã®è¿½åŠ ãƒ»æ”¹å–„ã€ãƒã‚°ã®ä¿®æ­£ã€æ©Ÿèƒ½è¿½åŠ ã‚’ã•ã‚ŒãŸå ´åˆã€ãƒ—ãƒ«ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’é€ã£ã¦ã„ãŸã ã‘ã‚‹ã¨ä½œè€…ã¯å¤§å¤‰å–œã³ã¾ã™ã€‚ãŸã ã—å¼·åˆ¶ã¯ã—ã¾ã›ã‚“ã€‚
+
+ãŸã ã—ä»˜å±wavãƒ•ã‚¡ã‚¤ãƒ«ã¯é­”ç‹é­‚ã•ã‚“ã«ã‚ˆã‚‹ãƒ•ãƒªãƒ¼ç´ æã®å†é…å¸ƒã§ã™ï¼š
+> ã‚µã‚¤ãƒˆåï¼šéŸ³æ¥½ç´ æ/é­”ç‹é­‚
+> ãƒˆãƒƒãƒ—ãƒšãƒ¼ã‚¸ã®URL:  http://maoudamashii.jokersounds.com/
+> ã“ã¡ã‚‰ã®åˆ©ç”¨ã«éš›ã—ã¦ã¯ã€[ç´ æåˆ©ç”¨è¦ç´„](http://maoudamashii.jokersounds.com/music_rule.html)ã«æ²¿ã£ã¦ãã ã•ã„ã€‚
