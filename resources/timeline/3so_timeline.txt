@@ -8,6 +8,7 @@ alertall "ホーミングミサイル" before 3 sound "アレ"
 alertall "防衛反応" before 10 sound "怪しい"
 alertall "防衛反応" before 3 sound "ピンポン"
 
+0 "--- 戦闘開始 ---" sync /の封鎖まであと/ window 999
 5 "ディフュージョンレイ" sync /アバターの「ディフュージョンレイ」/ window 20
 
 # wave1

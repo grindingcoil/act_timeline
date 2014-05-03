@@ -128,9 +128,11 @@ namespace ACTTimeline
         public Regex Regex { get; set; }
         public double Window { get; set; }
 
+        public const double DefaultWindow = 5.0;
+
         public TimelineAnchor()
         {
-            Window = 3.0;
+            Window = DefaultWindow;
         }
 
         public bool ActiveAt(double t)
@@ -204,9 +206,9 @@ namespace ACTTimeline
         {
             get { return anchors; }
         }
-        public IEnumerable<TimelineAnchor> ActiveAnchors()
+        public IEnumerable<TimelineAnchor> ActiveAnchorsAt(double t)
         {
-            return from a in anchors where a.ActiveAt(CurrentTime) select a;
+            return from a in anchors where a.ActiveAt(t) select a;
         }
 
         List<ActivityAlert> alerts;

@@ -123,10 +123,12 @@ namespace ACTTimeline
                 return;
 
             string line = logInfo.logLine;
-            foreach (TimelineAnchor anchor in timeline.ActiveAnchors())
+
+            foreach (TimelineAnchor anchor in timeline.ActiveAnchorsAt(CurrentTime))
             {
                 if (anchor.Regex.IsMatch(line)) {
                     CurrentTime = anchor.TimeFromStart;
+                    Paused = false;
                     break;
                 }
             }

@@ -76,7 +76,7 @@ namespace ACTTimeline
             from spaces2 in Parse.Optional(Spaces)
             from regex in Regex
             from window in Parse.Optional(SyncWindow)
-            select new Tuple<string, double>(regex, window.GetOrElse(3));
+            select new Tuple<string, double>(regex, window.GetOrElse(TimelineAnchor.DefaultWindow));
         static readonly Parser<Tuple<TimelineActivity, Tuple<string, double>>> TimelineActivity =
             from timeFromStart in Parse.Decimal
             from spaces in Spaces
