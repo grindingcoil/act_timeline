@@ -136,6 +136,8 @@ namespace ACTTimeline
     
         void IActPluginV1.DeInitPlugin()
         {
+            ActGlobals.oFormActMain.Controls.Remove(checkBoxShowView);
+
             Settings.Save();
 
             TimelineView.Close();
