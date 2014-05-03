@@ -145,8 +145,14 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set LIBZ=$(SolutionDir)packages\LibZ.Bootstrap.1.1.0.2\tools\libz.exe
+set EXE_7ZA=$(SolutionDir)packages\7ZipCLI.9.20.0\tools\7za.exe
+if $(ConfigurationName) == Release (
 %25LIBZ%25 inject-dll --assembly $(TargetName).dll --include *.dll --exclude  $(TargetName).dll --move
-</PostBuildEvent>
+cd $(TargetDir)..\
+%25EXE_7ZA%25 a act_timeline.zip bin\BindingCoil.ACTTimeline.dll resources
+) ELSE (
+echo "no post build on Debug"
+)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
