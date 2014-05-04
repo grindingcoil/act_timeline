@@ -19,6 +19,8 @@ namespace ACTTimeline
 
             InitializeComponent();
 
+            this.ShowInTaskbar = false;
+
             // Force set small window size below OS minimum.
             Win32APIUtils.SetWindowSize(Handle, 55, 20);
 

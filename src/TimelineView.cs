@@ -115,6 +115,7 @@ namespace ACTTimeline
             this.Name = "TimelineView";
             this.Text = "Timeline";
             this.TopMost = true;
+            this.ShowInTaskbar = false;
             ((System.ComponentModel.ISupportInitialize)(dataGridView)).EndInit();
             this.ResumeLayout(false);
 
