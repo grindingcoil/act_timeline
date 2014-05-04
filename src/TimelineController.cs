@@ -108,7 +108,7 @@ namespace ACTTimeline
             timer.Start();
 
             relativeClock = new RelativeClock();
-            Paused = false;
+            Paused = true;
 
             ActGlobals.oFormActMain.OnLogLineRead += act_OnLogLineRead;
         }
