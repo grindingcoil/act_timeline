@@ -180,7 +180,7 @@ namespace ACTTimeline
 
                 // sync dataGridView
                 dataGridView.DataSource = null;
-                dataGridView.DataSource = timeline.VisibleItemsAt(controller.CurrentTime - TimeLeftCell.THRESHOLD).ToList();
+                dataGridView.DataSource = timeline.VisibleItemsAt(controller.CurrentTime - TimeLeftCell.THRESHOLD, numberOfRowsToDisplay).ToList();
             }
         }
     }

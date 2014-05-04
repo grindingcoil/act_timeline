@@ -17,6 +17,7 @@ namespace ACTTimeline
         public List<TimelineActivity> Items;
         public List<TimelineAnchor> Anchors;
         public List<AlertAll> AlertAlls;
+        public List<string> HideAlls;
         public List<ActivityAlert> Alerts;
         public AlertSoundAssets AlertSoundAssets;
 
@@ -25,6 +26,7 @@ namespace ACTTimeline
             Items = new List<TimelineActivity>();
             Anchors = new List<TimelineAnchor>();
             AlertAlls = new List<AlertAll>();
+            HideAlls = new List<string>();
             Alerts = new List<ActivityAlert>();
             AlertSoundAssets = new AlertSoundAssets();
         }
@@ -133,8 +135,20 @@ namespace ACTTimeline
                 config.AlertAlls.Add(new AlertAll { ActivityName = t.Item1, ReminderTime = Double.Parse(t.Item2), AlertSound = alertSound });
             }));
 
+        static readonly Parser<string> HideAll =
+            from hideall in Parse.String("hideall")
+            from spaces in Spaces
+            from activityName in MaybeQuotedString
+            select activityName;
+
+        static readonly Parser<ConfigOp> HideAllStatement =
+            HideAll.Select<string, ConfigOp>((string targetActivityName) => ((TimelineConfig config) =>
+            {
+                config.HideAlls.Add(targetActivityName);
+            }));
+
         static readonly Parser<ConfigOp> TimelineStatement =
-            AlertSoundAliasStatement.Or(AlertAllStatement).Or(TimelineActivityStatement);
+            AlertSoundAliasStatement.Or(AlertAllStatement).Or(HideAllStatement).Or(TimelineActivityStatement);
 
         static readonly Parser<int> LineBreak = Parse.Or(Parse.Char('\n'), Parse.Char('\r')).AtLeastOnce().Return(TRASH);
         static readonly Parser<int> StatementSeparator =
@@ -178,6 +192,13 @@ namespace ACTTimeline
                 {
                     var alert = new ActivityAlert { Activity = matchingActivity, ReminderTimeOffset = alertAll.ReminderTime, Sound = alertAll.AlertSound };
                     config.Alerts.Add(alert);
+                }
+            }
+            foreach (string activityName in config.HideAlls)
+            {
+                foreach (TimelineActivity matchingActivity in config.Items.FindAll(activity => activity.Name == activityName))
+                {
+                    matchingActivity.Hidden = true;
                 }
             }
             return new Timeline(name, config.Items, config.Anchors, config.Alerts, config.AlertSoundAssets);

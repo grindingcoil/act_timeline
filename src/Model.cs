@@ -149,6 +149,8 @@ namespace ACTTimeline
         const double Instant = 0;
         public double Duration { get; set; }
 
+        public bool Hidden { get; set; }
+
         public double EndTime
         {
             get
@@ -165,6 +167,7 @@ namespace ACTTimeline
             Name = "何かすごい攻撃";
             TimeFromStart = 5;
             Duration = Instant;
+            Hidden = false;
         }
     }
 
@@ -177,9 +180,12 @@ namespace ACTTimeline
         public IEnumerable<TimelineActivity> Items {
             get { return items; }        
         }
-        public IEnumerable<TimelineActivity> VisibleItemsAt(double t)
+        public IEnumerable<TimelineActivity> VisibleItemsAt(double t, int limit)
         {
-            return from e in Items where e.EndTime > t select e;
+            return (from e in Items
+                    where e.EndTime > t
+                    where !e.Hidden
+                    select e).Take(limit);
         }
 
         List<TimelineAnchor> anchors;
