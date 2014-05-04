@@ -37,6 +37,17 @@ namespace ACTTimeline
             }
         }
 
+        private bool showOverlayButtons;
+        public bool ShowOverlayButtons
+        {
+            get { return showOverlayButtons; }
+            set
+            {
+                showOverlayButtons = value;
+                OnVisibleChanged(EventArgs.Empty);
+            }
+        }
+
         private TimelineController controller;
         
         public TimelineView(TimelineController controller_)
@@ -62,6 +73,7 @@ namespace ACTTimeline
             this.Opacity = 0.8;
             NumberOfRowsToDisplay = 3;
             MoveByDrag = true;
+            ShowOverlayButtons = true;
 
             soundplayer = new CachedSoundPlayer();
         }
@@ -106,12 +118,12 @@ namespace ACTTimeline
             ((System.ComponentModel.ISupportInitialize)(dataGridView)).EndInit();
             this.ResumeLayout(false);
 
-            buttons = new OverlayButtonsForm();
+            buttons = new OverlayButtonsForm(controller);
         }
 
         void TimelineView_VisibleChanged(object sender, EventArgs e)
         {
-            buttons.Visible = Visible;
+            buttons.Visible = Visible && showOverlayButtons;
         }
 
         void TimelineView_Move(object sender, EventArgs e)

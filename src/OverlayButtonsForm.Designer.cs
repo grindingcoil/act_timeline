@@ -41,6 +41,7 @@
             this.buttonRewind.TabIndex = 4;
             this.buttonRewind.Text = "<<";
             this.buttonRewind.UseVisualStyleBackColor = true;
+            this.buttonRewind.Click += new System.EventHandler(this.buttonRewind_Click);
             // 
             // buttonPlayPause
             // 
@@ -51,6 +52,7 @@
             this.buttonPlayPause.TabIndex = 3;
             this.buttonPlayPause.Text = "▷";
             this.buttonPlayPause.UseVisualStyleBackColor = true;
+            this.buttonPlayPause.Click += new System.EventHandler(this.buttonPlayPause_Click);
             // 
             // OverlayButtonsForm
             // 

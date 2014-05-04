@@ -103,6 +103,9 @@
     <EmbeddedResource Include="ACTTabPageControl.resx">
       <DependentUpon>ACTTabPageControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="OverlayButtonsForm.resx">
+      <DependentUpon>OverlayButtonsForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

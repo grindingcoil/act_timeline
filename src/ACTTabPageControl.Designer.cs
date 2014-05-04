@@ -57,6 +57,7 @@
             this.labelLoadedTimeline = new System.Windows.Forms.Label();
             this.labelLoadedTimelineLabel = new System.Windows.Forms.Label();
             this.trackBar = new System.Windows.Forms.TrackBar();
+            this.checkBoxShowOverlayButtons = new System.Windows.Forms.CheckBox();
             this.groupBoxEnvironment.SuspendLayout();
             this.groupBoxTimelines.SuspendLayout();
             this.groupBoxOverlay.SuspendLayout();
@@ -174,6 +175,7 @@
             // 
             // groupBoxOverlay
             // 
+            this.groupBoxOverlay.Controls.Add(this.checkBoxShowOverlayButtons);
             this.groupBoxOverlay.Controls.Add(this.checkBoxMoveOverlayByDrag);
             this.groupBoxOverlay.Controls.Add(this.labelOverlayY);
             this.groupBoxOverlay.Controls.Add(this.labelOverlayX);
@@ -402,6 +404,19 @@
             this.trackBar.TickFrequency = 30;
             this.trackBar.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
             // 
+            // checkBoxShowOverlayButtons
+            // 
+            this.checkBoxShowOverlayButtons.AutoSize = true;
+            this.checkBoxShowOverlayButtons.Checked = true;
+            this.checkBoxShowOverlayButtons.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxShowOverlayButtons.Location = new System.Drawing.Point(235, 79);
+            this.checkBoxShowOverlayButtons.Name = "checkBoxShowOverlayButtons";
+            this.checkBoxShowOverlayButtons.Size = new System.Drawing.Size(150, 17);
+            this.checkBoxShowOverlayButtons.TabIndex = 3;
+            this.checkBoxShowOverlayButtons.Text = "Show mini button controls.";
+            this.checkBoxShowOverlayButtons.UseVisualStyleBackColor = true;
+            this.checkBoxShowOverlayButtons.CheckedChanged += new System.EventHandler(this.checkBoxShowOverlayButtons_CheckedChanged);
+            // 
             // ACTTabPageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -458,5 +473,6 @@
         private System.Windows.Forms.Label labelLoadedTimeline;
         private System.Windows.Forms.Label labelLoadedTimelineLabel;
         private System.Windows.Forms.TrackBar trackBar;
+        private System.Windows.Forms.CheckBox checkBoxShowOverlayButtons;
     }
 }
