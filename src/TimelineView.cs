@@ -61,6 +61,7 @@ namespace ACTTimeline
             this.MouseDown += TimelineView_MouseDown;
             this.VisibleChanged += TimelineView_VisibleChanged;
             this.Move += TimelineView_Move;
+            this.FormClosing += TimelineView_FormClosing;
 
             typeof(DataGridView).
                 GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).
@@ -130,6 +131,11 @@ namespace ACTTimeline
         void TimelineView_Move(object sender, EventArgs e)
         {
             buttons.Location = new Point(this.Location.X + UIWidth - buttons.Width, this.Location.Y - buttons.Height);
+        }
+
+        void TimelineView_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            buttons.Close();
         }
 
         void TimelineView_MouseDown(object sender, MouseEventArgs e)
