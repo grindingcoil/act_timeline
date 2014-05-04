@@ -72,6 +72,8 @@ namespace ACTTimeline
             {
                 currentTime = value;
                 relativeClock.CurrentTime = value;
+                if (value == 0.0)
+                    timeline.ResetAllAlerts();
                 OnCurrentTimeUpdate();
             }
         }
