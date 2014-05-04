@@ -10,6 +10,7 @@ namespace ACTTimeline
     public class TimelineView : Form
     {
         private DataGridView dataGridView;
+        private OverlayButtonsForm buttons;
         private CachedSoundPlayer soundplayer;
 
         private int numberOfRowsToDisplay;
@@ -20,8 +21,9 @@ namespace ACTTimeline
             {
                 numberOfRowsToDisplay = value;
 
-                this.Height = dataGridView.RowTemplate.Height * numberOfRowsToDisplay;
-                dataGridView.Height = this.Height;
+                int gridHeight = dataGridView.RowTemplate.Height * numberOfRowsToDisplay;
+                this.Height = gridHeight;
+                dataGridView.Height = gridHeight;
             }
         }
 
@@ -46,6 +48,8 @@ namespace ACTTimeline
             SetupUI();
 
             this.MouseDown += TimelineView_MouseDown;
+            this.VisibleChanged += TimelineView_VisibleChanged;
+            this.Move += TimelineView_Move;
 
             typeof(DataGridView).
                 GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).
@@ -62,9 +66,12 @@ namespace ACTTimeline
             soundplayer = new CachedSoundPlayer();
         }
 
+        const int UIWidth = 200;
+
         private void SetupUI()
         {
             dataGridView = new DataGridView();
+
             ((System.ComponentModel.ISupportInitialize)(dataGridView)).BeginInit();
             this.SuspendLayout();
 
@@ -86,12 +93,11 @@ namespace ACTTimeline
             dataGridView.ReadOnly = true;
             dataGridView.RowHeadersVisible = false;
             dataGridView.ScrollBars = ScrollBars.None;
-            dataGridView.Size = new Size(200, 80);
-            dataGridView.TabIndex = 2;
+            dataGridView.Size = new Size(UIWidth, 80);
 
             this.AutoScaleDimensions = new SizeF(6F, 13F);
             this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(200, 80);
+            this.ClientSize = new Size(UIWidth, 80);
             this.Controls.Add(dataGridView);
             this.FormBorderStyle = FormBorderStyle.None;
             this.Name = "TimelineView";
@@ -99,6 +105,18 @@ namespace ACTTimeline
             this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(dataGridView)).EndInit();
             this.ResumeLayout(false);
+
+            buttons = new OverlayButtonsForm();
+        }
+
+        void TimelineView_VisibleChanged(object sender, EventArgs e)
+        {
+            buttons.Visible = Visible;
+        }
+
+        void TimelineView_Move(object sender, EventArgs e)
+        {
+            buttons.Location = new Point(this.Location.X + UIWidth - buttons.Width, this.Location.Y - buttons.Height);
         }
 
         void TimelineView_MouseDown(object sender, MouseEventArgs e)

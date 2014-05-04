@@ -83,6 +83,12 @@
     </Compile>
     <Compile Include="Globals.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="OverlayButtonsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OverlayButtonsForm.Designer.cs">
+      <DependentUpon>OverlayButtonsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PluginSettings.cs" />
     <Compile Include="CachedSoundPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

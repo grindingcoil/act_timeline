@@ -5,22 +5,29 @@ namespace ACTTimeline
 {
     class Win32APIUtils
     {
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HT_CAPTION = 0x2;
+        const int WM_NCLBUTTONDOWN = 0xA1;
+        const int HT_CAPTION = 0x2;
         
-        public const int WS_EX_TRANSPARENT = 0x00000020;
-        public const int GWL_EXSTYLE = (-20);
+        const int WS_EX_TRANSPARENT = 0x00000020;
+        const int GWL_EXSTYLE = (-20);
 
-        [DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [DllImportAttribute("user32.dll")]
-        public static extern bool ReleaseCapture();
+        static readonly IntPtr HWND_TOP = new IntPtr(0);
+        const int SWP_NOMOVE = 2;
+
+        [DllImport("user32.dll")]
+        static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+        [DllImport("user32.dll")]
+        static extern bool ReleaseCapture();
 
         [DllImport("user32.dll")]
         static extern int GetWindowLong(IntPtr hwnd, int index);
 
         [DllImport("user32.dll")]
         static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
+
+        [DllImport("user32.dll")]
+        static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
 
         public static void DragMove(IntPtr handle)
         {
@@ -39,6 +46,11 @@ namespace ACTTimeline
                 style = origStyle & ~WS_EX_TRANSPARENT;
 
             SetWindowLong(handle, GWL_EXSTYLE, style);
+        }
+
+        public static void SetWindowSize(IntPtr handle, int w, int h)
+        {
+            SetWindowPos(handle, HWND_TOP, 0, 0, w, h, SWP_NOMOVE);
         }
     }
 }
