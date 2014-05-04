@@ -7,8 +7,10 @@ using System.Windows.Forms;
 
 namespace ACTTimeline
 {
-    public partial class TimelineView : Form
+    public class TimelineView : Form
     {
+        private DataGridView dataGridView;
+        private OverlayButtonsForm buttons;
         private CachedSoundPlayer soundplayer;
 
         private int numberOfRowsToDisplay;
@@ -19,8 +21,9 @@ namespace ACTTimeline
             {
                 numberOfRowsToDisplay = value;
 
-                this.Height = dataGridView.RowTemplate.Height * numberOfRowsToDisplay;
-                dataGridView.Height = this.Height;
+                int gridHeight = dataGridView.RowTemplate.Height * numberOfRowsToDisplay;
+                this.Height = gridHeight;
+                dataGridView.Height = gridHeight;
             }
         }
 
@@ -34,6 +37,17 @@ namespace ACTTimeline
             }
         }
 
+        private bool showOverlayButtons;
+        public bool ShowOverlayButtons
+        {
+            get { return showOverlayButtons; }
+            set
+            {
+                showOverlayButtons = value;
+                OnVisibleChanged(EventArgs.Empty);
+            }
+        }
+
         private TimelineController controller;
         
         public TimelineView(TimelineController controller_)
@@ -42,9 +56,11 @@ namespace ACTTimeline
             controller.TimelineUpdate += controller_TimelineUpdate;
             controller.CurrentTimeUpdate += controller_CurrentTimeUpdate;
 
-            InitializeComponent();
+            SetupUI();
 
             this.MouseDown += TimelineView_MouseDown;
+            this.VisibleChanged += TimelineView_VisibleChanged;
+            this.Move += TimelineView_Move;
 
             typeof(DataGridView).
                 GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).
@@ -57,8 +73,62 @@ namespace ACTTimeline
             this.Opacity = 0.8;
             NumberOfRowsToDisplay = 3;
             MoveByDrag = true;
+            ShowOverlayButtons = true;
 
             soundplayer = new CachedSoundPlayer();
+        }
+
+        const int UIWidth = 200;
+
+        private void SetupUI()
+        {
+            dataGridView = new DataGridView();
+
+            ((System.ComponentModel.ISupportInitialize)(dataGridView)).BeginInit();
+            this.SuspendLayout();
+
+            // 
+            // dataGridView
+            // 
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AllowUserToResizeColumns = false;
+            dataGridView.AllowUserToResizeRows = false;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.ColumnHeadersVisible = false;
+            dataGridView.Enabled = false;
+            dataGridView.Location = new Point(0, 0);
+            dataGridView.Margin = new Padding(0);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.ReadOnly = true;
+            dataGridView.RowHeadersVisible = false;
+            dataGridView.ScrollBars = ScrollBars.None;
+            dataGridView.Size = new Size(UIWidth, 80);
+
+            this.AutoScaleDimensions = new SizeF(6F, 13F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.ClientSize = new Size(UIWidth, 80);
+            this.Controls.Add(dataGridView);
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.Name = "TimelineView";
+            this.Text = "Timeline";
+            this.TopMost = true;
+            ((System.ComponentModel.ISupportInitialize)(dataGridView)).EndInit();
+            this.ResumeLayout(false);
+
+            buttons = new OverlayButtonsForm(controller);
+        }
+
+        void TimelineView_VisibleChanged(object sender, EventArgs e)
+        {
+            buttons.Visible = Visible && showOverlayButtons;
+        }
+
+        void TimelineView_Move(object sender, EventArgs e)
+        {
+            buttons.Location = new Point(this.Location.X + UIWidth - buttons.Width, this.Location.Y - buttons.Height);
         }
 
         void TimelineView_MouseDown(object sender, MouseEventArgs e)

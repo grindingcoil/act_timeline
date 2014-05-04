@@ -29,6 +29,7 @@ namespace ACTTimeline
             settings.AddControlSetting("OverlayY", udOverlayY);
             settings.AddControlSetting("NumberOfRowsToDisplay", udNumRows);
             settings.AddControlSetting("MoveOverlayByDrag", checkBoxMoveOverlayByDrag);
+            settings.AddControlSetting("ShowOverlayButtons", checkBoxShowOverlayButtons);
 
             plugin.TimelineView.Move += TimelineView_Move;
             plugin.Controller.CurrentTimeUpdate += Controller_CurrentTimeUpdate;
@@ -197,6 +198,11 @@ namespace ACTTimeline
         private void buttonPlay_Click(object sender, EventArgs e)
         {
             plugin.Controller.Paused = false;
+        }
+
+        private void checkBoxShowOverlayButtons_CheckedChanged(object sender, EventArgs e)
+        {
+            plugin.TimelineView.ShowOverlayButtons = checkBoxShowOverlayButtons.Checked;
         }
     }
 }
