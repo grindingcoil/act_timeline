@@ -91,14 +91,12 @@
     <Compile Include="TimelineView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TimelineView.Designer.cs" />
     <Compile Include="Win32APIUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ACTTabPageControl.resx">
       <DependentUpon>ACTTabPageControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TimelineView.resx" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

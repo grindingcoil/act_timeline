@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
+using Drawing2D;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
 namespace ACTTimeline
 {
-    public partial class TimelineView : Form
+    public class TimelineView : Form
     {
+        private DataGridView dataGridView;
         private CachedSoundPlayer soundplayer;
 
         private int numberOfRowsToDisplay;
@@ -42,7 +43,7 @@ namespace ACTTimeline
             controller.TimelineUpdate += controller_TimelineUpdate;
             controller.CurrentTimeUpdate += controller_CurrentTimeUpdate;
 
-            InitializeComponent();
+            SetupUI();
 
             this.MouseDown += TimelineView_MouseDown;
 
@@ -59,6 +60,45 @@ namespace ACTTimeline
             MoveByDrag = true;
 
             soundplayer = new CachedSoundPlayer();
+        }
+
+        private void SetupUI()
+        {
+            dataGridView = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(dataGridView)).BeginInit();
+            this.SuspendLayout();
+
+            // 
+            // dataGridView
+            // 
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AllowUserToResizeColumns = false;
+            dataGridView.AllowUserToResizeRows = false;
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.ColumnHeadersVisible = false;
+            dataGridView.Enabled = false;
+            dataGridView.Location = new Point(0, 0);
+            dataGridView.Margin = new Padding(0);
+            dataGridView.MultiSelect = false;
+            dataGridView.Name = "dataGridView";
+            dataGridView.ReadOnly = true;
+            dataGridView.RowHeadersVisible = false;
+            dataGridView.ScrollBars = ScrollBars.None;
+            dataGridView.Size = new Size(200, 80);
+            dataGridView.TabIndex = 2;
+
+            this.AutoScaleDimensions = new SizeF(6F, 13F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.ClientSize = new Size(200, 80);
+            this.Controls.Add(dataGridView);
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.Name = "TimelineView";
+            this.Text = "Timeline";
+            this.TopMost = true;
+            ((System.ComponentModel.ISupportInitialize)(dataGridView)).EndInit();
+            this.ResumeLayout(false);
         }
 
         void TimelineView_MouseDown(object sender, MouseEventArgs e)
