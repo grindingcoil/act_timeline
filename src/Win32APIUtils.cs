@@ -7,8 +7,9 @@ namespace ACTTimeline
     {
         const int WM_NCLBUTTONDOWN = 0xA1;
         const int HT_CAPTION = 0x2;
-        
+
         const int WS_EX_TRANSPARENT = 0x00000020;
+        const int WS_EX_NOACTIVATE = 0x08000000;
         const int GWL_EXSTYLE = (-20);
 
         static readonly IntPtr HWND_TOP = new IntPtr(0);
@@ -35,7 +36,7 @@ namespace ACTTimeline
             SendMessage(handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
         }
 
-        public static void SetWindow_EX_TRANSPARENT(IntPtr handle, bool value)
+        public static void SetWS_EX_TRANSPARENT(IntPtr handle, bool value)
         {
             int origStyle = GetWindowLong(handle, GWL_EXSTYLE);
 
@@ -44,6 +45,19 @@ namespace ACTTimeline
                 style = origStyle | WS_EX_TRANSPARENT;
             else
                 style = origStyle & ~WS_EX_TRANSPARENT;
+
+            SetWindowLong(handle, GWL_EXSTYLE, style);
+        }
+
+        public static void SetWS_EX_NOACTIVATE(IntPtr handle, bool value)
+        {
+            int origStyle = GetWindowLong(handle, GWL_EXSTYLE);
+
+            int style;
+            if (value)
+                style = origStyle | WS_EX_NOACTIVATE;
+            else
+                style = origStyle & ~WS_EX_NOACTIVATE;
 
             SetWindowLong(handle, GWL_EXSTYLE, style);
         }

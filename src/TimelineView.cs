@@ -33,7 +33,7 @@ namespace ACTTimeline
             set
             {
                 moveByDrag = value;
-                Win32APIUtils.SetWindow_EX_TRANSPARENT(Handle, !moveByDrag);
+                Win32APIUtils.SetWS_EX_TRANSPARENT(Handle, !moveByDrag);
             }
         }
 
