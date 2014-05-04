@@ -157,17 +157,25 @@ namespace ACTTimeline
             if (timeline == null)
                 return;
 
-            // play pending alerts
-            var pendingAlerts = timeline.PendingAlertsAt(controller.CurrentTime);
-            foreach (ActivityAlert pendingAlert in pendingAlerts)
+            if (InvokeRequired)
             {
-                soundplayer.PlaySound(pendingAlert.Sound.Filename);
-                pendingAlert.Processed = true;
+                Invoke(new Action(() => { controller_CurrentTimeUpdate(sender, e); }));
+                return;
             }
+            else
+            {
+                // play pending alerts
+                var pendingAlerts = timeline.PendingAlertsAt(controller.CurrentTime);
+                foreach (ActivityAlert pendingAlert in pendingAlerts)
+                {
+                    soundplayer.PlaySound(pendingAlert.Sound.Filename);
+                    pendingAlert.Processed = true;
+                }
 
-            // sync dataGridView
-            dataGridView.DataSource = null;
-            dataGridView.DataSource = timeline.VisibleItemsAt(controller.CurrentTime - TimeLeftCell.THRESHOLD).ToList();
+                // sync dataGridView
+                dataGridView.DataSource = null;
+                dataGridView.DataSource = timeline.VisibleItemsAt(controller.CurrentTime - TimeLeftCell.THRESHOLD).ToList();
+            }
         }
     }
 

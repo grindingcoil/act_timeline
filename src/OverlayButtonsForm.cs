@@ -32,6 +32,12 @@ namespace ACTTimeline
 
         void controller_PausedUpdate(object sender, EventArgs e)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => { controller_PausedUpdate(sender, e); }));
+                return;
+            }
+
             buttonPlayPause.Text = controller.Paused ? "▷" : "■";
         }
 

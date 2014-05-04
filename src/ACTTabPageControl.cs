@@ -73,6 +73,12 @@ namespace ACTTimeline
 
         void Controller_CurrentTimeUpdate(object sender, EventArgs e)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => { Controller_CurrentTimeUpdate(sender, e); }));
+                return;
+            }
+
             double currtime = plugin.Controller.CurrentTime;
             labelCurrPos.Text = FormatMMSS(currtime);
 
