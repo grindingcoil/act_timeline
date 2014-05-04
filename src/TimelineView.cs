@@ -87,7 +87,7 @@ namespace ACTTimeline
                 return;
 
             // play pending alerts
-            var pendingAlerts = timeline.PendingAlerts;
+            var pendingAlerts = timeline.PendingAlertsAt(controller.CurrentTime);
             foreach (ActivityAlert pendingAlert in pendingAlerts)
             {
                 soundplayer.PlaySound(pendingAlert.Sound.Filename);
@@ -96,7 +96,7 @@ namespace ACTTimeline
 
             // sync dataGridView
             dataGridView.DataSource = null;
-            dataGridView.DataSource = timeline.VisibleItemsAt(timeline.CurrentTime - TimeLeftCell.THRESHOLD).ToList();
+            dataGridView.DataSource = timeline.VisibleItemsAt(controller.CurrentTime - TimeLeftCell.THRESHOLD).ToList();
         }
     }
 

@@ -60,19 +60,19 @@ namespace ACTTimeline
                 CurrentTimeUpdate(this, EventArgs.Empty);
         }
 
-        bool forceSynchronizeOnce;
-
         private RelativeClock relativeClock;
+        private double currentTime;
         public double CurrentTime
         {
             get
             {
-                return relativeClock.CurrentTime;
+                return currentTime;
             }
             set
             {
+                currentTime = value;
                 relativeClock.CurrentTime = value;
-                forceSynchronizeOnce = true;
+                OnCurrentTimeUpdate();
             }
         }
         
@@ -93,11 +93,8 @@ namespace ACTTimeline
         public event EventHandler PausedUpdate;
         public void OnPausedUpdate()
         {
-            if (!Paused)
-            {
-                // adjust relativeClock when unpaused
-                relativeClock.CurrentTime = timeline.CurrentTime;
-            }
+            if (!paused)
+                relativeClock.CurrentTime = currentTime;
 
             if (PausedUpdate != null)
                 PausedUpdate(this, EventArgs.Empty);
@@ -111,7 +108,6 @@ namespace ACTTimeline
             timer.Start();
 
             relativeClock = new RelativeClock();
-            forceSynchronizeOnce = true;
             Paused = false;
 
             ActGlobals.oFormActMain.OnLogLineRead += act_OnLogLineRead;
@@ -147,12 +143,10 @@ namespace ACTTimeline
             if (timeline == null)
                 return;
 
-            if (Paused && !forceSynchronizeOnce)
+            if (Paused)
                 return;
 
-            forceSynchronizeOnce = false;
-            timeline.CurrentTime = relativeClock.CurrentTime;
-
+            currentTime = relativeClock.CurrentTime;
             OnCurrentTimeUpdate();
         }
     }

@@ -172,25 +172,6 @@ namespace ACTTimeline
     {
         public string Name { get; private set; }
 
-        private double currentTime;
-
-        public double CurrentTime
-        {
-            get
-            {
-                return currentTime;
-            }
-            set
-            {
-                currentTime = value;
-
-                if (currentTime == 0)
-                {
-                    foreach (ActivityAlert alert in alerts)
-                        alert.Processed = false;
-                }
-            }
-        }
 
         List<TimelineActivity> items;
         public IEnumerable<TimelineActivity> Items {
@@ -214,16 +195,20 @@ namespace ACTTimeline
         List<ActivityAlert> alerts;
 
         public IEnumerable<ActivityAlert> Alerts { get { return alerts; } }
-        public IEnumerable<ActivityAlert> PendingAlerts
+
+        public IEnumerable<ActivityAlert> PendingAlertsAt(double t)
         {
-            get
-            {
-                return from alert in alerts
-                       where alert.TimeFromStart < CurrentTime
-                       where CurrentTime - ActivityAlert.TooOldThreshold < alert.TimeFromStart 
-                       where !alert.Processed
-                       select alert;
-            }
+            return from alert in alerts
+                   where alert.TimeFromStart < t
+                   where t - ActivityAlert.TooOldThreshold < alert.TimeFromStart
+                   where !alert.Processed
+                   select alert;
+        }
+
+        public void ResetAllAlerts()
+        {
+            foreach (ActivityAlert alert in alerts)
+                alert.Processed = false;
         }
 
         public AlertSoundAssets AlertSoundAssets { get; private set; }
@@ -233,7 +218,6 @@ namespace ACTTimeline
         public Timeline(string name, List<TimelineActivity> items_, List<TimelineAnchor> anchors_, List<ActivityAlert> alerts_, AlertSoundAssets soundAssets)
         {
             Name = name;
-            currentTime = 0;
             items = items_.OrderBy(activity => activity.TimeFromStart).ToList();
             anchors = anchors_.OrderBy(anchor => anchor.TimeFromStart).ToList();
             alerts = alerts_;
