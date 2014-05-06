@@ -82,6 +82,7 @@
       <DependentUpon>ACTTabPageControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Globals.cs" />
+    <Compile Include="3rdparty\IntervalTree.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="OverlayButtonsForm.cs">
       <SubType>Form</SubType>
