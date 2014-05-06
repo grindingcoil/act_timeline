@@ -212,7 +212,7 @@ namespace ACTTimeline
             get { return items.Values; }        
         }
         
-        private int FindLastItemIndexBeforeEndTime(double t)
+        private int FindLastItemIndexAfterEndTime(double t)
         {
             int l = 0;
             int h = items.Count;
@@ -229,14 +229,14 @@ namespace ACTTimeline
             }
             return l;
         }
-        private IEnumerable<TimelineActivity> ItemsAfterEndTime(double t)
+        private IEnumerable<TimelineActivity> ItemsBeforeEndTime(double t)
         {
-            int itemsToSkip = FindLastItemIndexBeforeEndTime(t);
+            int itemsToSkip = FindLastItemIndexAfterEndTime(t);
             return Items.Skip(itemsToSkip);
         }
         public IEnumerable<TimelineActivity> VisibleItemsAt(double t, int limit)
         {
-            return (from e in ItemsAfterEndTime(t)
+            return (from e in ItemsBeforeEndTime(t)
                     where !e.Hidden
                     select e).Take(limit);
         }
