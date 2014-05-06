@@ -6,6 +6,8 @@ using System.Text.RegularExpressions;
 
 namespace ACTTimeline
 {
+    using TimelineInterval = IntervalTree.Interval<double>;
+
     public class ModelException : Exception
     {
         public ModelException() { }
@@ -137,6 +139,14 @@ namespace ACTTimeline
             }
         }
 
+        public TimelineInterval Interval
+        {
+            get
+            {
+                return new TimelineInterval(TimeFromStart - WindowBefore, TimeFromStart + WindowAfter);
+            }
+        }
+
         public const double DefaultWindow = 5.0;
 
         public TimelineAnchor()
@@ -198,13 +208,16 @@ namespace ACTTimeline
         }
 
         List<TimelineAnchor> anchors;
+        IntervalTree.IntervalTree<double, TimelineAnchor> anchorsTree;
         public IEnumerable<TimelineAnchor> Anchors
         {
             get { return anchors; }
         }
         public IEnumerable<TimelineAnchor> ActiveAnchorsAt(double t)
         {
-            return from a in anchors where a.ActiveAt(t) select a;
+            return anchorsTree
+                .GetIntervalsOverlappingWith(new TimelineInterval(t, t + 0.1))
+                .Select(kv => kv.Value);
         }
         public TimelineAnchor FindAnchorMatchingLogline(double t, string line)
         {
@@ -244,7 +257,12 @@ namespace ACTTimeline
         {
             Name = name;
             items = items_.OrderBy(activity => activity.TimeFromStart).ToList();
+
             anchors = anchors_.OrderBy(anchor => anchor.TimeFromStart).ToList();
+            anchorsTree = new IntervalTree.IntervalTree<double, TimelineAnchor>();
+            foreach (TimelineAnchor a in anchors)
+                anchorsTree.Add(a.Interval, a);
+
             alerts = alerts_;
             AlertSoundAssets = soundAssets;
             EndTime = items.Last().EndTime;
