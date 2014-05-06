@@ -136,14 +136,20 @@ namespace ACTTimeline
     
         void IActPluginV1.DeInitPlugin()
         {
-            ActGlobals.oFormActMain.Controls.Remove(checkBoxShowView);
+            if (checkBoxShowView != null)
+                ActGlobals.oFormActMain.Controls.Remove(checkBoxShowView);
 
-            Settings.Save();
+            if (Settings != null)
+                Settings.Save();
 
-            TimelineView.Close();
-            Controller.Stop();
+            if (TimelineView != null)
+                TimelineView.Close();
 
-            StatusText.Text = "Plugin Exited m(_ _)m";
+            if (Controller != null)
+                Controller.Stop();
+
+            if (StatusText != null)
+                StatusText.Text = "Plugin Exited m(_ _)m";
         }
     }
 }
