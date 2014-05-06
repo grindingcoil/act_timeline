@@ -250,7 +250,7 @@ namespace ACTTimeline
         public IEnumerable<TimelineAnchor> ActiveAnchorsAt(double t)
         {
             return anchorsTree
-                .GetIntervalsOverlappingWith(new TimelineInterval(t, t + 0.1))
+                .GetIntervalsOverlappingWith(new TimelineInterval(t, t + 0.1)) // FIXME
                 .Select(kv => kv.Value);
         }
         public TimelineAnchor FindAnchorMatchingLogline(double t, string line)
@@ -264,13 +264,12 @@ namespace ACTTimeline
             return null;
         }
 
-        List<ActivityAlert> alerts;
-
-        public IEnumerable<ActivityAlert> Alerts { get { return alerts; } }
+        SortedList<double, ActivityAlert> alerts;
+        public IEnumerable<ActivityAlert> Alerts { get { return alerts.Values; } }
 
         public IEnumerable<ActivityAlert> PendingAlertsAt(double t)
         {
-            return from alert in alerts
+            return from alert in Alerts
                    where alert.TimeFromStart < t
                    where t - ActivityAlert.TooOldThreshold < alert.TimeFromStart
                    where !alert.Processed
@@ -279,7 +278,7 @@ namespace ACTTimeline
 
         public void ResetAllAlerts()
         {
-            foreach (ActivityAlert alert in alerts)
+            foreach (ActivityAlert alert in Alerts)
                 alert.Processed = false;
         }
 
@@ -303,7 +302,9 @@ namespace ACTTimeline
             foreach (TimelineAnchor a in anchors)
                 anchorsTree.Add(a.Interval, a);
 
-            alerts = alerts_;
+            alerts = new SortedList<double, ActivityAlert>();
+            foreach (ActivityAlert a in alerts_)
+                alerts.Add(a.TimeFromStart, a);
             AlertSoundAssets = soundAssets;
 
             EndTime = Items.Last().EndTime;
