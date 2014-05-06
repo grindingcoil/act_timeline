@@ -126,7 +126,16 @@ namespace ACTTimeline
     {
         public double TimeFromStart { get; set; }
         public Regex Regex { get; set; }
-        public double Window { get; set; }
+        public double WindowBefore { get; set; }
+        public double WindowAfter { get; set; }
+        public double Window
+        {
+            set
+            {
+                WindowBefore = value / 2;
+                WindowAfter = value / 2;
+            }
+        }
 
         public const double DefaultWindow = 5.0;
 
@@ -137,7 +146,7 @@ namespace ACTTimeline
 
         public bool ActiveAt(double t)
         {
-            return (TimeFromStart - Window / 2) < t && t < (TimeFromStart + Window / 2);
+            return (TimeFromStart - WindowBefore) < t && t < (TimeFromStart + WindowAfter);
         }
     };
 
