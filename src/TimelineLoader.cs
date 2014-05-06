@@ -38,6 +38,8 @@ namespace ACTTimeline
 
         public delegate void ConfigOp(TimelineConfig config);
 
+        static readonly Parser<Double> DecimalDouble = Parse.Decimal.Select(str => Double.Parse(str, CultureInfo.InvariantCulture));
+
         static readonly Parser<int> Comment = Parse.Regex(@"^#.*").Return(TRASH);
 
         static readonly Parser<string> QuotedString =
@@ -64,40 +66,66 @@ namespace ACTTimeline
             from spaces in Spaces
             from durationPrefix in Parse.String("duration").Or(Parse.String("効果時間"))
             from spaces2 in Parse.Optional(Spaces)
-            from value in Parse.Decimal
-            select double.Parse(value, CultureInfo.InvariantCulture);
-        static readonly Parser<double> SyncWindow =
+            from value in DecimalDouble
+            select value;
+
+        public struct SyncWindowSettings
+        {
+            public double WindowBefore;
+            public double WindowAfter;
+        };
+        static readonly SyncWindowSettings DefaultWindow = new SyncWindowSettings
+        {
+            WindowBefore = TimelineAnchor.DefaultWindow / 2,
+            WindowAfter = TimelineAnchor.DefaultWindow / 2
+        };
+        static readonly Parser<SyncWindowSettings> SingleWindow =
+            from value in DecimalDouble
+            select new SyncWindowSettings { WindowBefore = value / 2, WindowAfter = value / 2};
+        static readonly Parser<SyncWindowSettings> BeforeAfterWindow =
+            from beforeWindow in DecimalDouble
+            from sep in Parse.Regex(@"[,\s]+")
+            from afterWindow in DecimalDouble
+            select new SyncWindowSettings { WindowBefore = beforeWindow, WindowAfter = afterWindow };
+        static readonly Parser<SyncWindowSettings> SyncWindow =
             from spaces in Spaces
             from window in Parse.String("window")
             from spaces2 in Spaces
-            from value in Parse.Decimal
-            select double.Parse(value, CultureInfo.InvariantCulture);
-        static readonly Parser<Tuple<string, double>> Sync =
+            from value in BeforeAfterWindow.Or(SingleWindow)
+            select value;
+
+        static readonly Parser<Tuple<string, SyncWindowSettings>> Sync =
             from spaces in Spaces
             from sync in Parse.String("sync")
             from spaces2 in Parse.Optional(Spaces)
             from regex in Regex
             from window in Parse.Optional(SyncWindow)
-            select new Tuple<string, double>(regex, window.GetOrElse(TimelineAnchor.DefaultWindow));
-        static readonly Parser<Tuple<TimelineActivity, Tuple<string, double>>> TimelineActivity =
+            select new Tuple<string, SyncWindowSettings>(regex, window.GetOrElse(DefaultWindow));
+        static readonly Parser<Tuple<TimelineActivity, Tuple<string, SyncWindowSettings>>> TimelineActivity =
             from timeFromStart in Parse.Decimal
             from spaces in Spaces
             from name in MaybeQuotedString
             from duration in Parse.Optional(Duration)
             from sync in Parse.Optional(Sync)
-            select new Tuple<TimelineActivity, Tuple<string, double>>(new TimelineActivity {
+            select new Tuple<TimelineActivity, Tuple<string, SyncWindowSettings>>(new TimelineActivity {
                 TimeFromStart = double.Parse(timeFromStart, CultureInfo.InvariantCulture),
                 Name = name,
                 Duration = duration.GetOrElse(0)
             }, sync.GetOrElse(null));
 
         static readonly Parser<ConfigOp> TimelineActivityStatement =
-            TimelineActivity.Select<Tuple<TimelineActivity, Tuple<string, double>>, ConfigOp>(t => ((TimelineConfig config) =>
+            TimelineActivity.Select<Tuple<TimelineActivity, Tuple<string, SyncWindowSettings>>, ConfigOp>(t => ((TimelineConfig config) =>
             {
                 config.Items.Add(t.Item1);
                 if (t.Item2 != null)
                 {
-                    config.Anchors.Add(new TimelineAnchor { TimeFromStart = t.Item1.TimeFromStart, Regex = new System.Text.RegularExpressions.Regex(t.Item2.Item1), Window = t.Item2.Item2 });
+                    var windowSettings = t.Item2.Item2;
+                    config.Anchors.Add(new TimelineAnchor {
+                        TimeFromStart = t.Item1.TimeFromStart,
+                        Regex = new System.Text.RegularExpressions.Regex(t.Item2.Item1),
+                        WindowBefore = windowSettings.WindowBefore,
+                        WindowAfter = windowSettings.WindowAfter
+                    });
                 }
             })).Named("TimelineActivityStatement");
         

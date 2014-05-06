@@ -50,7 +50,7 @@ namespace test
         [TestMethod]
         public void TestTimelineStatementWithSingleWindow()
         {
-            Timeline timeline = TimelineLoader.LoadFromText("test", "1 テスト sync /「テスト」の構え/ window 10\n");
+            Timeline timeline = TimelineLoader.LoadFromText("test", "1 テスト sync /「テスト」の構え/ window 30\n");
             var items = timeline.Items.ToList();
             Assert.AreEqual(1, items.Count);
             Assert.AreEqual(1.0, items.First().TimeFromStart);
@@ -59,12 +59,11 @@ namespace test
             var anchors = timeline.Anchors.ToList();
             Assert.AreEqual(1, anchors.Count);
             Assert.AreEqual("「テスト」の構え", anchors.First().Regex.ToString());
-            Assert.AreEqual(10 / 2, anchors.First().WindowBefore);
-            Assert.AreEqual(10 / 2, anchors.First().WindowAfter);
+            Assert.AreEqual(30 / 2, anchors.First().WindowBefore, "WindowBefore");
+            Assert.AreEqual(30 / 2, anchors.First().WindowAfter, "WindowAfter");
         }
 
         [TestMethod]
-        [Ignore]
         public void TestTimelineStatementWithBeforeAndAfterWindow()
         {
             Timeline timeline = TimelineLoader.LoadFromText("test", "1 テスト sync /「テスト」の構え/ window 10, 20\n");
