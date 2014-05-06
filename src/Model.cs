@@ -234,26 +234,25 @@ namespace ACTTimeline
 
     public class RelativeClock
     {
-        private long baseTicks;
-
-        static private long currentTick() { return DateTime.Now.Ticks; }
+        System.Diagnostics.Stopwatch sw;
+        private double offset;
 
         public RelativeClock()
         {
-            CurrentTime = 0;
+            sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
         }
 
         public double CurrentTime
         {
             get
             {
-                long now = currentTick();
-                TimeSpan elapsed = new TimeSpan(now - baseTicks);
-                return elapsed.TotalSeconds;
+                return offset + ((double)sw.ElapsedMilliseconds) / 1000;
             }
             set
             {
-               baseTicks = currentTick() - (long)(value * TimeSpan.TicksPerSecond);
+                sw.Restart();
+                offset = value;
             }
         }
     }
