@@ -122,13 +122,11 @@ namespace ACTTimeline
 
             string line = logInfo.logLine;
 
-            foreach (TimelineAnchor anchor in timeline.ActiveAnchorsAt(CurrentTime))
+            TimelineAnchor anchor = timeline.FindAnchorMatchingLogline(CurrentTime, logInfo.logLine);
+            if (anchor != null)
             {
-                if (anchor.Regex.IsMatch(line)) {
-                    CurrentTime = anchor.TimeFromStart;
-                    Paused = false;
-                    break;
-                }
+                CurrentTime = anchor.TimeFromStart;
+                Paused = false;
             }
         }
 

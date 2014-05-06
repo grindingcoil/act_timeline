@@ -206,6 +206,16 @@ namespace ACTTimeline
         {
             return from a in anchors where a.ActiveAt(t) select a;
         }
+        public TimelineAnchor FindAnchorMatchingLogline(double t, string line)
+        {
+            foreach (TimelineAnchor anchor in ActiveAnchorsAt(t))
+            {
+                if (anchor.Regex.IsMatch(line))
+                    return anchor;
+            }
+
+            return null;
+        }
 
         List<ActivityAlert> alerts;
 
