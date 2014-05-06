@@ -39,6 +39,7 @@
             this.buttonLoad = new System.Windows.Forms.Button();
             this.listTimelines = new System.Windows.Forms.ListBox();
             this.groupBoxOverlay = new System.Windows.Forms.GroupBox();
+            this.checkBoxShowOverlayButtons = new System.Windows.Forms.CheckBox();
             this.checkBoxMoveOverlayByDrag = new System.Windows.Forms.CheckBox();
             this.labelOverlayY = new System.Windows.Forms.Label();
             this.labelOverlayX = new System.Windows.Forms.Label();
@@ -57,7 +58,6 @@
             this.labelLoadedTimeline = new System.Windows.Forms.Label();
             this.labelLoadedTimelineLabel = new System.Windows.Forms.Label();
             this.trackBar = new System.Windows.Forms.TrackBar();
-            this.checkBoxShowOverlayButtons = new System.Windows.Forms.CheckBox();
             this.groupBoxEnvironment.SuspendLayout();
             this.groupBoxTimelines.SuspendLayout();
             this.groupBoxOverlay.SuspendLayout();
@@ -190,6 +190,19 @@
             this.groupBoxOverlay.TabIndex = 5;
             this.groupBoxOverlay.TabStop = false;
             this.groupBoxOverlay.Text = "Overlay";
+            // 
+            // checkBoxShowOverlayButtons
+            // 
+            this.checkBoxShowOverlayButtons.AutoSize = true;
+            this.checkBoxShowOverlayButtons.Checked = true;
+            this.checkBoxShowOverlayButtons.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxShowOverlayButtons.Location = new System.Drawing.Point(235, 79);
+            this.checkBoxShowOverlayButtons.Name = "checkBoxShowOverlayButtons";
+            this.checkBoxShowOverlayButtons.Size = new System.Drawing.Size(150, 17);
+            this.checkBoxShowOverlayButtons.TabIndex = 3;
+            this.checkBoxShowOverlayButtons.Text = "Show mini button controls.";
+            this.checkBoxShowOverlayButtons.UseVisualStyleBackColor = true;
+            this.checkBoxShowOverlayButtons.CheckedChanged += new System.EventHandler(this.checkBoxShowOverlayButtons_CheckedChanged);
             // 
             // checkBoxMoveOverlayByDrag
             // 
@@ -402,20 +415,7 @@
             this.trackBar.Size = new System.Drawing.Size(388, 45);
             this.trackBar.TabIndex = 0;
             this.trackBar.TickFrequency = 30;
-            this.trackBar.ValueChanged += new System.EventHandler(this.trackBar_ValueChanged);
-            // 
-            // checkBoxShowOverlayButtons
-            // 
-            this.checkBoxShowOverlayButtons.AutoSize = true;
-            this.checkBoxShowOverlayButtons.Checked = true;
-            this.checkBoxShowOverlayButtons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxShowOverlayButtons.Location = new System.Drawing.Point(235, 79);
-            this.checkBoxShowOverlayButtons.Name = "checkBoxShowOverlayButtons";
-            this.checkBoxShowOverlayButtons.Size = new System.Drawing.Size(150, 17);
-            this.checkBoxShowOverlayButtons.TabIndex = 3;
-            this.checkBoxShowOverlayButtons.Text = "Show mini button controls.";
-            this.checkBoxShowOverlayButtons.UseVisualStyleBackColor = true;
-            this.checkBoxShowOverlayButtons.CheckedChanged += new System.EventHandler(this.checkBoxShowOverlayButtons_CheckedChanged);
+            this.trackBar.Scroll += new System.EventHandler(this.trackbar_Scroll);
             // 
             // ACTTabPageControl
             // 

@@ -186,7 +186,7 @@ namespace ACTTimeline
             plugin.TimelineView.MoveByDrag = checkBoxMoveOverlayByDrag.Checked;
         }
 
-        private void trackBar_ValueChanged(object sender, EventArgs e)
+        private void trackbar_Scroll(object sender, EventArgs e)
         {
             plugin.Controller.CurrentTime = (int)trackBar.Value;
         }
