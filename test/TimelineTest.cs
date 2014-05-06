@@ -21,5 +21,25 @@ namespace test
             Assert.IsNull(t.FindAnchorMatchingLogline(79, "a"), "Out of before window");
             Assert.IsNull(t.FindAnchorMatchingLogline(131, "a"), "Out of after window");
         }
+
+        [TestMethod]
+        public void VisibleItemsAtShouldReturnUnfinishedActivities()
+        {
+            string txt = "";
+            for (int i = 0; i < 10; ++i)
+            {
+                txt += String.Format("{0} {0}\n", i);
+            }
+            Timeline t = TimelineLoader.LoadFromText("test", txt);
+
+            {
+                var visibleItems = t.VisibleItemsAt(5.1, 10).ToList();
+                Assert.AreEqual(4, visibleItems.Count);
+            } 
+            {
+                var visibleItems = t.VisibleItemsAt(5, 10).ToList();
+                Assert.AreEqual(5, visibleItems.Count);
+            }
+        }
     }
 }

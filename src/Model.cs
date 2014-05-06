@@ -162,10 +162,13 @@ namespace ACTTimeline
 
     public class TimelineActivity
     {
+        public int Index { get; set; }
+        const int IndexNotYetSet = -1;
+
         public string Name { get; set; }
         public double TimeFromStart { get; set; }
 
-        const double Instant = 0;
+        const double Instant = 0.1;
         public double Duration { get; set; }
 
         public bool Hidden { get; set; }
@@ -178,11 +181,20 @@ namespace ACTTimeline
             }
         }
 
+        public TimelineInterval Interval
+        {
+            get
+            {
+                return new TimelineInterval(TimeFromStart, TimeFromStart + Duration);
+            }
+        }
+
         // for TimeLeft{Column,Cell}
         public TimelineActivity Self { get { return this; } }
 
         public TimelineActivity()
         {
+            Index = IndexNotYetSet;
             Name = "何かすごい攻撃";
             TimeFromStart = 5;
             Duration = Instant;
@@ -194,15 +206,37 @@ namespace ACTTimeline
     {
         public string Name { get; private set; }
 
+        SortedList<double, TimelineActivity> items;
 
-        List<TimelineActivity> items;
         public IEnumerable<TimelineActivity> Items {
-            get { return items; }        
+            get { return items.Values; }        
+        }
+        
+        private int FindLastItemIndexBeforeEndTime(double t)
+        {
+            int l = 0;
+            int h = items.Count;
+            
+            int m = 0;
+            while (h > l)
+            {
+                m = l + (h - l) / 2;
+
+                if (items.ElementAt(m).Key < t)
+                    l = m + 1;
+                else
+                    h = m;
+            }
+            return l;
+        }
+        private IEnumerable<TimelineActivity> ItemsAfterEndTime(double t)
+        {
+            int itemsToSkip = FindLastItemIndexBeforeEndTime(t);
+            return Items.Skip(itemsToSkip);
         }
         public IEnumerable<TimelineActivity> VisibleItemsAt(double t, int limit)
         {
-            return (from e in Items
-                    where e.EndTime > t
+            return (from e in ItemsAfterEndTime(t)
                     where !e.Hidden
                     select e).Take(limit);
         }
@@ -256,7 +290,13 @@ namespace ACTTimeline
         public Timeline(string name, List<TimelineActivity> items_, List<TimelineAnchor> anchors_, List<ActivityAlert> alerts_, AlertSoundAssets soundAssets)
         {
             Name = name;
-            items = items_.OrderBy(activity => activity.TimeFromStart).ToList();
+            items = new SortedList<double, TimelineActivity>();
+            int i = 0;
+            foreach (TimelineActivity a in items_)
+            {
+                a.Index = i++;
+                items.Add(a.EndTime, a);
+            }
 
             anchors = anchors_.OrderBy(anchor => anchor.TimeFromStart).ToList();
             anchorsTree = new IntervalTree.IntervalTree<double, TimelineAnchor>();
@@ -265,7 +305,8 @@ namespace ACTTimeline
 
             alerts = alerts_;
             AlertSoundAssets = soundAssets;
-            EndTime = items.Last().EndTime;
+
+            EndTime = Items.Last().EndTime;
         }
     }
 
