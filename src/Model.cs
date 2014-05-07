@@ -104,7 +104,7 @@ namespace ACTTimeline
         }
     };
 
-    public class ActivityAlert
+    public class ActivityAlert : IComparable<ActivityAlert>
     {
         public double TimeFromStart {
             get {
@@ -121,6 +121,11 @@ namespace ACTTimeline
         public ActivityAlert()
         {
             Processed = false;
+        }
+    
+        public int CompareTo(ActivityAlert other)
+        {
+            return TimeFromStart.CompareTo(other.TimeFromStart);
         }
     };
 
@@ -181,6 +186,15 @@ namespace ACTTimeline
             }
         }
 
+        private class CompareByEndTimeKlass : IComparer<TimelineActivity>
+        {
+            int IComparer<TimelineActivity>.Compare(TimelineActivity x, TimelineActivity y)
+            {
+                return x.EndTime.CompareTo(y.EndTime);
+            }
+        }
+        static public readonly IComparer<TimelineActivity> CompareByEndTime = new CompareByEndTimeKlass();
+
         public TimelineInterval Interval
         {
             get
@@ -206,28 +220,19 @@ namespace ACTTimeline
     {
         public string Name { get; private set; }
 
-        SortedList<double, TimelineActivity> items;
+        List<TimelineActivity> items;
 
         public IEnumerable<TimelineActivity> Items {
-            get { return items.Values; }        
+            get { return items; }        
         }
         
         private int FindLastItemIndexAfterEndTime(double t)
         {
-            int l = 0;
-            int h = items.Count;
-            
-            int m = 0;
-            while (h > l)
-            {
-                m = l + (h - l) / 2;
-
-                if (items.ElementAt(m).Key < t)
-                    l = m + 1;
-                else
-                    h = m;
-            }
-            return l;
+            int i = items.BinarySearch(
+                new TimelineActivity { TimeFromStart = t },
+                TimelineActivity.CompareByEndTime
+                );
+            return (i >= 0) ? i : (-i - 1);
         }
         private IEnumerable<TimelineActivity> ItemsBeforeEndTime(double t)
         {
@@ -264,8 +269,8 @@ namespace ACTTimeline
             return null;
         }
 
-        SortedList<double, ActivityAlert> alerts;
-        public IEnumerable<ActivityAlert> Alerts { get { return alerts.Values; } }
+        List<ActivityAlert> alerts;
+        public IEnumerable<ActivityAlert> Alerts { get { return alerts; } }
 
         public IEnumerable<ActivityAlert> PendingAlertsAt(double t)
         {
@@ -289,22 +294,21 @@ namespace ACTTimeline
         public Timeline(string name, List<TimelineActivity> items_, List<TimelineAnchor> anchors_, List<ActivityAlert> alerts_, AlertSoundAssets soundAssets)
         {
             Name = name;
-            items = new SortedList<double, TimelineActivity>();
+            items = items_;
             int i = 0;
             foreach (TimelineActivity a in items_)
             {
                 a.Index = i++;
-                items.Add(a.EndTime, a);
             }
+            items.Sort(TimelineActivity.CompareByEndTime);
 
             anchors = anchors_.OrderBy(anchor => anchor.TimeFromStart).ToList();
             anchorsTree = new IntervalTree.IntervalTree<double, TimelineAnchor>();
             foreach (TimelineAnchor a in anchors)
                 anchorsTree.Add(a.Interval, a);
 
-            alerts = new SortedList<double, ActivityAlert>();
-            foreach (ActivityAlert a in alerts_)
-                alerts.Add(a.TimeFromStart, a);
+            alerts = alerts_;
+            alerts.Sort();
             AlertSoundAssets = soundAssets;
 
             EndTime = Items.Last().EndTime;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ACTTimeline;
 
@@ -23,6 +24,17 @@ namespace test
         }
 
         [TestMethod]
+        public void ActivitiesWithSameTimeToStartShouldBeAccepted()
+        {
+            string txt = "";
+            for (int i = 0; i < 10; ++i)
+            {
+                txt += String.Format("1 {0}\n", i);
+            }
+            Timeline t = TimelineLoader.LoadFromText("test", txt);
+        }
+
+        [TestMethod]
         public void VisibleItemsAtShouldReturnUnfinishedActivities()
         {
             string txt = "";
@@ -35,10 +47,57 @@ namespace test
             {
                 var visibleItems = t.VisibleItemsAt(5.1, 10).ToList();
                 Assert.AreEqual(4, visibleItems.Count);
-            } 
+            }
             {
                 var visibleItems = t.VisibleItemsAt(5, 10).ToList();
+                Assert.AreEqual(4, visibleItems.Count);
+            }
+            {
+                var visibleItems = t.VisibleItemsAt(4.9, 10).ToList();
                 Assert.AreEqual(5, visibleItems.Count);
+            }
+        }
+
+        [TestMethod]
+        public void AlertLookupShouldReturnValidResults()
+        {
+            TimelineActivity activity = new TimelineActivity { TimeFromStart = 10 };
+            List<TimelineActivity> activities = new List<TimelineActivity>() { activity };
+            List<ActivityAlert> alerts = new List<ActivityAlert>();
+            for (int i = 0; i < 10; ++i)
+                alerts.Add(new ActivityAlert { ReminderTimeOffset = (double)i, Activity = activity });
+
+            Timeline t = new Timeline("foobar", activities, new List<TimelineAnchor>(), alerts, new AlertSoundAssets());
+
+            {
+                var pending = t.PendingAlertsAt(0);
+                CollectionAssert.AreEqual(
+                    new List<double> { },
+                    pending.Select(a => a.TimeFromStart).ToList());
+            }
+            {
+                var pending = t.PendingAlertsAt(1.1);
+                CollectionAssert.AreEqual(
+                    new List<double> { 1.0 },
+                    pending.Select(a => a.TimeFromStart).ToList());
+            }
+            {
+                var pending = t.PendingAlertsAt(2.1);
+                CollectionAssert.AreEqual(
+                    new List<double> { 1.0, 2.0 },
+                    pending.Select(a => a.TimeFromStart).ToList());
+            }
+            {
+                var pending = t.PendingAlertsAt(3.1);
+                CollectionAssert.AreEqual(
+                    new List<double> { 1.0, 2.0, 3.0 },
+                    pending.Select(a => a.TimeFromStart).ToList());
+            }
+            {
+                var pending = t.PendingAlertsAt(5.1);
+                CollectionAssert.AreEqual(
+                    new List<double> { 3.0, 4.0, 5.0 },
+                    pending.Select(a => a.TimeFromStart).ToList());
             }
         }
     }
