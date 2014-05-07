@@ -78,5 +78,15 @@ namespace test
             Assert.AreEqual(10, anchors.First().WindowBefore);
             Assert.AreEqual(20, anchors.First().WindowAfter);
         }
+
+        [TestMethod]
+        public void TestTimelineStatementRegression()
+        {
+            Timeline timeline = TimelineLoader.LoadFromText("test", "0 \"asdf\" sync /aaa/ window 999\n1 bbb\n");
+            var items = timeline.Items.ToList();
+            Assert.AreEqual(2, items.Count);
+            Assert.AreEqual(0.0, items.First().TimeFromStart);
+            Assert.AreEqual("asdf", items.First().Name);
+        }
     }
 }

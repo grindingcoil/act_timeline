@@ -84,7 +84,7 @@ namespace ACTTimeline
             select new SyncWindowSettings { WindowBefore = value / 2, WindowAfter = value / 2};
         static readonly Parser<SyncWindowSettings> BeforeAfterWindow =
             from beforeWindow in DecimalDouble
-            from sep in Parse.Regex(@"[,\s]+")
+            from sep in Parse.Regex(@"[, 　]+")
             from afterWindow in DecimalDouble
             select new SyncWindowSettings { WindowBefore = beforeWindow, WindowAfter = afterWindow };
         static readonly Parser<SyncWindowSettings> SyncWindow =
