@@ -230,7 +230,13 @@ namespace ACTTimeline
         private int FindFirstItemIndexAfterEndTime(double t)
         {
             int i = itemsEndTime.BinarySearch(t);
-            return (i >= 0) ? i : (~i);
+            if (i < 0)
+                return ~i;
+
+            for (; i < itemsEndTime.Count && itemsEndTime[i] == t; ++ i)
+                ;
+
+            return i;               
         }
         private IEnumerable<TimelineActivity> ItemsBeforeEndTime(double t)
         {
@@ -273,7 +279,13 @@ namespace ACTTimeline
         public int FindFirstAlertIndexAfterStartTime(double t)
         {
             int i = alertsTimeFromStart.BinarySearch(t);
-            return (i >= 0) ? i : ~i;
+            if (i < 0)
+                return ~i;
+
+            for (; i < alertsTimeFromStart.Count && alertsTimeFromStart[i] == t; ++ i)
+                ;
+
+            return i;
         }
         public IEnumerable<ActivityAlert> PendingAlertsAt(double t)
         {

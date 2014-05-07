@@ -50,11 +50,33 @@ namespace test
             }
             {
                 var visibleItems = t.VisibleItemsAt(5, 10).ToList();
-                Assert.AreEqual(5, visibleItems.Count);
+                Assert.AreEqual(4, visibleItems.Count);
             }
             {
                 var visibleItems = t.VisibleItemsAt(4.9, 10).ToList();
                 Assert.AreEqual(5, visibleItems.Count);
+            }
+        }
+
+        [TestMethod]
+        public void VisibleItemsAtShouldReturnActivitiesWithSameStartTime()
+        {
+            string txt = "";
+            for (int i = 0; i < 10; ++i)
+            {
+                txt += String.Format("{0} {0}a\n", i);
+                txt += String.Format("{0} {0}b\n", i);
+                txt += String.Format("{0} {0}c\n", i);
+            }
+            Timeline t = TimelineLoader.LoadFromText("test", txt);
+
+            {
+                var visibleItemsStr = t.VisibleItemsAt(5.1, 10).Select(a => a.Name).Aggregate((a, n) => a + " " + n);
+                Assert.AreEqual("6a 6b 6c 7a 7b 7c 8a 8b 8c 9b", visibleItemsStr);
+            }
+            {
+                var visibleItemsStr = t.VisibleItemsAt(5, 10).Select(a => a.Name).Aggregate((a, n) => a + " " + n);
+                Assert.AreEqual("6a 6b 6c 7a 7b 7c 8a 8b 8c 9b", visibleItemsStr);
             }
         }
 
@@ -70,7 +92,8 @@ namespace test
             Timeline t = new Timeline("foobar", activities, new List<TimelineAnchor>(), alerts, new AlertSoundAssets());
 
             // t.alertsTimeFromStart == 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-            Assert.AreEqual(4, t.FindFirstAlertIndexAfterStartTime(5));
+            Assert.AreEqual(4, t.FindFirstAlertIndexAfterStartTime(4.9));
+            Assert.AreEqual(5, t.FindFirstAlertIndexAfterStartTime(5));
             Assert.AreEqual(5, t.FindFirstAlertIndexAfterStartTime(5.1));
 
             {
