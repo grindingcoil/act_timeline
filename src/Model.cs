@@ -259,7 +259,7 @@ namespace ACTTimeline
         public IEnumerable<TimelineAnchor> ActiveAnchorsAt(double t)
         {
             return anchorsTree
-                .GetIntervalsOverlappingWith(new TimelineInterval(t, t + 0.1)) // FIXME
+                .GetIntervalsIncludingPoint(t)
                 .Select(kv => kv.Value);
         }
         public TimelineAnchor FindAnchorMatchingLogline(double t, string line)
@@ -328,7 +328,7 @@ namespace ACTTimeline
             alertsTimeFromStart = alerts.Select(a => a.TimeFromStart).ToList();
             AlertSoundAssets = soundAssets;
 
-            EndTime = Items.Last().EndTime;
+            EndTime = Items.Any() ? Items.Last().EndTime : 0;
         }
     }
 

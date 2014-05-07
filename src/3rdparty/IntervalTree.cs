@@ -80,6 +80,11 @@ namespace IntervalTree
             return this.Start.CompareTo(other.End) < 0 && this.End.CompareTo(other.Start) > 0;
         }
 
+        public bool Include(T point)
+        {
+            return this.Start.CompareTo(point) < 0 && this.End.CompareTo(point) > 0;
+        }
+
         public override string ToString()
         {
             return string.Format("[{0}, {1}]", this.Start.ToString(), this.End.ToString());
@@ -216,17 +221,11 @@ namespace IntervalTree
             }
         }
 
-        /// <summary>
-        /// Searches for all intervals overlapping the one specified.
-        /// If multiple intervals starting at the same time/value are found to overlap the specified interval, they are returned in decreasing order of their End values.
-        /// </summary>
-        /// <param name="toFind">To find.</param>
-        /// <param name="list">The list.</param>
-        public void GetIntervalsOverlappingWith(Interval<T> toFind, ref List<KeyValuePair<Interval<T>, TypeValue>> list)
+        public void GetIntervalsIncludingPoint(T toFind, ref List<KeyValuePair<Interval<T>, TypeValue>> list)
         {
             if (this.Root != null)
             {
-                this.Root.GetIntervalsOverlappingWith(toFind, ref list);
+                this.Root.GetIntervalsIncludingPoint(toFind, ref list);
             }
         }
 
@@ -239,6 +238,10 @@ namespace IntervalTree
         public IEnumerable<KeyValuePair<Interval<T>, TypeValue>> GetIntervalsOverlappingWith(Interval<T> toFind)
         {
             return (this.Root != null) ? this.Root.GetIntervalsOverlappingWith(toFind) : null;
+        }
+        public IEnumerable<KeyValuePair<Interval<T>, TypeValue>> GetIntervalsIncludingPoint(T toFind)
+        {
+            return (this.Root != null) ? this.Root.GetIntervalsIncludingPoint(toFind) : null;
         }
 
         /// <summary>
@@ -963,22 +966,22 @@ namespace IntervalTree
             /// </summary>
             /// <param name="toFind">To find.</param>
             /// <param name="list">The list.</param>
-            public void GetIntervalsOverlappingWith(Interval<T> toFind, ref List<KeyValuePair<Interval<T>, TypeValue>> list)
+            public void GetIntervalsIncludingPoint(T toFind, ref List<KeyValuePair<Interval<T>, TypeValue>> list)
             {
-                if (toFind.End.CompareTo(this.Interval.Start) <= 0)
+                if (toFind.CompareTo(this.Interval.Start) <= 0)
                 {
-                    ////toFind ends before subtree.Data begins, prune the right subtree
+                    ////toFind is before subtree.Data begins, prune the right subtree
                     if (this.Left != null)
                     {
-                        this.Left.GetIntervalsOverlappingWith(toFind, ref list);
+                        this.Left.GetIntervalsIncludingPoint(toFind, ref list);
                     }
                 }
-                else if (toFind.Start.CompareTo(this.Max) >= 0)
+                else if (toFind.CompareTo(this.Max) >= 0)
                 {
                     ////toFind begins after the subtree.Max ends, prune the left subtree
                     if (this.Right != null)
                     {
-                        this.Right.GetIntervalsOverlappingWith(toFind, ref list);
+                        this.Right.GetIntervalsIncludingPoint(toFind, ref list);
                     }
                 }
                 else
@@ -986,10 +989,10 @@ namespace IntervalTree
                     //// search the left subtree
                     if (this.Left != null)
                     {
-                        this.Left.GetIntervalsOverlappingWith(toFind, ref list);
+                        this.Left.GetIntervalsIncludingPoint(toFind, ref list);
                     }
 
-                    if (this.Interval.OverlapsWith(toFind))
+                    if (this.Interval.Include(toFind))
                     {
                         if (list == null)
                         {
@@ -1004,7 +1007,7 @@ namespace IntervalTree
                             int rangeCount = this.Range.Count;
                             foreach (var kvp in this.GetRange())
                             {
-                                if (kvp.Key.OverlapsWith(toFind))
+                                if (kvp.Key.Include(toFind))
                                 {
                                     if (list == null)
                                     {
@@ -1023,7 +1026,7 @@ namespace IntervalTree
                     //// search the right subtree
                     if (this.Right != null)
                     {
-                        this.Right.GetIntervalsOverlappingWith(toFind, ref list);
+                        this.Right.GetIntervalsIncludingPoint(toFind, ref list);
                     }
                 }
             }
@@ -1091,6 +1094,70 @@ namespace IntervalTree
                     if (this.Right != null)
                     {
                         foreach (var value in this.Right.GetIntervalsOverlappingWith(toFind))
+                        {
+                            yield return value;
+                        }
+                    }
+                }
+            }
+
+            public IEnumerable<KeyValuePair<Interval<T>, TypeValue>> GetIntervalsIncludingPoint(T toFind)
+            {
+                if (toFind.CompareTo(this.Interval.Start) <= 0)
+                {
+                    ////toFind is before subtree.Data begins, prune the right subtree
+                    if (this.Left != null)
+                    {
+                        foreach (var value in this.Left.GetIntervalsIncludingPoint(toFind))
+                        {
+                            yield return value;
+                        }
+                    }
+                }
+                else if (toFind.CompareTo(this.Max) >= 0)
+                {
+                    ////toFind is after the subtree.Max ends, prune the left subtree
+                    if (this.Right != null)
+                    {
+                        foreach (var value in this.Right.GetIntervalsIncludingPoint(toFind))
+                        {
+                            yield return value;
+                        }
+                    }
+                }
+                else
+                {
+                    if (this.Left != null)
+                    {
+                        foreach (var value in this.Left.GetIntervalsIncludingPoint(toFind))
+                        {
+                            yield return value;
+                        }
+                    }
+
+                    if (this.Interval.Include(toFind))
+                    {
+                        yield return new KeyValuePair<Interval<T>, TypeValue>(this.Interval, this.Value);
+
+                        if (this.Range != null && this.Range.Count > 0)
+                        {
+                            foreach (var kvp in this.GetRange())
+                            {
+                                if (kvp.Key.Include(toFind))
+                                {
+                                    yield return kvp;
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (this.Right != null)
+                    {
+                        foreach (var value in this.Right.GetIntervalsIncludingPoint(toFind))
                         {
                             yield return value;
                         }

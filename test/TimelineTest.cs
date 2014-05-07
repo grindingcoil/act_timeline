@@ -10,6 +10,14 @@ namespace test
     public class TimelineTest
     {
         [TestMethod]
+        public void ShouldAllowEmptyTimeline()
+        {
+            Timeline t = TimelineLoader.LoadFromText("test", "");
+            Assert.AreEqual(0, t.Items.Count());
+            Assert.IsFalse(t.VisibleItemsAt(0, 10).Any());
+        }
+
+        [TestMethod]
         public void AnchorWindowShouldBeRespected()
         {
             Timeline t = TimelineLoader.LoadFromText("test", "100 テスト sync /a/ window 20,30\n");
