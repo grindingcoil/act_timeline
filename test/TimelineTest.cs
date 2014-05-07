@@ -50,7 +50,7 @@ namespace test
             }
             {
                 var visibleItems = t.VisibleItemsAt(5, 10).ToList();
-                Assert.AreEqual(4, visibleItems.Count);
+                Assert.AreEqual(5, visibleItems.Count);
             }
             {
                 var visibleItems = t.VisibleItemsAt(4.9, 10).ToList();
@@ -68,6 +68,10 @@ namespace test
                 alerts.Add(new ActivityAlert { ReminderTimeOffset = (double)i, Activity = activity });
 
             Timeline t = new Timeline("foobar", activities, new List<TimelineAnchor>(), alerts, new AlertSoundAssets());
+
+            // t.alertsTimeFromStart == 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+            Assert.AreEqual(4, t.FindFirstAlertIndexAfterStartTime(5));
+            Assert.AreEqual(5, t.FindFirstAlertIndexAfterStartTime(5.1));
 
             {
                 var pending = t.PendingAlertsAt(0);

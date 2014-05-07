@@ -221,22 +221,20 @@ namespace ACTTimeline
         public string Name { get; private set; }
 
         List<TimelineActivity> items;
+        List<double> itemsEndTime;
 
         public IEnumerable<TimelineActivity> Items {
             get { return items; }        
         }
         
-        private int FindLastItemIndexAfterEndTime(double t)
+        private int FindFirstItemIndexAfterEndTime(double t)
         {
-            int i = items.BinarySearch(
-                new TimelineActivity { TimeFromStart = t },
-                TimelineActivity.CompareByEndTime
-                );
-            return (i >= 0) ? i : (-i - 1);
+            int i = itemsEndTime.BinarySearch(t);
+            return (i >= 0) ? i : (~i);
         }
         private IEnumerable<TimelineActivity> ItemsBeforeEndTime(double t)
         {
-            int itemsToSkip = FindLastItemIndexAfterEndTime(t);
+            int itemsToSkip = FindFirstItemIndexAfterEndTime(t);
             return Items.Skip(itemsToSkip);
         }
         public IEnumerable<TimelineActivity> VisibleItemsAt(double t, int limit)
@@ -270,15 +268,20 @@ namespace ACTTimeline
         }
 
         List<ActivityAlert> alerts;
+        List<double> alertsTimeFromStart;
         public IEnumerable<ActivityAlert> Alerts { get { return alerts; } }
-
+        public int FindFirstAlertIndexAfterStartTime(double t)
+        {
+            int i = alertsTimeFromStart.BinarySearch(t);
+            return (i >= 0) ? i : ~i;
+        }
         public IEnumerable<ActivityAlert> PendingAlertsAt(double t)
         {
-            return from alert in Alerts
-                   where alert.TimeFromStart < t
-                   where t - ActivityAlert.TooOldThreshold < alert.TimeFromStart
-                   where !alert.Processed
-                   select alert;
+            int firstAlertIndex = FindFirstAlertIndexAfterStartTime(t - ActivityAlert.TooOldThreshold);
+            return alerts
+                .Skip(firstAlertIndex)
+                .TakeWhile(a => (a.TimeFromStart < t))
+                .Where(a => !a.Processed);
         }
 
         public void ResetAllAlerts()
@@ -301,6 +304,7 @@ namespace ACTTimeline
                 a.Index = i++;
             }
             items.Sort(TimelineActivity.CompareByEndTime);
+            itemsEndTime = items.Select(a => a.EndTime).ToList();
 
             anchors = anchors_.OrderBy(anchor => anchor.TimeFromStart).ToList();
             anchorsTree = new IntervalTree.IntervalTree<double, TimelineAnchor>();
@@ -309,6 +313,7 @@ namespace ACTTimeline
 
             alerts = alerts_;
             alerts.Sort();
+            alertsTimeFromStart = alerts.Select(a => a.TimeFromStart).ToList();
             AlertSoundAssets = soundAssets;
 
             EndTime = Items.Last().EndTime;
