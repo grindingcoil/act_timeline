@@ -174,7 +174,15 @@ namespace ACTTimeline
                 var pendingAlerts = timeline.PendingAlertsAt(controller.CurrentTime);
                 foreach (ActivityAlert pendingAlert in pendingAlerts)
                 {
-                    soundplayer.PlaySound(pendingAlert.Sound.Filename);
+                    if (pendingAlert.Sound != null)
+                    {
+                        soundplayer.PlaySound(pendingAlert.Sound.Filename);
+                    }
+                    if (pendingAlert.TtsSpeaker != null &&
+                        !string.IsNullOrWhiteSpace(pendingAlert.TtsSentence))
+                    {
+                        pendingAlert.TtsSpeaker.Synthesizer.SpeakAsync(pendingAlert.TtsSentence);
+                    }
                     pendingAlert.Processed = true;
                 }
 

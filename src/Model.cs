@@ -104,6 +104,50 @@ namespace ACTTimeline
         }
     };
 
+    public class TtsSpeaker : IDisposable
+    {
+        private System.Speech.Synthesis.SpeechSynthesizer synthesizer;
+        public System.Speech.Synthesis.SpeechSynthesizer Synthesizer
+        {
+            get
+            {
+                if (this.synthesizer == null)
+                {
+                    PopulateSynthesizer();
+                }
+
+                return this.synthesizer;
+            }
+        }
+
+        public string Name { get; private set; }
+        public int Rate { get; private set; }
+        public int Volume { get; private set; }
+
+        public TtsSpeaker(string name, int rate, int volume)
+        {
+            this.Name = name;
+            this.Rate = rate;
+            this.Volume = volume;
+        }
+
+        private void PopulateSynthesizer()
+        {
+            this.synthesizer = new System.Speech.Synthesis.SpeechSynthesizer();
+            synthesizer.Rate = this.Rate;
+            synthesizer.Volume = this.Volume;
+        }
+
+        public void Dispose()
+        {
+            if (this.synthesizer != null)
+            {
+                this.synthesizer.Dispose();
+                this.synthesizer = null;
+            }
+        }
+    }
+
     public class ActivityAlert : IComparable<ActivityAlert>
     {
         public double TimeFromStart {
@@ -113,6 +157,8 @@ namespace ACTTimeline
         }
         public double ReminderTimeOffset { get; set; }
         public AlertSound Sound { get; set; }
+        public TtsSpeaker TtsSpeaker { get; set; }
+        public string TtsSentence { get; set; }
         public TimelineActivity Activity { get; set; }
         public bool Processed { get; set; }
 
