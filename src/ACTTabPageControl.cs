@@ -32,11 +32,13 @@ namespace ACTTimeline
             settings.AddControlSetting("ShowOverlayButtons", checkBoxShowOverlayButtons);
 
             plugin.TimelineView.Move += TimelineView_Move;
+            plugin.TimelineView.TimelineFontChanged += TimelineView_TimelineFontChanged;
             plugin.Controller.CurrentTimeUpdate += Controller_CurrentTimeUpdate;
             plugin.Controller.TimelineUpdate += Controller_TimelineUpdate;
             plugin.Controller.PausedUpdate += Controller_PausedUpdate;
             Controller_TimelineUpdate(this, null);
             Controller_PausedUpdate(this, null);
+            TimelineView_TimelineFontChanged(this, null);
         }
 
         void Controller_PausedUpdate(object sender, EventArgs e)
@@ -209,6 +211,22 @@ namespace ACTTimeline
         private void checkBoxShowOverlayButtons_CheckedChanged(object sender, EventArgs e)
         {
             plugin.TimelineView.ShowOverlayButtons = checkBoxShowOverlayButtons.Checked;
+        }
+
+        void TimelineView_TimelineFontChanged(object sender, EventArgs e)
+        {
+            labelCurrentFont.Text = plugin.FontString;
+        }
+
+        private void buttonFontSelect_Click(object sender, EventArgs e)
+        {
+            FontDialog fontdialog = new FontDialog();
+            fontdialog.Font = plugin.TimelineView.TimelineFont;
+
+            if (fontdialog.ShowDialog() != DialogResult.Cancel)
+            {
+                plugin.TimelineView.TimelineFont = fontdialog.Font;
+            }
         }
     }
 }

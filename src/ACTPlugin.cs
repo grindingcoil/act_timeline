@@ -1,5 +1,6 @@
 ﻿using Advanced_Combat_Tracker;
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -25,6 +26,12 @@ namespace ACTTimeline
         {
             get { return Controller.TimelineTxtFilePath; }
             set { Controller.TimelineTxtFilePath = value; }
+        }
+
+        public string FontString
+        {
+            get { return TypeDescriptor.GetConverter(typeof(Font)).ConvertToString(TimelineView.TimelineFont); }
+            set { TimelineView.TimelineFont = TypeDescriptor.GetConverter(typeof(Font)).ConvertFromString(value) as Font; }
         }
 
         public ACTPlugin()
@@ -59,6 +66,7 @@ namespace ACTTimeline
 
                 Settings = new PluginSettings(this);
                 Settings.AddStringSetting("TimelineTxtFilePath");
+                Settings.AddStringSetting("FontString");
 
                 SetupTab();
                 InjectButton();

@@ -58,6 +58,9 @@
             this.labelLoadedTimeline = new System.Windows.Forms.Label();
             this.labelLoadedTimelineLabel = new System.Windows.Forms.Label();
             this.trackBar = new System.Windows.Forms.TrackBar();
+            this.labelFont = new System.Windows.Forms.Label();
+            this.labelCurrentFont = new System.Windows.Forms.Label();
+            this.buttonFontSelect = new System.Windows.Forms.Button();
             this.groupBoxEnvironment.SuspendLayout();
             this.groupBoxTimelines.SuspendLayout();
             this.groupBoxOverlay.SuspendLayout();
@@ -178,15 +181,18 @@
             this.groupBoxOverlay.Controls.Add(this.checkBoxShowOverlayButtons);
             this.groupBoxOverlay.Controls.Add(this.checkBoxMoveOverlayByDrag);
             this.groupBoxOverlay.Controls.Add(this.labelOverlayY);
+            this.groupBoxOverlay.Controls.Add(this.buttonFontSelect);
             this.groupBoxOverlay.Controls.Add(this.labelOverlayX);
             this.groupBoxOverlay.Controls.Add(this.udOverlayY);
             this.groupBoxOverlay.Controls.Add(this.udNumRows);
             this.groupBoxOverlay.Controls.Add(this.udOverlayX);
+            this.groupBoxOverlay.Controls.Add(this.labelCurrentFont);
+            this.groupBoxOverlay.Controls.Add(this.labelFont);
             this.groupBoxOverlay.Controls.Add(this.labelNumRows);
             this.groupBoxOverlay.Controls.Add(this.labelOverlayOrientation);
             this.groupBoxOverlay.Location = new System.Drawing.Point(16, 377);
             this.groupBoxOverlay.Name = "groupBoxOverlay";
-            this.groupBoxOverlay.Size = new System.Drawing.Size(469, 112);
+            this.groupBoxOverlay.Size = new System.Drawing.Size(469, 137);
             this.groupBoxOverlay.TabIndex = 5;
             this.groupBoxOverlay.TabStop = false;
             this.groupBoxOverlay.Text = "Overlay";
@@ -196,7 +202,7 @@
             this.checkBoxShowOverlayButtons.AutoSize = true;
             this.checkBoxShowOverlayButtons.Checked = true;
             this.checkBoxShowOverlayButtons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxShowOverlayButtons.Location = new System.Drawing.Point(235, 79);
+            this.checkBoxShowOverlayButtons.Location = new System.Drawing.Point(235, 114);
             this.checkBoxShowOverlayButtons.Name = "checkBoxShowOverlayButtons";
             this.checkBoxShowOverlayButtons.Size = new System.Drawing.Size(150, 17);
             this.checkBoxShowOverlayButtons.TabIndex = 3;
@@ -209,7 +215,7 @@
             this.checkBoxMoveOverlayByDrag.AutoSize = true;
             this.checkBoxMoveOverlayByDrag.Checked = true;
             this.checkBoxMoveOverlayByDrag.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxMoveOverlayByDrag.Location = new System.Drawing.Point(11, 79);
+            this.checkBoxMoveOverlayByDrag.Location = new System.Drawing.Point(11, 114);
             this.checkBoxMoveOverlayByDrag.Name = "checkBoxMoveOverlayByDrag";
             this.checkBoxMoveOverlayByDrag.Size = new System.Drawing.Size(218, 17);
             this.checkBoxMoveOverlayByDrag.TabIndex = 3;
@@ -417,6 +423,34 @@
             this.trackBar.TickFrequency = 30;
             this.trackBar.Scroll += new System.EventHandler(this.trackbar_Scroll);
             // 
+            // labelFont
+            // 
+            this.labelFont.AutoSize = true;
+            this.labelFont.Location = new System.Drawing.Point(8, 85);
+            this.labelFont.Name = "labelFont";
+            this.labelFont.Size = new System.Drawing.Size(31, 13);
+            this.labelFont.TabIndex = 0;
+            this.labelFont.Text = "Font:";
+            // 
+            // labelCurrentFont
+            // 
+            this.labelCurrentFont.AutoSize = true;
+            this.labelCurrentFont.Location = new System.Drawing.Point(45, 85);
+            this.labelCurrentFont.Name = "labelCurrentFont";
+            this.labelCurrentFont.Size = new System.Drawing.Size(80, 13);
+            this.labelCurrentFont.TabIndex = 0;
+            this.labelCurrentFont.Text = "CurrentFontInfo";
+            // 
+            // buttonFontSelect
+            // 
+            this.buttonFontSelect.Location = new System.Drawing.Point(375, 80);
+            this.buttonFontSelect.Name = "buttonFontSelect";
+            this.buttonFontSelect.Size = new System.Drawing.Size(85, 22);
+            this.buttonFontSelect.TabIndex = 0;
+            this.buttonFontSelect.Text = "Select Font";
+            this.buttonFontSelect.UseVisualStyleBackColor = true;
+            this.buttonFontSelect.Click += new System.EventHandler(this.buttonFontSelect_Click);
+            // 
             // ACTTabPageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -426,7 +460,7 @@
             this.Controls.Add(this.groupBoxTimelines);
             this.Controls.Add(this.groupBoxEnvironment);
             this.Name = "ACTTabPageControl";
-            this.Size = new System.Drawing.Size(500, 500);
+            this.Size = new System.Drawing.Size(500, 532);
             this.groupBoxEnvironment.ResumeLayout(false);
             this.groupBoxEnvironment.PerformLayout();
             this.groupBoxTimelines.ResumeLayout(false);
@@ -474,5 +508,8 @@
         private System.Windows.Forms.Label labelLoadedTimelineLabel;
         private System.Windows.Forms.TrackBar trackBar;
         private System.Windows.Forms.CheckBox checkBoxShowOverlayButtons;
+        private System.Windows.Forms.Button buttonFontSelect;
+        private System.Windows.Forms.Label labelCurrentFont;
+        private System.Windows.Forms.Label labelFont;
     }
 }
