@@ -43,8 +43,12 @@
             this.checkBoxMoveOverlayByDrag = new System.Windows.Forms.CheckBox();
             this.labelOverlayY = new System.Windows.Forms.Label();
             this.buttonFontSelect = new System.Windows.Forms.Button();
+            this.labelBar = new System.Windows.Forms.Label();
+            this.labelTextWidth = new System.Windows.Forms.Label();
             this.labelOverlayX = new System.Windows.Forms.Label();
             this.udOverlayY = new System.Windows.Forms.NumericUpDown();
+            this.udBarWidth = new System.Windows.Forms.NumericUpDown();
+            this.udTextWidth = new System.Windows.Forms.NumericUpDown();
             this.udNumRows = new System.Windows.Forms.NumericUpDown();
             this.udOverlayX = new System.Windows.Forms.NumericUpDown();
             this.labelCurrentFont = new System.Windows.Forms.Label();
@@ -62,20 +66,16 @@
             this.labelLoadedTimeline = new System.Windows.Forms.Label();
             this.labelLoadedTimelineLabel = new System.Windows.Forms.Label();
             this.trackBar = new System.Windows.Forms.TrackBar();
-            this.udTextWidth = new System.Windows.Forms.NumericUpDown();
-            this.labelTextWidth = new System.Windows.Forms.Label();
-            this.labelBar = new System.Windows.Forms.Label();
-            this.udBarWidth = new System.Windows.Forms.NumericUpDown();
             this.groupBoxEnvironment.SuspendLayout();
             this.groupBoxTimelines.SuspendLayout();
             this.groupBoxOverlay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udBarWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTextWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udNumRows)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayX)).BeginInit();
             this.groupBoxTracker.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTextWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udBarWidth)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonResourceDirSelect
@@ -254,6 +254,26 @@
             this.buttonFontSelect.UseVisualStyleBackColor = true;
             this.buttonFontSelect.Click += new System.EventHandler(this.buttonFontSelect_Click);
             // 
+            // labelBar
+            // 
+            this.labelBar.AutoSize = true;
+            this.labelBar.Location = new System.Drawing.Point(251, 89);
+            this.labelBar.Name = "labelBar";
+            this.labelBar.Size = new System.Drawing.Size(26, 13);
+            this.labelBar.TabIndex = 2;
+            this.labelBar.Text = "Bar:";
+            this.labelBar.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // labelTextWidth
+            // 
+            this.labelTextWidth.AutoSize = true;
+            this.labelTextWidth.Location = new System.Drawing.Point(122, 89);
+            this.labelTextWidth.Name = "labelTextWidth";
+            this.labelTextWidth.Size = new System.Drawing.Size(31, 13);
+            this.labelTextWidth.TabIndex = 2;
+            this.labelTextWidth.Text = "Text:";
+            this.labelTextWidth.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // labelOverlayX
             // 
             this.labelOverlayX.AutoSize = true;
@@ -285,6 +305,62 @@
             0,
             0});
             this.udOverlayY.ValueChanged += new System.EventHandler(this.udOverlayY_ValueChanged);
+            // 
+            // udBarWidth
+            // 
+            this.udBarWidth.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udBarWidth.Location = new System.Drawing.Point(286, 87);
+            this.udBarWidth.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.udBarWidth.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udBarWidth.Name = "udBarWidth";
+            this.udBarWidth.Size = new System.Drawing.Size(80, 20);
+            this.udBarWidth.TabIndex = 1;
+            this.udBarWidth.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udBarWidth.ValueChanged += new System.EventHandler(this.udBarWidth_ValueChanged);
+            // 
+            // udTextWidth
+            // 
+            this.udTextWidth.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udTextWidth.Location = new System.Drawing.Point(159, 87);
+            this.udTextWidth.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.udTextWidth.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udTextWidth.Name = "udTextWidth";
+            this.udTextWidth.Size = new System.Drawing.Size(80, 20);
+            this.udTextWidth.TabIndex = 1;
+            this.udTextWidth.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udTextWidth.ValueChanged += new System.EventHandler(this.udTextWidth_ValueChanged);
             // 
             // udNumRows
             // 
@@ -472,72 +548,6 @@
             this.trackBar.TickFrequency = 30;
             this.trackBar.Scroll += new System.EventHandler(this.trackbar_Scroll);
             // 
-            // udTextWidth
-            // 
-            this.udTextWidth.Location = new System.Drawing.Point(159, 87);
-            this.udTextWidth.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.udTextWidth.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.udTextWidth.Name = "udTextWidth";
-            this.udTextWidth.Size = new System.Drawing.Size(80, 20);
-            this.udTextWidth.TabIndex = 1;
-            this.udTextWidth.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.udTextWidth.ValueChanged += new System.EventHandler(this.udNumRows_ValueChanged);
-            // 
-            // labelTextWidth
-            // 
-            this.labelTextWidth.AutoSize = true;
-            this.labelTextWidth.Location = new System.Drawing.Point(122, 89);
-            this.labelTextWidth.Name = "labelTextWidth";
-            this.labelTextWidth.Size = new System.Drawing.Size(31, 13);
-            this.labelTextWidth.TabIndex = 2;
-            this.labelTextWidth.Text = "Text:";
-            this.labelTextWidth.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // labelBar
-            // 
-            this.labelBar.AutoSize = true;
-            this.labelBar.Location = new System.Drawing.Point(251, 89);
-            this.labelBar.Name = "labelBar";
-            this.labelBar.Size = new System.Drawing.Size(26, 13);
-            this.labelBar.TabIndex = 2;
-            this.labelBar.Text = "Bar:";
-            this.labelBar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // udBarWidth
-            // 
-            this.udBarWidth.Location = new System.Drawing.Point(286, 87);
-            this.udBarWidth.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.udBarWidth.Minimum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.udBarWidth.Name = "udBarWidth";
-            this.udBarWidth.Size = new System.Drawing.Size(80, 20);
-            this.udBarWidth.TabIndex = 1;
-            this.udBarWidth.Value = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.udBarWidth.ValueChanged += new System.EventHandler(this.udNumRows_ValueChanged);
-            // 
             // ACTTabPageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -554,13 +564,13 @@
             this.groupBoxOverlay.ResumeLayout(false);
             this.groupBoxOverlay.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udBarWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTextWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udNumRows)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayX)).EndInit();
             this.groupBoxTracker.ResumeLayout(false);
             this.groupBoxTracker.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udTextWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.udBarWidth)).EndInit();
             this.ResumeLayout(false);
 
         }

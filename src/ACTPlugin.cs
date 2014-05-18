@@ -2,7 +2,6 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -21,7 +20,8 @@ namespace ACTTimeline
         public TimelineView TimelineView { get; private set; }
         private CheckBox checkBoxShowView;
 
-        // delegate for PluginSettings
+        #region delegates for PluginSettings
+
         public string TimelineTxtFilePath
         {
             get { return Controller.TimelineTxtFilePath; }
@@ -33,6 +33,20 @@ namespace ACTTimeline
             get { return TypeDescriptor.GetConverter(typeof(Font)).ConvertToString(TimelineView.TimelineFont); }
             set { TimelineView.TimelineFont = TypeDescriptor.GetConverter(typeof(Font)).ConvertFromString(value) as Font; }
         }
+
+        public int TextWidth
+        {
+            get { return TimelineView.TextWidth; }
+            set { TimelineView.TextWidth = value; }
+        }
+
+        public int BarWidth
+        {
+            get { return TimelineView.BarWidth; }
+            set { TimelineView.BarWidth = value; }
+        }
+
+        #endregion
 
         public ACTPlugin()
         {
@@ -67,6 +81,8 @@ namespace ACTTimeline
                 Settings = new PluginSettings(this);
                 Settings.AddStringSetting("TimelineTxtFilePath");
                 Settings.AddStringSetting("FontString");
+                Settings.AddIntSetting("TextWidth");
+                Settings.AddIntSetting("BarWidth");
 
                 SetupTab();
                 InjectButton();
