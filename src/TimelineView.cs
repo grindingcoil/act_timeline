@@ -28,7 +28,8 @@ namespace ACTTimeline
         }
 
         private bool moveByDrag;
-        public bool MoveByDrag {
+        public bool MoveByDrag
+        {
             get { return moveByDrag; }
             set
             {
@@ -48,7 +49,29 @@ namespace ACTTimeline
             }
         }
 
+        private Font timelineFont;
+        public Font TimelineFont
+        {
+            get { return timelineFont; }
+            set
+            {
+                timelineFont = value;
+                OnTimelineFontChanged();
+            }
+        }
+
+        public event EventHandler TimelineFontChanged;
+        public void OnTimelineFontChanged()
+        {
+            columnText.DefaultCellStyle.Font = TimelineFont;
+
+            if (TimelineFontChanged != null)
+                TimelineFontChanged(this, EventArgs.Empty);
+        }
+
         private TimelineController controller;
+        DataGridViewTextBoxColumn columnText;
+        TimeLeftColumn columnTimeLeft;
         
         public TimelineView(TimelineController controller_)
         {
@@ -68,8 +91,8 @@ namespace ACTTimeline
                 SetValue(dataGridView, true, null);
             dataGridView.SelectionChanged += (object sender, EventArgs args) => dataGridView.ClearSelection();
             dataGridView.AutoGenerateColumns = false;
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Name", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
-            dataGridView.Columns.Add(new TimeLeftColumn { Controller = controller_ });
+            dataGridView.Columns.Add(columnText = new DataGridViewTextBoxColumn { DataPropertyName = "Name", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+            dataGridView.Columns.Add(columnTimeLeft = new TimeLeftColumn { Controller = controller_ });
 
             this.Opacity = 0.8;
             NumberOfRowsToDisplay = 3;
@@ -77,6 +100,8 @@ namespace ACTTimeline
             ShowOverlayButtons = true;
 
             soundplayer = new CachedSoundPlayer();
+
+            TimelineFont = new Font(FontFamily.GenericSansSerif, 12, FontStyle.Bold);
         }
 
         const int UIWidth = 200;
