@@ -33,12 +33,14 @@ namespace ACTTimeline
 
             plugin.TimelineView.Move += TimelineView_Move;
             plugin.TimelineView.TimelineFontChanged += TimelineView_TimelineFontChanged;
+            plugin.TimelineView.ColumnWidthChanged += TimelineView_ColumnWidthChanged;
             plugin.Controller.CurrentTimeUpdate += Controller_CurrentTimeUpdate;
             plugin.Controller.TimelineUpdate += Controller_TimelineUpdate;
             plugin.Controller.PausedUpdate += Controller_PausedUpdate;
+            TimelineView_TimelineFontChanged(this, null);
+            TimelineView_ColumnWidthChanged(this, null);
             Controller_TimelineUpdate(this, null);
             Controller_PausedUpdate(this, null);
-            TimelineView_TimelineFontChanged(this, null);
         }
 
         void Controller_PausedUpdate(object sender, EventArgs e)
@@ -227,6 +229,22 @@ namespace ACTTimeline
             {
                 plugin.TimelineView.TimelineFont = fontdialog.Font;
             }
+        }
+
+        void TimelineView_ColumnWidthChanged(object sender, EventArgs e)
+        {
+            udTextWidth.Value = plugin.TimelineView.TextWidth;
+            udBarWidth.Value = plugin.TimelineView.BarWidth;
+        }
+
+        private void udTextWidth_ValueChanged(object sender, EventArgs e)
+        {
+            plugin.TimelineView.TextWidth = (int)udTextWidth.Value;
+        }
+
+        private void udBarWidth_ValueChanged(object sender, EventArgs e)
+        {
+            plugin.TimelineView.BarWidth = (int)udBarWidth.Value;
         }
     }
 }
