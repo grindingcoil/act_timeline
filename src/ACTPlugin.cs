@@ -46,6 +46,12 @@ namespace ACTTimeline
             set { TimelineView.BarWidth = value; }
         }
 
+        public int OpacityPercentage
+        {
+            get { return (int)(TimelineView.MyOpacity * 100.0); }
+            set { TimelineView.MyOpacity = (double)value / 100.0; }
+        }
+
         #endregion
 
         public ACTPlugin()
@@ -83,6 +89,7 @@ namespace ACTTimeline
                 Settings.AddStringSetting("FontString");
                 Settings.AddIntSetting("TextWidth");
                 Settings.AddIntSetting("BarWidth");
+                Settings.AddIntSetting("OpacityPercentage");
 
                 SetupTab();
                 InjectButton();

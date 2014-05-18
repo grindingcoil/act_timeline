@@ -98,6 +98,24 @@ namespace ACTTimeline
                 ColumnWidthChanged(this, EventArgs.Empty);
         }
 
+        // trigger OnOpacityChanged on change.
+        public double MyOpacity
+        {
+            get { return Opacity; }
+            set
+            {
+                Opacity = value;
+                OnOpacityChanged();
+            }
+        }
+
+        public event EventHandler OpacityChanged;
+        public void OnOpacityChanged()
+        {
+            if (OpacityChanged != null)
+                OpacityChanged(this, EventArgs.Empty);
+        }
+
         private TimelineController controller;
         DataGridViewTextBoxColumn textColumn;
         TimeLeftColumn timeLeftColumn;
@@ -126,7 +144,7 @@ namespace ACTTimeline
             dataGridView.Columns.Add(textColumn = new DataGridViewTextBoxColumn { DataPropertyName = "Name", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
             dataGridView.Columns.Add(timeLeftColumn = new TimeLeftColumn { Controller = controller_ });
 
-            this.Opacity = 0.8;
+            MyOpacity = 0.8;
             NumberOfRowsToDisplay = 3;
             MoveByDrag = true;
             ShowOverlayButtons = true;
