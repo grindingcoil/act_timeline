@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ACTTimeline
@@ -63,6 +64,9 @@ namespace ACTTimeline
         {
             try
             {
+                // DI log writer
+                Globals.WriteLogImpl = (str) => { ActGlobals.oFormActMain.WriteInfoLog(String.Format("act_timeline: {0}", str)); };
+
                 ScreenSpace = pluginScreenSpace;
                 StatusText = pluginStatusText;
 
@@ -95,6 +99,8 @@ namespace ACTTimeline
                 InjectButton();
 
                 Settings.Load();
+
+                SetupUpdateChecker();
 
                 StatusText.Text = "Plugin Started (^^)!";
             }
@@ -164,7 +170,21 @@ namespace ACTTimeline
             tabPageControl.Location = new System.Drawing.Point(0, 0);
             tabPageControl.Size = ScreenSpace.Size;
         }
-    
+
+        void SetupUpdateChecker()
+        {
+            ActGlobals.oFormActMain.UpdateCheckClicked += new FormActMain.NullDelegate(CheckForUpdate);
+            if (ActGlobals.oFormActMain.GetAutomaticUpdatesAllowed())
+                CheckForUpdate();
+        }
+
+        void CheckForUpdate()
+        {
+            var myVersion = typeof(ACTPlugin).Assembly.GetName().Version.ToString();
+            var updateChecker = new UpdateChecker(myVersion);
+            updateChecker.PerformCheckOnNewThread();
+        }
+
         void IActPluginV1.DeInitPlugin()
         {
             if (checkBoxShowView != null)
@@ -178,6 +198,8 @@ namespace ACTTimeline
 
             if (Controller != null)
                 Controller.Stop();
+
+            ActGlobals.oFormActMain.UpdateCheckClicked -= CheckForUpdate;
 
             if (StatusText != null)
                 StatusText.Text = "Plugin Exited m(_ _)m";
