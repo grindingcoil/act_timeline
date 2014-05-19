@@ -49,7 +49,7 @@ namespace ACTTimeline
     {
         string localVersion;
 
-        const string DefaultVersionInfoUrl = "https://raw.githubusercontent.com/grindingcoil/act_timeline/master/src/version_info.xml";
+        const string DefaultVersionInfoUrl = "https://raw.githubusercontent.com/grindingcoil/act_timeline/master/version_info.xml";
         string versionInfoUrl;
 
         public UpdateChecker(string localVersion_, string versionInfoUrl_ = DefaultVersionInfoUrl)
