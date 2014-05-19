@@ -57,5 +57,26 @@ namespace ACTTimeline
                 }
             }
         }
+
+        public delegate void WriteLogDelegate(string str);
+        static public WriteLogDelegate WriteLogImpl = System.Console.WriteLine;
+
+        static public void WriteLog(string str)
+        {
+            WriteLogImpl(str);
+        }
+
+        public delegate string FetchUrlDelegate(string url);
+        static public FetchUrlDelegate FetchUrlImpl = FetchUrlUsingWebRequest;
+
+        static public string FetchUrl(string url)
+        {
+            return FetchUrlImpl(url);
+        }
+
+        static public string FetchUrlUsingWebRequest(string url)
+        {
+            return new System.Net.WebClient().DownloadString(url);
+        }
     }
 }
