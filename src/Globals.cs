@@ -76,7 +76,9 @@ namespace ACTTimeline
 
         static public string FetchUrlUsingWebRequest(string url)
         {
-            return new System.Net.WebClient().DownloadString(url);
+            var client = new System.Net.WebClient();
+            client.Encoding = System.Text.Encoding.UTF8;
+            return client.DownloadString(url);
         }
     }
 }
