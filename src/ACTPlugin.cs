@@ -180,8 +180,8 @@ namespace ACTTimeline
 
         void CheckForUpdate()
         {
-            var pluginData = ActGlobals.oFormActMain.PluginGetSelfData(this);
-            var updateChecker = new UpdateChecker(pluginData.pluginVersion);
+            var myVersion = typeof(ACTPlugin).Assembly.GetName().Version.ToString();
+            var updateChecker = new UpdateChecker(myVersion);
             updateChecker.PerformCheckOnNewThread();
         }
 
