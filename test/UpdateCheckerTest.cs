@@ -121,7 +121,7 @@ namespace test
             {
                 TestPerformCheck(new UpdateChecker("0.1.1.0", "https://bad.url"));
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 Assert.Fail("TestPerformCheck should not throw exception even on bad url.");
             }

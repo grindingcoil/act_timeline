@@ -21,6 +21,16 @@ namespace test
         }
 
         [TestMethod]
+        public void EOLAtEOFShouldBeOptional()
+        {
+            Timeline timeline = TimelineLoader.LoadFromText("test", "1 テスト");
+            var items = timeline.Items.ToList();
+            Assert.AreEqual(1, items.Count);
+            Assert.AreEqual(1.0, items.First().TimeFromStart);
+            Assert.AreEqual("テスト", items.First().Name);
+        }
+
+        [TestMethod]
         public void TestTimelineStatementWithDuration()
         {
             Timeline timeline = TimelineLoader.LoadFromText("test", "1 テスト duration 5\n");
@@ -87,6 +97,15 @@ namespace test
             Assert.AreEqual(2, items.Count);
             Assert.AreEqual(0.0, items.First().TimeFromStart);
             Assert.AreEqual("asdf", items.First().Name);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"..\..\..\..\resources\")]
+        public void TestIncludedTimelineFiles()
+        {
+            Globals.ResourceRoot = ".";
+            foreach (var filepath in Globals.TimelineTxtsInResourcesDir)
+                TimelineLoader.LoadFromFile(filepath);
         }
     }
 }
