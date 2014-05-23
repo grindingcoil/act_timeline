@@ -74,6 +74,7 @@
     <Compile Include="TimelineLoaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimelineTest.cs" />
+    <Compile Include="UpdateCheckerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\act_timeline.csproj">

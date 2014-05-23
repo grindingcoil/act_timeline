@@ -32,14 +32,20 @@ namespace ACTTimeline
             settings.AddControlSetting("ShowOverlayButtons", checkBoxShowOverlayButtons);
 
             plugin.TimelineView.Move += TimelineView_Move;
+            plugin.TimelineView.TimelineFontChanged += TimelineView_TimelineFontChanged;
+            plugin.TimelineView.ColumnWidthChanged += TimelineView_ColumnWidthChanged;
+            plugin.TimelineView.OpacityChanged += TimelineView_OpacityChanged;
             plugin.Controller.CurrentTimeUpdate += Controller_CurrentTimeUpdate;
             plugin.Controller.TimelineUpdate += Controller_TimelineUpdate;
             plugin.Controller.PausedUpdate += Controller_PausedUpdate;
+            TimelineView_TimelineFontChanged(this, null);
+            TimelineView_ColumnWidthChanged(this, null);
+            TimelineView_OpacityChanged(this, null);
             Controller_TimelineUpdate(this, null);
             Controller_PausedUpdate(this, null);
         }
 
-        void Controller_PausedUpdate(object sender, EventArgs e)
+        private void Controller_PausedUpdate(object sender, EventArgs e)
         {
             if (InvokeRequired)
             {
@@ -58,7 +64,7 @@ namespace ACTTimeline
             return String.Format("{0:00}:{1:00}", mm, ss);
         }
 
-        void Controller_TimelineUpdate(object sender, EventArgs e)
+        private void Controller_TimelineUpdate(object sender, EventArgs e)
         {
             Timeline timeline = plugin.Controller.Timeline;
             if (timeline == null)
@@ -71,7 +77,7 @@ namespace ACTTimeline
             labelLoadedTimeline.Text = timeline.Name;
         }
 
-        void Controller_CurrentTimeUpdate(object sender, EventArgs e)
+        private void Controller_CurrentTimeUpdate(object sender, EventArgs e)
         {
             if (InvokeRequired)
             {
@@ -87,7 +93,7 @@ namespace ACTTimeline
                 trackBar.Value = currTimeInt;
         }
 
-        void TimelineView_Move(object sender, EventArgs e)
+        private void TimelineView_Move(object sender, EventArgs e)
         {
             updateFromOverlayMove = true;
             udOverlayX.Value = plugin.TimelineView.Left;
@@ -209,6 +215,54 @@ namespace ACTTimeline
         private void checkBoxShowOverlayButtons_CheckedChanged(object sender, EventArgs e)
         {
             plugin.TimelineView.ShowOverlayButtons = checkBoxShowOverlayButtons.Checked;
+        }
+
+        private void TimelineView_TimelineFontChanged(object sender, EventArgs e)
+        {
+            labelCurrentFont.Text = plugin.FontString;
+        }
+
+        private void buttonFontSelect_Click(object sender, EventArgs e)
+        {
+            FontDialog fontdialog = new FontDialog();
+            fontdialog.Font = plugin.TimelineView.TimelineFont;
+
+            if (fontdialog.ShowDialog() != DialogResult.Cancel)
+            {
+                plugin.TimelineView.TimelineFont = fontdialog.Font;
+            }
+        }
+
+        private void TimelineView_ColumnWidthChanged(object sender, EventArgs e)
+        {
+            udTextWidth.Value = plugin.TimelineView.TextWidth;
+            udBarWidth.Value = plugin.TimelineView.BarWidth;
+        }
+
+        private void udTextWidth_ValueChanged(object sender, EventArgs e)
+        {
+            plugin.TimelineView.TextWidth = (int)udTextWidth.Value;
+        }
+
+        private void udBarWidth_ValueChanged(object sender, EventArgs e)
+        {
+            plugin.TimelineView.BarWidth = (int)udBarWidth.Value;
+        }
+
+        private void TimelineView_OpacityChanged(object sender, EventArgs e)
+        {
+            int percentage = (int)(plugin.TimelineView.MyOpacity * 100);
+
+            labelCurrOpacity.Text = String.Format("{0}%", percentage);
+
+            percentage = Math.Min(trackBarOpacity.Maximum, percentage);
+            percentage = Math.Max(trackBarOpacity.Minimum, percentage);
+            trackBarOpacity.Value = percentage;
+        }
+
+        private void trackBarOpacity_Scroll(object sender, EventArgs e)
+        {
+            plugin.TimelineView.MyOpacity = ((double)trackBarOpacity.Value) / 100;
         }
     }
 }

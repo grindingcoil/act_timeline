@@ -42,10 +42,18 @@
             this.checkBoxShowOverlayButtons = new System.Windows.Forms.CheckBox();
             this.checkBoxMoveOverlayByDrag = new System.Windows.Forms.CheckBox();
             this.labelOverlayY = new System.Windows.Forms.Label();
+            this.buttonFontSelect = new System.Windows.Forms.Button();
+            this.labelBar = new System.Windows.Forms.Label();
+            this.labelTextWidth = new System.Windows.Forms.Label();
             this.labelOverlayX = new System.Windows.Forms.Label();
             this.udOverlayY = new System.Windows.Forms.NumericUpDown();
+            this.udBarWidth = new System.Windows.Forms.NumericUpDown();
+            this.udTextWidth = new System.Windows.Forms.NumericUpDown();
             this.udNumRows = new System.Windows.Forms.NumericUpDown();
             this.udOverlayX = new System.Windows.Forms.NumericUpDown();
+            this.labelCurrentFont = new System.Windows.Forms.Label();
+            this.labelFont = new System.Windows.Forms.Label();
+            this.labelColumnSize = new System.Windows.Forms.Label();
             this.labelNumRows = new System.Windows.Forms.Label();
             this.labelOverlayOrientation = new System.Windows.Forms.Label();
             this.groupBoxTracker = new System.Windows.Forms.GroupBox();
@@ -58,14 +66,20 @@
             this.labelLoadedTimeline = new System.Windows.Forms.Label();
             this.labelLoadedTimelineLabel = new System.Windows.Forms.Label();
             this.trackBar = new System.Windows.Forms.TrackBar();
+            this.labelOpacity = new System.Windows.Forms.Label();
+            this.trackBarOpacity = new System.Windows.Forms.TrackBar();
+            this.labelCurrOpacity = new System.Windows.Forms.Label();
             this.groupBoxEnvironment.SuspendLayout();
             this.groupBoxTimelines.SuspendLayout();
             this.groupBoxOverlay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayY)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udBarWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTextWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udNumRows)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayX)).BeginInit();
             this.groupBoxTracker.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonResourceDirSelect
@@ -175,18 +189,29 @@
             // 
             // groupBoxOverlay
             // 
+            this.groupBoxOverlay.Controls.Add(this.trackBarOpacity);
             this.groupBoxOverlay.Controls.Add(this.checkBoxShowOverlayButtons);
             this.groupBoxOverlay.Controls.Add(this.checkBoxMoveOverlayByDrag);
             this.groupBoxOverlay.Controls.Add(this.labelOverlayY);
+            this.groupBoxOverlay.Controls.Add(this.buttonFontSelect);
+            this.groupBoxOverlay.Controls.Add(this.labelBar);
+            this.groupBoxOverlay.Controls.Add(this.labelTextWidth);
             this.groupBoxOverlay.Controls.Add(this.labelOverlayX);
             this.groupBoxOverlay.Controls.Add(this.udOverlayY);
+            this.groupBoxOverlay.Controls.Add(this.udBarWidth);
+            this.groupBoxOverlay.Controls.Add(this.udTextWidth);
             this.groupBoxOverlay.Controls.Add(this.udNumRows);
             this.groupBoxOverlay.Controls.Add(this.udOverlayX);
+            this.groupBoxOverlay.Controls.Add(this.labelCurrentFont);
+            this.groupBoxOverlay.Controls.Add(this.labelFont);
+            this.groupBoxOverlay.Controls.Add(this.labelColumnSize);
+            this.groupBoxOverlay.Controls.Add(this.labelCurrOpacity);
+            this.groupBoxOverlay.Controls.Add(this.labelOpacity);
             this.groupBoxOverlay.Controls.Add(this.labelNumRows);
             this.groupBoxOverlay.Controls.Add(this.labelOverlayOrientation);
             this.groupBoxOverlay.Location = new System.Drawing.Point(16, 377);
             this.groupBoxOverlay.Name = "groupBoxOverlay";
-            this.groupBoxOverlay.Size = new System.Drawing.Size(469, 112);
+            this.groupBoxOverlay.Size = new System.Drawing.Size(469, 243);
             this.groupBoxOverlay.TabIndex = 5;
             this.groupBoxOverlay.TabStop = false;
             this.groupBoxOverlay.Text = "Overlay";
@@ -196,7 +221,7 @@
             this.checkBoxShowOverlayButtons.AutoSize = true;
             this.checkBoxShowOverlayButtons.Checked = true;
             this.checkBoxShowOverlayButtons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxShowOverlayButtons.Location = new System.Drawing.Point(235, 79);
+            this.checkBoxShowOverlayButtons.Location = new System.Drawing.Point(235, 209);
             this.checkBoxShowOverlayButtons.Name = "checkBoxShowOverlayButtons";
             this.checkBoxShowOverlayButtons.Size = new System.Drawing.Size(150, 17);
             this.checkBoxShowOverlayButtons.TabIndex = 3;
@@ -209,7 +234,7 @@
             this.checkBoxMoveOverlayByDrag.AutoSize = true;
             this.checkBoxMoveOverlayByDrag.Checked = true;
             this.checkBoxMoveOverlayByDrag.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxMoveOverlayByDrag.Location = new System.Drawing.Point(11, 79);
+            this.checkBoxMoveOverlayByDrag.Location = new System.Drawing.Point(11, 209);
             this.checkBoxMoveOverlayByDrag.Name = "checkBoxMoveOverlayByDrag";
             this.checkBoxMoveOverlayByDrag.Size = new System.Drawing.Size(218, 17);
             this.checkBoxMoveOverlayByDrag.TabIndex = 3;
@@ -226,6 +251,36 @@
             this.labelOverlayY.TabIndex = 2;
             this.labelOverlayY.Text = "Y:";
             // 
+            // buttonFontSelect
+            // 
+            this.buttonFontSelect.Location = new System.Drawing.Point(375, 173);
+            this.buttonFontSelect.Name = "buttonFontSelect";
+            this.buttonFontSelect.Size = new System.Drawing.Size(85, 22);
+            this.buttonFontSelect.TabIndex = 0;
+            this.buttonFontSelect.Text = "Select Font";
+            this.buttonFontSelect.UseVisualStyleBackColor = true;
+            this.buttonFontSelect.Click += new System.EventHandler(this.buttonFontSelect_Click);
+            // 
+            // labelBar
+            // 
+            this.labelBar.AutoSize = true;
+            this.labelBar.Location = new System.Drawing.Point(251, 89);
+            this.labelBar.Name = "labelBar";
+            this.labelBar.Size = new System.Drawing.Size(26, 13);
+            this.labelBar.TabIndex = 2;
+            this.labelBar.Text = "Bar:";
+            this.labelBar.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // labelTextWidth
+            // 
+            this.labelTextWidth.AutoSize = true;
+            this.labelTextWidth.Location = new System.Drawing.Point(122, 89);
+            this.labelTextWidth.Name = "labelTextWidth";
+            this.labelTextWidth.Size = new System.Drawing.Size(31, 13);
+            this.labelTextWidth.TabIndex = 2;
+            this.labelTextWidth.Text = "Text:";
+            this.labelTextWidth.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // labelOverlayX
             // 
             this.labelOverlayX.AutoSize = true;
@@ -237,7 +292,7 @@
             // 
             // udOverlayY
             // 
-            this.udOverlayY.Location = new System.Drawing.Point(271, 23);
+            this.udOverlayY.Location = new System.Drawing.Point(286, 23);
             this.udOverlayY.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -257,6 +312,62 @@
             0,
             0});
             this.udOverlayY.ValueChanged += new System.EventHandler(this.udOverlayY_ValueChanged);
+            // 
+            // udBarWidth
+            // 
+            this.udBarWidth.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udBarWidth.Location = new System.Drawing.Point(286, 87);
+            this.udBarWidth.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.udBarWidth.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udBarWidth.Name = "udBarWidth";
+            this.udBarWidth.Size = new System.Drawing.Size(80, 20);
+            this.udBarWidth.TabIndex = 1;
+            this.udBarWidth.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udBarWidth.ValueChanged += new System.EventHandler(this.udBarWidth_ValueChanged);
+            // 
+            // udTextWidth
+            // 
+            this.udTextWidth.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udTextWidth.Location = new System.Drawing.Point(159, 87);
+            this.udTextWidth.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.udTextWidth.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udTextWidth.Name = "udTextWidth";
+            this.udTextWidth.Size = new System.Drawing.Size(80, 20);
+            this.udTextWidth.TabIndex = 1;
+            this.udTextWidth.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.udTextWidth.ValueChanged += new System.EventHandler(this.udTextWidth_ValueChanged);
             // 
             // udNumRows
             // 
@@ -293,6 +404,33 @@
             0,
             0});
             this.udOverlayX.ValueChanged += new System.EventHandler(this.udOverlayX_ValueChanged);
+            // 
+            // labelCurrentFont
+            // 
+            this.labelCurrentFont.AutoSize = true;
+            this.labelCurrentFont.Location = new System.Drawing.Point(45, 178);
+            this.labelCurrentFont.Name = "labelCurrentFont";
+            this.labelCurrentFont.Size = new System.Drawing.Size(80, 13);
+            this.labelCurrentFont.TabIndex = 0;
+            this.labelCurrentFont.Text = "CurrentFontInfo";
+            // 
+            // labelFont
+            // 
+            this.labelFont.AutoSize = true;
+            this.labelFont.Location = new System.Drawing.Point(8, 178);
+            this.labelFont.Name = "labelFont";
+            this.labelFont.Size = new System.Drawing.Size(31, 13);
+            this.labelFont.TabIndex = 0;
+            this.labelFont.Text = "Font:";
+            // 
+            // labelColumnSize
+            // 
+            this.labelColumnSize.AutoSize = true;
+            this.labelColumnSize.Location = new System.Drawing.Point(8, 89);
+            this.labelColumnSize.Name = "labelColumnSize";
+            this.labelColumnSize.Size = new System.Drawing.Size(73, 13);
+            this.labelColumnSize.TabIndex = 0;
+            this.labelColumnSize.Text = "Column Width";
             // 
             // labelNumRows
             // 
@@ -417,6 +555,36 @@
             this.trackBar.TickFrequency = 30;
             this.trackBar.Scroll += new System.EventHandler(this.trackbar_Scroll);
             // 
+            // labelOpacity
+            // 
+            this.labelOpacity.AutoSize = true;
+            this.labelOpacity.Location = new System.Drawing.Point(8, 127);
+            this.labelOpacity.Name = "labelOpacity";
+            this.labelOpacity.Size = new System.Drawing.Size(46, 13);
+            this.labelOpacity.TabIndex = 0;
+            this.labelOpacity.Text = "Opacity:";
+            // 
+            // trackBarOpacity
+            // 
+            this.trackBarOpacity.Location = new System.Drawing.Point(159, 122);
+            this.trackBarOpacity.Maximum = 100;
+            this.trackBarOpacity.Minimum = 1;
+            this.trackBarOpacity.Name = "trackBarOpacity";
+            this.trackBarOpacity.Size = new System.Drawing.Size(234, 45);
+            this.trackBarOpacity.TabIndex = 4;
+            this.trackBarOpacity.TickFrequency = 10;
+            this.trackBarOpacity.Value = 1;
+            this.trackBarOpacity.Scroll += new System.EventHandler(this.trackBarOpacity_Scroll);
+            // 
+            // labelCurrOpacity
+            // 
+            this.labelCurrOpacity.AutoSize = true;
+            this.labelCurrOpacity.Location = new System.Drawing.Point(399, 127);
+            this.labelCurrOpacity.Name = "labelCurrOpacity";
+            this.labelCurrOpacity.Size = new System.Drawing.Size(27, 13);
+            this.labelCurrOpacity.TabIndex = 0;
+            this.labelCurrOpacity.Text = "??%";
+            // 
             // ACTTabPageControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -426,18 +594,21 @@
             this.Controls.Add(this.groupBoxTimelines);
             this.Controls.Add(this.groupBoxEnvironment);
             this.Name = "ACTTabPageControl";
-            this.Size = new System.Drawing.Size(500, 500);
+            this.Size = new System.Drawing.Size(500, 637);
             this.groupBoxEnvironment.ResumeLayout(false);
             this.groupBoxEnvironment.PerformLayout();
             this.groupBoxTimelines.ResumeLayout(false);
             this.groupBoxOverlay.ResumeLayout(false);
             this.groupBoxOverlay.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayY)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udBarWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udTextWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udNumRows)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayX)).EndInit();
             this.groupBoxTracker.ResumeLayout(false);
             this.groupBoxTracker.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -474,5 +645,16 @@
         private System.Windows.Forms.Label labelLoadedTimelineLabel;
         private System.Windows.Forms.TrackBar trackBar;
         private System.Windows.Forms.CheckBox checkBoxShowOverlayButtons;
+        private System.Windows.Forms.Button buttonFontSelect;
+        private System.Windows.Forms.Label labelCurrentFont;
+        private System.Windows.Forms.Label labelFont;
+        private System.Windows.Forms.Label labelColumnSize;
+        private System.Windows.Forms.Label labelBar;
+        private System.Windows.Forms.Label labelTextWidth;
+        private System.Windows.Forms.NumericUpDown udBarWidth;
+        private System.Windows.Forms.NumericUpDown udTextWidth;
+        private System.Windows.Forms.TrackBar trackBarOpacity;
+        private System.Windows.Forms.Label labelOpacity;
+        private System.Windows.Forms.Label labelCurrOpacity;
     }
 }

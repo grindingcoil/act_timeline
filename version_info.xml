@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<versionInfo>
+  <version>0.1.1.0</version>
+  <changeSummary>
+    <jp>- 自動更新チェック実装
+- フォント、幅、透過度を設定可能に</jp>
+  </changeSummary>
+  <downloadUrl>https://github.com/grindingcoil/act_timeline</downloadUrl>
+</versionInfo>

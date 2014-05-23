@@ -268,13 +268,16 @@ namespace ACTTimeline
                 config.HideAlls.Add(targetActivityName);
             }));
 
+        static readonly Parser<ConfigOp> EmptyStatement = Parse.Return<ConfigOp>((TimelineConfig config) => { });
+
         static readonly Parser<ConfigOp> TimelineStatement =
             AlertSoundAliasStatement
                 .Or(TtsAliasStatement)
                 .Or(AlertAllSoundStatement)
                 .Or(AlertAllTtsStatement)
                 .Or(HideAllStatement)
-                .Or(TimelineActivityStatement);
+                .Or(TimelineActivityStatement)
+                .Or(EmptyStatement);
 
         static readonly Parser<int> LineBreak = Parse.Or(Parse.Char('\n'), Parse.Char('\r')).AtLeastOnce().Return(TRASH);
         static readonly Parser<int> StatementSeparator =
@@ -285,12 +288,7 @@ namespace ACTTimeline
             select TRASH;
 
         static readonly Parser<IEnumerable<ConfigOp>> TimelineStatements =
-            from startSpaces in StatementSeparator.Many()
-            from stmts in (
-                from stmtop in TimelineStatement
-                from sep in StatementSeparator.AtLeastOnce()
-                select stmtop
-                ).Many()
+            from stmts in TimelineStatement.DelimitedBy(StatementSeparator.Many())
             select stmts;
 
         public static readonly Parser<TimelineConfig> TimelineConfig = TimelineStatements.Select(stmts => {

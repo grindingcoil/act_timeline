@@ -20,15 +20,35 @@ namespace ACTTimeline
             set
             {
                 numberOfRowsToDisplay = value;
+                UpdateLayout();
+            }
+        }
 
-                int gridHeight = dataGridView.RowTemplate.Height * numberOfRowsToDisplay;
-                this.Height = gridHeight;
-                dataGridView.Height = gridHeight;
+        private int textWidth;
+        public int TextWidth
+        {
+            get { return textWidth; }
+            set
+            {
+                textWidth = value;
+                OnColumnWidthChanged();
+            }
+        }
+
+        private int barWidth;
+        public int BarWidth
+        {
+            get { return barWidth; }
+            set
+            {
+                barWidth = value;
+                OnColumnWidthChanged();
             }
         }
 
         private bool moveByDrag;
-        public bool MoveByDrag {
+        public bool MoveByDrag
+        {
             get { return moveByDrag; }
             set
             {
@@ -48,13 +68,66 @@ namespace ACTTimeline
             }
         }
 
+        private Font timelineFont;
+        public Font TimelineFont
+        {
+            get { return timelineFont; }
+            set
+            {
+                timelineFont = value;
+                OnTimelineFontChanged();
+            }
+        }
+
+        public event EventHandler TimelineFontChanged;
+        public void OnTimelineFontChanged()
+        {
+            textColumn.DefaultCellStyle.Font = TimelineFont;
+            UpdateLayout();
+
+            if (TimelineFontChanged != null)
+                TimelineFontChanged(this, EventArgs.Empty);
+        }
+
+        public event EventHandler ColumnWidthChanged;
+        public void OnColumnWidthChanged()
+        {
+            UpdateLayout();
+
+            if (ColumnWidthChanged != null)
+                ColumnWidthChanged(this, EventArgs.Empty);
+        }
+
+        // trigger OnOpacityChanged on change.
+        public double MyOpacity
+        {
+            get { return Opacity; }
+            set
+            {
+                Opacity = value;
+                OnOpacityChanged();
+            }
+        }
+
+        public event EventHandler OpacityChanged;
+        public void OnOpacityChanged()
+        {
+            if (OpacityChanged != null)
+                OpacityChanged(this, EventArgs.Empty);
+        }
+
         private TimelineController controller;
+        DataGridViewTextBoxColumn textColumn;
+        TimeLeftColumn timeLeftColumn;
         
         public TimelineView(TimelineController controller_)
         {
             controller = controller_;
             controller.TimelineUpdate += controller_TimelineUpdate;
             controller.CurrentTimeUpdate += controller_CurrentTimeUpdate;
+
+            textWidth = 100;
+            barWidth = 100;
 
             SetupUI();
 
@@ -68,18 +141,24 @@ namespace ACTTimeline
                 SetValue(dataGridView, true, null);
             dataGridView.SelectionChanged += (object sender, EventArgs args) => dataGridView.ClearSelection();
             dataGridView.AutoGenerateColumns = false;
-            dataGridView.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Name", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
-            dataGridView.Columns.Add(new TimeLeftColumn { Controller = controller_ });
+            dataGridView.Columns.Add(textColumn = new DataGridViewTextBoxColumn { DataPropertyName = "Name", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+            dataGridView.Columns.Add(timeLeftColumn = new TimeLeftColumn { Controller = controller_ });
 
-            this.Opacity = 0.8;
+            MyOpacity = 0.8;
             NumberOfRowsToDisplay = 3;
             MoveByDrag = true;
             ShowOverlayButtons = true;
+            UpdateLayout();
 
             soundplayer = new CachedSoundPlayer();
+
+            TimelineFont = new Font(FontFamily.GenericSansSerif, 12, FontStyle.Bold);
         }
 
-        const int UIWidth = 200;
+        void TimelineView_VisibleChanged(object sender, EventArgs e)
+        {
+            buttons.Visible = Visible && showOverlayButtons;
+        }
 
         private void SetupUI()
         {
@@ -106,11 +185,11 @@ namespace ACTTimeline
             dataGridView.ReadOnly = true;
             dataGridView.RowHeadersVisible = false;
             dataGridView.ScrollBars = ScrollBars.None;
-            dataGridView.Size = new Size(UIWidth, 80);
+            dataGridView.Size = new Size(200, 80);
 
             this.AutoScaleDimensions = new SizeF(6F, 13F);
             this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(UIWidth, 80);
+            this.ClientSize = new Size(200, 80);
             this.Controls.Add(dataGridView);
             this.FormBorderStyle = FormBorderStyle.None;
             this.Name = "TimelineView";
@@ -123,14 +202,22 @@ namespace ACTTimeline
             buttons = new OverlayButtonsForm(controller);
         }
 
-        void TimelineView_VisibleChanged(object sender, EventArgs e)
+        void UpdateLayout()
         {
-            buttons.Visible = Visible && showOverlayButtons;
+            int gridHeight = dataGridView.RowTemplate.Height * numberOfRowsToDisplay;
+            ClientSize = new Size(textWidth + barWidth, gridHeight);
+            dataGridView.Size = ClientSize;
+
+            textColumn.Width = textWidth;
+            timeLeftColumn.Width = barWidth;
+
+            // update buttons location
+            TimelineView_Move(this, EventArgs.Empty);
         }
 
         void TimelineView_Move(object sender, EventArgs e)
         {
-            buttons.Location = new Point(this.Location.X + UIWidth - buttons.Width, this.Location.Y - buttons.Height);
+            buttons.Location = new Point(this.Location.X + textWidth + barWidth - buttons.Width, this.Location.Y - buttons.Height);
         }
 
         void TimelineView_FormClosing(object sender, FormClosingEventArgs e)
@@ -199,7 +286,6 @@ namespace ACTTimeline
 
         public TimeLeftColumn()
         {
-            this.Width = 100;
             this.ReadOnly = true;
             this.CellTemplate = new TimeLeftCell();
             this.DefaultCellStyle.Alignment = DataGridViewContentAlignment.BottomRight;

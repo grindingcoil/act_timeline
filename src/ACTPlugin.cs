@@ -1,8 +1,9 @@
 ﻿using Advanced_Combat_Tracker;
 using System;
+using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ACTTimeline
@@ -20,12 +21,39 @@ namespace ACTTimeline
         public TimelineView TimelineView { get; private set; }
         private CheckBox checkBoxShowView;
 
-        // delegate for PluginSettings
+        #region delegates for PluginSettings
+
         public string TimelineTxtFilePath
         {
             get { return Controller.TimelineTxtFilePath; }
             set { Controller.TimelineTxtFilePath = value; }
         }
+
+        public string FontString
+        {
+            get { return TypeDescriptor.GetConverter(typeof(Font)).ConvertToString(TimelineView.TimelineFont); }
+            set { TimelineView.TimelineFont = TypeDescriptor.GetConverter(typeof(Font)).ConvertFromString(value) as Font; }
+        }
+
+        public int TextWidth
+        {
+            get { return TimelineView.TextWidth; }
+            set { TimelineView.TextWidth = value; }
+        }
+
+        public int BarWidth
+        {
+            get { return TimelineView.BarWidth; }
+            set { TimelineView.BarWidth = value; }
+        }
+
+        public int OpacityPercentage
+        {
+            get { return (int)(TimelineView.MyOpacity * 100.0); }
+            set { TimelineView.MyOpacity = (double)value / 100.0; }
+        }
+
+        #endregion
 
         public ACTPlugin()
         {
@@ -36,6 +64,9 @@ namespace ACTTimeline
         {
             try
             {
+                // DI log writer
+                Globals.WriteLogImpl = (str) => { ActGlobals.oFormActMain.WriteInfoLog(String.Format("act_timeline: {0}", str)); };
+
                 ScreenSpace = pluginScreenSpace;
                 StatusText = pluginStatusText;
 
@@ -59,11 +90,17 @@ namespace ACTTimeline
 
                 Settings = new PluginSettings(this);
                 Settings.AddStringSetting("TimelineTxtFilePath");
+                Settings.AddStringSetting("FontString");
+                Settings.AddIntSetting("TextWidth");
+                Settings.AddIntSetting("BarWidth");
+                Settings.AddIntSetting("OpacityPercentage");
 
                 SetupTab();
                 InjectButton();
 
                 Settings.Load();
+
+                SetupUpdateChecker();
 
                 StatusText.Text = "Plugin Started (^^)!";
             }
@@ -133,7 +170,21 @@ namespace ACTTimeline
             tabPageControl.Location = new System.Drawing.Point(0, 0);
             tabPageControl.Size = ScreenSpace.Size;
         }
-    
+
+        void SetupUpdateChecker()
+        {
+            ActGlobals.oFormActMain.UpdateCheckClicked += new FormActMain.NullDelegate(CheckForUpdate);
+            if (ActGlobals.oFormActMain.GetAutomaticUpdatesAllowed())
+                CheckForUpdate();
+        }
+
+        void CheckForUpdate()
+        {
+            var myVersion = typeof(ACTPlugin).Assembly.GetName().Version.ToString();
+            var updateChecker = new UpdateChecker(myVersion);
+            updateChecker.PerformCheckOnNewThread();
+        }
+
         void IActPluginV1.DeInitPlugin()
         {
             if (checkBoxShowView != null)
@@ -147,6 +198,8 @@ namespace ACTTimeline
 
             if (Controller != null)
                 Controller.Stop();
+
+            ActGlobals.oFormActMain.UpdateCheckClicked -= CheckForUpdate;
 
             if (StatusText != null)
                 StatusText.Text = "Plugin Exited m(_ _)m";
