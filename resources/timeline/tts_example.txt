@@ -1,0 +1,17 @@
+﻿# TTS 機能を使用するためには、TTS エンジンがインストールされている必要があります
+# インストール方法は ACT wiki を参照してください
+
+# define speaker <話者の名前> <速度(-10～10)> <ボリューム(0～100)> で話者を定義します
+define speaker "Fast" 3 100
+define speaker "Normal" 0 100
+define speaker "Slow" -10 100
+
+# alertall イベント名 before <秒数> speak <話者名> <内容> で喋るタイミングと内容を指定します
+alertall Phase1 before 0 speak "Normal" "フェイズ1、開始"
+alertall アトミックレイ before 10 speak "Fast" "あと10秒でアトミックきちゃううううううううう"
+alertall アトミックレイ before 5 speak "Fast" "はやくううううううううううううううううううううううう"
+alertall アトミックレイ before 0 speak "Slow" "吉田アアアアアアアアアアアアアアアアアアアアア"
+
+# タイムライン定義
+0 Phase1
+15 アトミックレイ

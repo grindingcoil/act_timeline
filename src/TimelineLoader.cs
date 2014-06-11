@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Globalization;
 using Sprache;
 using System;
@@ -10,6 +11,15 @@ namespace ACTTimeline
         public string ActivityName;
         public double ReminderTime;
         public AlertSound AlertSound;
+        public TtsSpeaker TtsSpeaker;
+        public string TtsSentence;
+        public AlertType Type;
+
+        public enum AlertType
+        {
+            Sound,
+            Tts
+        }
     }
 
     public class TimelineConfig
@@ -20,6 +30,7 @@ namespace ACTTimeline
         public List<string> HideAlls;
         public List<ActivityAlert> Alerts;
         public AlertSoundAssets AlertSoundAssets;
+        public List<TtsSpeaker> Speakers;
 
         public TimelineConfig()
         {
@@ -29,6 +40,7 @@ namespace ACTTimeline
             HideAlls = new List<string>();
             Alerts = new List<ActivityAlert>();
             AlertSoundAssets = new AlertSoundAssets();
+            Speakers = new List<TtsSpeaker>();
         }
     }
 
@@ -47,7 +59,7 @@ namespace ACTTimeline
             from quotedString in Parse.CharExcept('"').Many().Text()
             from quoteEnd in Parse.Char('"')
             select quotedString;
-        static readonly Parser<string> Spaces = Parse.Regex(@"^[ 　]+");
+        static readonly Parser<string> Spaces = Parse.Regex(@"^[ 　\t]+");
         static readonly Parser<string> NonWhiteSpaces = Parse.Char(c => !char.IsWhiteSpace(c), "non whitespace char").Many().Text();
         static readonly Parser<string> MaybeQuotedString = QuotedString.XOr(NonWhiteSpaces);
 
@@ -128,13 +140,29 @@ namespace ACTTimeline
                     });
                 }
             })).Named("TimelineActivityStatement");
-        
+
         static readonly Parser<Tuple<string, string>> AlertSoundAlias =
-            from define_alertsound in Parse.Regex(@"^define\s+alertsound\s+")
-            from alias in MaybeQuotedString
+            from define_keyword in Parse.String("define")
             from spaces in Spaces
+            from alertsound_keyword in Parse.String("alertsound")
+            from spaces2 in Spaces
+            from alias in MaybeQuotedString
+            from spaces3 in Spaces
             from target in MaybeQuotedString
             select new Tuple<string, string>(alias, target);
+
+        static readonly Parser<Tuple<string, string, string>> TtsAlias =
+            from define_keyword in Parse.String("define")
+            from spaces in Spaces
+            from tts_keyword in Parse.String("speaker")
+            from spaces2 in Spaces
+            from name in MaybeQuotedString
+            from spaces3 in Spaces
+            from rate in Parse.Regex(@"^\-?[0-9]+")
+            from spaces4 in Spaces
+            from volume in Parse.Regex("^[0-9]+")
+            select new Tuple<string, string, string>(name, rate, volume);
+            
 
         static readonly Parser<ConfigOp> AlertSoundAliasStatement =
             AlertSoundAlias.Select<Tuple<string, string>, ConfigOp>((Tuple<string, string> t) => ((TimelineConfig config) => {
@@ -142,25 +170,90 @@ namespace ACTTimeline
                 config.AlertSoundAssets.RegisterAlias(alertSound, t.Item1);
             }));
 
-        static readonly Parser<Tuple<string, string, string>> AlertAll =
+        static readonly Parser<ConfigOp> TtsAliasStatement =
+            TtsAlias.Select<Tuple<string, string, string>, ConfigOp>((Tuple<string, string, string> t) => ((TimelineConfig config) =>
+            {
+                var speaker = new TtsSpeaker(t.Item1, int.Parse(t.Item2), int.Parse(t.Item3));
+                config.Speakers.Add(speaker);
+            }));
+
+        static readonly Parser<Tuple<string, string>> Sound =
+            from before_keyword in Parse.String("before")
+            from spaces in Spaces
+            from reminderTime in Parse.Decimal
+            from spaces2 in Spaces
+            from sound_keyword in Parse.String("sound")
+            from spaces3 in Spaces
+            from soundName in MaybeQuotedString
+            select new Tuple<string, string>(reminderTime, soundName);
+
+        static readonly Parser<Tuple<string, string, string>> Tts =
+            from before_keyword in Parse.String("before")
+            from spaces in Spaces
+            from reminderTime in Parse.Decimal
+            from spaces2 in Spaces
+            from tts_keyword in Parse.String("speak")
+            from spaces3 in Spaces
+            from ttsName in MaybeQuotedString
+            from spaces4 in Spaces
+            from sentence in MaybeQuotedString
+            select new Tuple<string, string, string>(reminderTime, ttsName, sentence);
+
+        static readonly Parser<Tuple<string, string, string>> AlertAllSound =
             from alertall in Parse.String("alertall")
             from spaces in Spaces
             from activityName in MaybeQuotedString
             from spaces2 in Spaces
-            from before in Parse.String("before")
-            from spaces3 in Spaces
-            from reminderTime in Parse.Decimal
-            from spaces4 in Spaces
-            from sound_keyword in Parse.String("sound")
-            from spaces5 in Spaces
-            from soundName in MaybeQuotedString
-            select new Tuple<string, string, string>(activityName, reminderTime, soundName);
+            from sound in Sound
+            select new Tuple<string, string, string>(
+                activityName,
+                sound.Item1,
+                sound.Item2);
 
-        static readonly Parser<ConfigOp> AlertAllStatement =
-            AlertAll.Select<Tuple<string, string, string>, ConfigOp>((Tuple<string, string, string> t) => ((TimelineConfig config) =>
+        static readonly Parser<Tuple<string, string, string, string>> AlertAllTts =
+            from alertall in Parse.String("alertall")
+            from spaces in Spaces
+            from activityName in MaybeQuotedString
+            from spaces2 in Spaces
+            from tts in Tts
+            select new Tuple<string, string, string, string>(
+                activityName,
+                tts.Item1,
+                tts.Item2,
+                tts.Item3);
+
+        static readonly Parser<ConfigOp> AlertAllSoundStatement =
+            AlertAllSound.Select<Tuple<string, string, string>, ConfigOp>((Tuple<string, string, string> t) => ((TimelineConfig config) =>
             {
                 var alertSound = config.AlertSoundAssets.Get(t.Item3);
-                config.AlertAlls.Add(new AlertAll { ActivityName = t.Item1, ReminderTime = Double.Parse(t.Item2), AlertSound = alertSound });
+                config.AlertAlls.Add(new AlertAll
+                {
+                    ActivityName = t.Item1,
+                    ReminderTime = Double.Parse(t.Item2),
+                    AlertSound = alertSound,
+                    Type = AlertAll.AlertType.Sound
+                });
+            }));
+
+        static readonly Parser<ConfigOp> AlertAllTtsStatement =
+            AlertAllTts.Select<Tuple<string, string, string, string>, ConfigOp>((Tuple<string, string, string, string> t) => ((TimelineConfig config) =>
+            {
+                var speakers = config.Speakers.Where(x => x.Name == t.Item3);
+                if (speakers.Any())
+                {
+                    config.AlertAlls.Add(new AlertAll
+                    {
+                        ActivityName = t.Item1,
+                        ReminderTime = Double.Parse(t.Item2),
+                        TtsSpeaker = speakers.First(),
+                        TtsSentence = t.Item4,
+                        Type = AlertAll.AlertType.Tts
+                    });
+                }
+                else
+                {
+                    throw new ParseException(string.Format("The TTS speaker named '{0}' is not defined.", t.Item3));
+                }
             }));
 
         static readonly Parser<string> HideAll =
@@ -178,7 +271,13 @@ namespace ACTTimeline
         static readonly Parser<ConfigOp> EmptyStatement = Parse.Return<ConfigOp>((TimelineConfig config) => { });
 
         static readonly Parser<ConfigOp> TimelineStatement =
-            AlertSoundAliasStatement.Or(AlertAllStatement).Or(HideAllStatement).Or(TimelineActivityStatement).Or(EmptyStatement);
+            AlertSoundAliasStatement
+                .Or(TtsAliasStatement)
+                .Or(AlertAllSoundStatement)
+                .Or(AlertAllTtsStatement)
+                .Or(HideAllStatement)
+                .Or(TimelineActivityStatement)
+                .Or(EmptyStatement);
 
         static readonly Parser<int> LineBreak = Parse.Or(Parse.Char('\n'), Parse.Char('\r')).AtLeastOnce().Return(TRASH);
         static readonly Parser<int> StatementSeparator =
@@ -215,7 +314,14 @@ namespace ACTTimeline
             {
                 foreach (TimelineActivity matchingActivity in config.Items.FindAll(activity => activity.Name == alertAll.ActivityName))
                 {
-                    var alert = new ActivityAlert { Activity = matchingActivity, ReminderTimeOffset = alertAll.ReminderTime, Sound = alertAll.AlertSound };
+                    var alert = new ActivityAlert
+                    {
+                        Activity = matchingActivity,
+                        ReminderTimeOffset = alertAll.ReminderTime, 
+                        Sound = alertAll.AlertSound,
+                        TtsSpeaker = alertAll.TtsSpeaker,
+                        TtsSentence = alertAll.TtsSentence
+                    };
                     config.Alerts.Add(alert);
                 }
             }
