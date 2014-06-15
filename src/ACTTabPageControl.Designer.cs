@@ -33,14 +33,15 @@
             this.labelResourceDir = new System.Windows.Forms.Label();
             this.groupBoxEnvironment = new System.Windows.Forms.GroupBox();
             this.labelResourceDirStatus = new System.Windows.Forms.Label();
+            this.checkBoxPlaySoundByACT = new System.Windows.Forms.CheckBox();
             this.buttonResourceDirOpen = new System.Windows.Forms.Button();
             this.groupBoxTimelines = new System.Windows.Forms.GroupBox();
             this.buttonRefreshList = new System.Windows.Forms.Button();
             this.buttonLoad = new System.Windows.Forms.Button();
             this.listTimelines = new System.Windows.Forms.ListBox();
             this.groupBoxOverlay = new System.Windows.Forms.GroupBox();
+            this.trackBarOpacity = new System.Windows.Forms.TrackBar();
             this.checkBoxShowOverlayButtons = new System.Windows.Forms.CheckBox();
-            this.checkBoxMoveOverlayByDrag = new System.Windows.Forms.CheckBox();
             this.labelOverlayY = new System.Windows.Forms.Label();
             this.buttonFontSelect = new System.Windows.Forms.Button();
             this.labelBar = new System.Windows.Forms.Label();
@@ -54,6 +55,8 @@
             this.labelCurrentFont = new System.Windows.Forms.Label();
             this.labelFont = new System.Windows.Forms.Label();
             this.labelColumnSize = new System.Windows.Forms.Label();
+            this.labelCurrOpacity = new System.Windows.Forms.Label();
+            this.labelOpacity = new System.Windows.Forms.Label();
             this.labelNumRows = new System.Windows.Forms.Label();
             this.labelOverlayOrientation = new System.Windows.Forms.Label();
             this.groupBoxTracker = new System.Windows.Forms.GroupBox();
@@ -66,12 +69,11 @@
             this.labelLoadedTimeline = new System.Windows.Forms.Label();
             this.labelLoadedTimelineLabel = new System.Windows.Forms.Label();
             this.trackBar = new System.Windows.Forms.TrackBar();
-            this.labelOpacity = new System.Windows.Forms.Label();
-            this.trackBarOpacity = new System.Windows.Forms.TrackBar();
-            this.labelCurrOpacity = new System.Windows.Forms.Label();
+            this.checkBoxMoveOverlayByDrag = new System.Windows.Forms.CheckBox();
             this.groupBoxEnvironment.SuspendLayout();
             this.groupBoxTimelines.SuspendLayout();
             this.groupBoxOverlay.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udBarWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTextWidth)).BeginInit();
@@ -79,7 +81,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayX)).BeginInit();
             this.groupBoxTracker.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonResourceDirSelect
@@ -113,12 +114,13 @@
             // 
             this.groupBoxEnvironment.Controls.Add(this.labelResourceDirStatus);
             this.groupBoxEnvironment.Controls.Add(this.textBoxResourceDir);
+            this.groupBoxEnvironment.Controls.Add(this.checkBoxPlaySoundByACT);
             this.groupBoxEnvironment.Controls.Add(this.labelResourceDir);
             this.groupBoxEnvironment.Controls.Add(this.buttonResourceDirOpen);
             this.groupBoxEnvironment.Controls.Add(this.buttonResourceDirSelect);
             this.groupBoxEnvironment.Location = new System.Drawing.Point(16, 271);
             this.groupBoxEnvironment.Name = "groupBoxEnvironment";
-            this.groupBoxEnvironment.Size = new System.Drawing.Size(470, 100);
+            this.groupBoxEnvironment.Size = new System.Drawing.Size(470, 137);
             this.groupBoxEnvironment.TabIndex = 3;
             this.groupBoxEnvironment.TabStop = false;
             this.groupBoxEnvironment.Text = "Environment";
@@ -131,6 +133,19 @@
             this.labelResourceDirStatus.Size = new System.Drawing.Size(102, 13);
             this.labelResourceDirStatus.TabIndex = 3;
             this.labelResourceDirStatus.Text = "Resource Dir Status";
+            // 
+            // checkBoxPlaySoundByACT
+            // 
+            this.checkBoxPlaySoundByACT.AutoSize = true;
+            this.checkBoxPlaySoundByACT.Checked = true;
+            this.checkBoxPlaySoundByACT.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxPlaySoundByACT.Location = new System.Drawing.Point(11, 105);
+            this.checkBoxPlaySoundByACT.Name = "checkBoxPlaySoundByACT";
+            this.checkBoxPlaySoundByACT.Size = new System.Drawing.Size(116, 17);
+            this.checkBoxPlaySoundByACT.TabIndex = 3;
+            this.checkBoxPlaySoundByACT.Text = "Play sound by ACT";
+            this.checkBoxPlaySoundByACT.UseVisualStyleBackColor = true;
+            this.checkBoxPlaySoundByACT.CheckedChanged += new System.EventHandler(this.checkBoxPlaySoundByACT_CheckedChanged);
             // 
             // buttonResourceDirOpen
             // 
@@ -209,12 +224,24 @@
             this.groupBoxOverlay.Controls.Add(this.labelOpacity);
             this.groupBoxOverlay.Controls.Add(this.labelNumRows);
             this.groupBoxOverlay.Controls.Add(this.labelOverlayOrientation);
-            this.groupBoxOverlay.Location = new System.Drawing.Point(16, 377);
+            this.groupBoxOverlay.Location = new System.Drawing.Point(16, 414);
             this.groupBoxOverlay.Name = "groupBoxOverlay";
-            this.groupBoxOverlay.Size = new System.Drawing.Size(469, 243);
+            this.groupBoxOverlay.Size = new System.Drawing.Size(470, 243);
             this.groupBoxOverlay.TabIndex = 5;
             this.groupBoxOverlay.TabStop = false;
             this.groupBoxOverlay.Text = "Overlay";
+            // 
+            // trackBarOpacity
+            // 
+            this.trackBarOpacity.Location = new System.Drawing.Point(159, 122);
+            this.trackBarOpacity.Maximum = 100;
+            this.trackBarOpacity.Minimum = 1;
+            this.trackBarOpacity.Name = "trackBarOpacity";
+            this.trackBarOpacity.Size = new System.Drawing.Size(234, 45);
+            this.trackBarOpacity.TabIndex = 4;
+            this.trackBarOpacity.TickFrequency = 10;
+            this.trackBarOpacity.Value = 1;
+            this.trackBarOpacity.Scroll += new System.EventHandler(this.trackBarOpacity_Scroll);
             // 
             // checkBoxShowOverlayButtons
             // 
@@ -228,19 +255,6 @@
             this.checkBoxShowOverlayButtons.Text = "Show mini button controls.";
             this.checkBoxShowOverlayButtons.UseVisualStyleBackColor = true;
             this.checkBoxShowOverlayButtons.CheckedChanged += new System.EventHandler(this.checkBoxShowOverlayButtons_CheckedChanged);
-            // 
-            // checkBoxMoveOverlayByDrag
-            // 
-            this.checkBoxMoveOverlayByDrag.AutoSize = true;
-            this.checkBoxMoveOverlayByDrag.Checked = true;
-            this.checkBoxMoveOverlayByDrag.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxMoveOverlayByDrag.Location = new System.Drawing.Point(11, 209);
-            this.checkBoxMoveOverlayByDrag.Name = "checkBoxMoveOverlayByDrag";
-            this.checkBoxMoveOverlayByDrag.Size = new System.Drawing.Size(218, 17);
-            this.checkBoxMoveOverlayByDrag.TabIndex = 3;
-            this.checkBoxMoveOverlayByDrag.Text = "Move by drag && right doubleclick to hide.";
-            this.checkBoxMoveOverlayByDrag.UseVisualStyleBackColor = true;
-            this.checkBoxMoveOverlayByDrag.CheckedChanged += new System.EventHandler(this.checkBoxMoveOverlayByDrag_CheckedChanged);
             // 
             // labelOverlayY
             // 
@@ -432,6 +446,24 @@
             this.labelColumnSize.TabIndex = 0;
             this.labelColumnSize.Text = "Column Width";
             // 
+            // labelCurrOpacity
+            // 
+            this.labelCurrOpacity.AutoSize = true;
+            this.labelCurrOpacity.Location = new System.Drawing.Point(399, 127);
+            this.labelCurrOpacity.Name = "labelCurrOpacity";
+            this.labelCurrOpacity.Size = new System.Drawing.Size(27, 13);
+            this.labelCurrOpacity.TabIndex = 0;
+            this.labelCurrOpacity.Text = "??%";
+            // 
+            // labelOpacity
+            // 
+            this.labelOpacity.AutoSize = true;
+            this.labelOpacity.Location = new System.Drawing.Point(8, 127);
+            this.labelOpacity.Name = "labelOpacity";
+            this.labelOpacity.Size = new System.Drawing.Size(46, 13);
+            this.labelOpacity.TabIndex = 0;
+            this.labelOpacity.Text = "Opacity:";
+            // 
             // labelNumRows
             // 
             this.labelNumRows.AutoSize = true;
@@ -555,35 +587,18 @@
             this.trackBar.TickFrequency = 30;
             this.trackBar.Scroll += new System.EventHandler(this.trackbar_Scroll);
             // 
-            // labelOpacity
+            // checkBoxMoveOverlayByDrag
             // 
-            this.labelOpacity.AutoSize = true;
-            this.labelOpacity.Location = new System.Drawing.Point(8, 127);
-            this.labelOpacity.Name = "labelOpacity";
-            this.labelOpacity.Size = new System.Drawing.Size(46, 13);
-            this.labelOpacity.TabIndex = 0;
-            this.labelOpacity.Text = "Opacity:";
-            // 
-            // trackBarOpacity
-            // 
-            this.trackBarOpacity.Location = new System.Drawing.Point(159, 122);
-            this.trackBarOpacity.Maximum = 100;
-            this.trackBarOpacity.Minimum = 1;
-            this.trackBarOpacity.Name = "trackBarOpacity";
-            this.trackBarOpacity.Size = new System.Drawing.Size(234, 45);
-            this.trackBarOpacity.TabIndex = 4;
-            this.trackBarOpacity.TickFrequency = 10;
-            this.trackBarOpacity.Value = 1;
-            this.trackBarOpacity.Scroll += new System.EventHandler(this.trackBarOpacity_Scroll);
-            // 
-            // labelCurrOpacity
-            // 
-            this.labelCurrOpacity.AutoSize = true;
-            this.labelCurrOpacity.Location = new System.Drawing.Point(399, 127);
-            this.labelCurrOpacity.Name = "labelCurrOpacity";
-            this.labelCurrOpacity.Size = new System.Drawing.Size(27, 13);
-            this.labelCurrOpacity.TabIndex = 0;
-            this.labelCurrOpacity.Text = "??%";
+            this.checkBoxMoveOverlayByDrag.AutoSize = true;
+            this.checkBoxMoveOverlayByDrag.Checked = true;
+            this.checkBoxMoveOverlayByDrag.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxMoveOverlayByDrag.Location = new System.Drawing.Point(11, 209);
+            this.checkBoxMoveOverlayByDrag.Name = "checkBoxMoveOverlayByDrag";
+            this.checkBoxMoveOverlayByDrag.Size = new System.Drawing.Size(218, 17);
+            this.checkBoxMoveOverlayByDrag.TabIndex = 3;
+            this.checkBoxMoveOverlayByDrag.Text = "Move by drag && right doubleclick to hide.";
+            this.checkBoxMoveOverlayByDrag.UseVisualStyleBackColor = true;
+            this.checkBoxMoveOverlayByDrag.CheckedChanged += new System.EventHandler(this.checkBoxMoveOverlayByDrag_CheckedChanged);
             // 
             // ACTTabPageControl
             // 
@@ -594,12 +609,13 @@
             this.Controls.Add(this.groupBoxTimelines);
             this.Controls.Add(this.groupBoxEnvironment);
             this.Name = "ACTTabPageControl";
-            this.Size = new System.Drawing.Size(500, 637);
+            this.Size = new System.Drawing.Size(500, 674);
             this.groupBoxEnvironment.ResumeLayout(false);
             this.groupBoxEnvironment.PerformLayout();
             this.groupBoxTimelines.ResumeLayout(false);
             this.groupBoxOverlay.ResumeLayout(false);
             this.groupBoxOverlay.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udOverlayY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udBarWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.udTextWidth)).EndInit();
@@ -608,7 +624,6 @@
             this.groupBoxTracker.ResumeLayout(false);
             this.groupBoxTracker.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarOpacity)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -633,7 +648,7 @@
         private System.Windows.Forms.NumericUpDown udOverlayX;
         private System.Windows.Forms.Label labelNumRows;
         private System.Windows.Forms.Label labelOverlayOrientation;
-        private System.Windows.Forms.CheckBox checkBoxMoveOverlayByDrag;
+        private System.Windows.Forms.CheckBox checkBoxPlaySoundByACT;
         private System.Windows.Forms.GroupBox groupBoxTracker;
         private System.Windows.Forms.Button buttonPause;
         private System.Windows.Forms.Button buttonPlay;
@@ -656,5 +671,6 @@
         private System.Windows.Forms.TrackBar trackBarOpacity;
         private System.Windows.Forms.Label labelOpacity;
         private System.Windows.Forms.Label labelCurrOpacity;
+        private System.Windows.Forms.CheckBox checkBoxMoveOverlayByDrag;
     }
 }
