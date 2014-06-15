@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Advanced_Combat_Tracker;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -114,6 +115,26 @@ namespace ACTTimeline
         {
             if (OpacityChanged != null)
                 OpacityChanged(this, EventArgs.Empty);
+        }
+
+        private bool playSoundByACT;
+        public bool PlaySoundByACT
+        {
+            get { return playSoundByACT; }
+            set
+            {
+                playSoundByACT = value;
+                OnPlaySoundByACTChanged();
+            }
+        }
+
+        public event EventHandler PlaySoundByACTChanged;
+        public void OnPlaySoundByACTChanged()
+        {
+            WarmUpSoundPlayerCache();
+
+            if (PlaySoundByACTChanged != null)
+                PlaySoundByACTChanged(this, EventArgs.Empty);
         }
 
         private TimelineController controller;
@@ -238,6 +259,14 @@ namespace ACTTimeline
             if (controller.Timeline == null)
                 return;
 
+            WarmUpSoundPlayerCache();
+        }
+
+        private void WarmUpSoundPlayerCache()
+        {
+            if (playSoundByACT)
+                return;
+
             foreach (AlertSound sound in controller.Timeline.AlertSoundAssets.All)
             {
                 soundplayer.WarmUpCache(sound.Filename);
@@ -261,14 +290,25 @@ namespace ACTTimeline
                 var pendingAlerts = timeline.PendingAlertsAt(controller.CurrentTime);
                 foreach (ActivityAlert pendingAlert in pendingAlerts)
                 {
-                    soundplayer.PlaySound(pendingAlert.Sound.Filename);
-                    pendingAlert.Processed = true;
+                    ProcessAlert(pendingAlert);
                 }
 
                 // sync dataGridView
                 dataGridView.DataSource = null;
                 dataGridView.DataSource = timeline.VisibleItemsAt(controller.CurrentTime - TimeLeftCell.THRESHOLD, numberOfRowsToDisplay).ToList();
             }
+        }
+
+        void ProcessAlert(ActivityAlert alert)
+        {
+            if (PlaySoundByACT)
+            {
+                ActGlobals.oFormActMain.PlaySoundMethod(alert.Sound.Filename, 100);
+                return;
+            }
+
+            soundplayer.PlaySound(alert.Sound.Filename);
+            alert.Processed = true;
         }
     }
 

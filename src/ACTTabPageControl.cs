@@ -30,6 +30,7 @@ namespace ACTTimeline
             settings.AddControlSetting("NumberOfRowsToDisplay", udNumRows);
             settings.AddControlSetting("MoveOverlayByDrag", checkBoxMoveOverlayByDrag);
             settings.AddControlSetting("ShowOverlayButtons", checkBoxShowOverlayButtons);
+            settings.AddControlSetting("PlaySoundByACT", checkBoxPlaySoundByACT);
 
             plugin.TimelineView.Move += TimelineView_Move;
             plugin.TimelineView.TimelineFontChanged += TimelineView_TimelineFontChanged;
@@ -263,6 +264,11 @@ namespace ACTTimeline
         private void trackBarOpacity_Scroll(object sender, EventArgs e)
         {
             plugin.TimelineView.MyOpacity = ((double)trackBarOpacity.Value) / 100;
+        }
+
+        private void checkBoxPlaySoundByACT_CheckedChanged(object sender, EventArgs e)
+        {
+            plugin.TimelineView.PlaySoundByACT = checkBoxPlaySoundByACT.Checked;
         }
     }
 }
