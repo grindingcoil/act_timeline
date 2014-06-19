@@ -304,10 +304,10 @@ namespace ACTTimeline
             if (PlaySoundByACT)
             {
                 ActGlobals.oFormActMain.PlaySoundMethod(alert.Sound.Filename, 100);
-                return;
+            } else {
+                soundplayer.PlaySound(alert.Sound.Filename);
             }
 
-            soundplayer.PlaySound(alert.Sound.Filename);
             alert.Processed = true;
         }
     }
