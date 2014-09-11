@@ -121,12 +121,14 @@ namespace ACTTimeline
         }
 
         public string Name { get; private set; }
+        public string VoiceName { get; private set; }
         public int Rate { get; private set; }
         public int Volume { get; private set; }
 
-        public TtsSpeaker(string name, int rate, int volume)
+        public TtsSpeaker(string name, string voiceName, int rate, int volume)
         {
             this.Name = name;
+            this.VoiceName = voiceName;
             this.Rate = rate;
             this.Volume = volume;
         }
@@ -134,6 +136,20 @@ namespace ACTTimeline
         private void PopulateSynthesizer()
         {
             this.synthesizer = new System.Speech.Synthesis.SpeechSynthesizer();
+            if (!string.IsNullOrEmpty(this.VoiceName))
+            {
+                try
+                {
+                    synthesizer.SelectVoice(this.VoiceName);
+                }
+                catch (Exception e)
+                {
+                    System.Windows.Forms.MessageBox.Show(string.Format(
+                        "The selected TTS engine '{1}' at the speaker named '{0}' is not installed on your system.",
+                        this.Name,
+                        this.VoiceName));
+                }
+            }
             synthesizer.Rate = this.Rate;
             synthesizer.Volume = this.Volume;
         }

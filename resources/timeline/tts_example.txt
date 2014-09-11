@@ -6,10 +6,13 @@ define speaker "Fast" 3 100
 define speaker "Normal" 0 100
 define speaker "Slow" -10 100
 
+# define speaker <話者の名前> <TTSエンジンの名前> <速度> <ボリューム> でも話者を定義できます
+define speaker "ジーラさん" "Microsoft Zira Desktop" 0 100
+
 # alertall イベント名 before <秒数> speak <話者名> <内容> で喋るタイミングと内容を指定します
 alertall Phase1 before 0 speak "Normal" "フェイズ1、開始"
 alertall アトミックレイ before 10 speak "Fast" "あと10秒でアトミックきちゃううううううううう"
-alertall アトミックレイ before 5 speak "Fast" "はやくううううううううううううううううううううううう"
+alertall アトミックレイ before 5 speak "ジーラさん" "HURRY UP! HURRY UP!"
 alertall アトミックレイ before 0 speak "Slow" "吉田アアアアアアアアアアアアアアアアアアアアア"
 
 # タイムライン定義

@@ -162,6 +162,20 @@ namespace ACTTimeline
             from spaces4 in Spaces
             from volume in Parse.Regex("^[0-9]+")
             select new Tuple<string, string, string>(name, rate, volume);
+
+        static readonly Parser<Tuple<string, string, string, string>> NewTtsAlias =
+            from define_keyword in Parse.String("define")
+            from spaces in Spaces
+            from tts_keyword in Parse.String("speaker")
+            from spaces2 in Spaces
+            from name in MaybeQuotedString
+            from spaces3 in Spaces
+            from voiceName in MaybeQuotedString
+            from spaces4 in Spaces
+            from rate in Parse.Regex(@"^\-?[0-9]+")
+            from spaces5 in Spaces
+            from volume in Parse.Regex("^[0-9]+")
+            select new Tuple<string, string, string, string>(name, voiceName, rate, volume);
             
 
         static readonly Parser<ConfigOp> AlertSoundAliasStatement =
@@ -173,7 +187,14 @@ namespace ACTTimeline
         static readonly Parser<ConfigOp> TtsAliasStatement =
             TtsAlias.Select<Tuple<string, string, string>, ConfigOp>((Tuple<string, string, string> t) => ((TimelineConfig config) =>
             {
-                var speaker = new TtsSpeaker(t.Item1, int.Parse(t.Item2), int.Parse(t.Item3));
+                var speaker = new TtsSpeaker(t.Item1, null, int.Parse(t.Item2), int.Parse(t.Item3));
+                config.Speakers.Add(speaker);
+            }));
+
+        static readonly Parser<ConfigOp> NewTtsAliasStatement =
+            NewTtsAlias.Select<Tuple<string, string, string, string>, ConfigOp>((Tuple<string, string, string, string> t) => ((TimelineConfig config) =>
+            {
+                var speaker = new TtsSpeaker(t.Item1, t.Item2, int.Parse(t.Item3), int.Parse(t.Item4));
                 config.Speakers.Add(speaker);
             }));
 
@@ -273,6 +294,7 @@ namespace ACTTimeline
         static readonly Parser<ConfigOp> TimelineStatement =
             AlertSoundAliasStatement
                 .Or(TtsAliasStatement)
+                .Or(NewTtsAliasStatement)
                 .Or(AlertAllSoundStatement)
                 .Or(AlertAllTtsStatement)
                 .Or(HideAllStatement)
